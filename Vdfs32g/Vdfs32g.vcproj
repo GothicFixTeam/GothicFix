@@ -323,7 +323,7 @@
 		</Configuration>
 		<Configuration
 			Name="DebugG2|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Work\G2\System"
 			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
