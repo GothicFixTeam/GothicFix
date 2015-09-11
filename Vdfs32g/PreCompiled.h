@@ -56,6 +56,7 @@ using namespace COMMON;
 #include "Vdfs/Vdfs.h"
 
 #include "IniUtils.h"
+#include "IniUtilsEx.h"
 #include "PatchUtils.h"
 
 #include "Fixes/KillerFix.h"

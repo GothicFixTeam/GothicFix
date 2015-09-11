@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\WorkG1\Miles"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -92,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -168,8 +168,8 @@
 		</Configuration>
 		<Configuration
 			Name="DebugG2|Win32"
-			OutputDirectory="..\WorkG2\Miles"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -242,8 +242,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseG2|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -318,8 +318,8 @@
 		</Configuration>
 		<Configuration
 			Name="RemoteDebug|Win32"
-			OutputDirectory="Z:\WorkG2\Miles"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>

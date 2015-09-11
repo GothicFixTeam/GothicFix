@@ -31,7 +31,7 @@ extern void MssFree(void);
 
 #include "Common/UtilityEx.h"
 
-using namespace ARE;
+using namespace COMMON;
 
 #include "IniUtils.h"
 
