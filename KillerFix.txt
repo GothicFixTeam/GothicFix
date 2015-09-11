@@ -1,0 +1,1963 @@
+#include "PreCompiled.h"
+
+static uChar* BlockA = NULL;
+static uChar* BlockB = NULL;
+static uChar* BlockC = NULL;
+static uChar* BlockD = NULL;
+
+bool Patch_G2_NotR_report_V2(void)
+{
+	bool Ok = true;
+
+	BlockA = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && Patch((uChar*)0x00528BBA, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x100), Var<uChar>(0x68, 0xC00));
+	Ok = Ok && Patch((uChar*)0x00528CE1, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x100), Var<uChar>(0x68, 0xC00));
+	Ok = Ok && Patch((uChar*)0x0052D28C, sizeof(VarMem<uChar>), Var<uChar>(0x3D, 0x100), Var<uChar>(0x3D, 0xC00));
+
+	Ok = Ok && Patch((uChar*)0x00528BC1, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x8D4A40), Var<uChar>(0x68, BlockA));
+	Ok = Ok && Patch((uChar*)0x00528CEA, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x8D4A40), Var<uChar>(0x68, BlockA));
+	Ok = Ok && Patch((uChar*)0x00528DDA, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8D, 0x04, 0x95), 0x8D4A40), Var<Raw3>(Raw3(0x8D, 0x04, 0x95), BlockA));
+	Ok = Ok && Patch((uChar*)0x0052D308, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8D, 0x3C, 0x95), 0x8D4A40), Var<Raw3>(Raw3(0x8D, 0x3C, 0x95), BlockA));
+	Ok = Ok && Patch((uChar*)0x00528F83, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x00528FE3, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x0052BDE8, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0x8B, 0x0C, 0x8D), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x0052BE0F, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x89, 0x2C, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0x89, 0x2C, 0x8D), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x0052D301, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8B, 0x0C, 0x95), 0x8D4A4C), Var<Raw3>(Raw3(0x8B, 0x0C, 0x95), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x00528FAA, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0xC7, 0x04, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0xC7, 0x04, 0x8D), BlockA + 0xC));
+	Ok = Ok && Patch((uChar*)0x0052900A, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0xC7, 0x04, 0x8D), 0x8D4A4C), Var<Raw3>(Raw3(0xC7, 0x04, 0x8D), BlockA + 0xC));
+
+	BlockB = (uChar*)VirtualAlloc(NULL, 0x30000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && Patch((uChar*)0x005D6EEA, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x1000), Var<uChar>(0x68, 0x2600));
+	Ok = Ok && Patch((uChar*)0x005D6F61, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x1000), Var<uChar>(0x68, 0x2600));
+	Ok = Ok && Patch((uChar*)0x005D6FEF, sizeof(VarMem<Raw2>), Var<Raw2>(Raw2(0x81, 0xFB), 0x1000), Var<Raw2>(Raw2(0x81, 0xFB), 0x2600));
+
+	Ok = Ok && Patch((uChar*)0x005D6EF1, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x009868B0), Var<uChar>(0x68, BlockB));
+	Ok = Ok && Patch((uChar*)0x005D6F6A, sizeof(VarMem<uChar>), Var<uChar>(0x68, 0x009868B0), Var<uChar>(0x68, BlockB));
+	Ok = Ok && Patch((uChar*)0x005D70AA, sizeof(VarMem<Raw3>), Var<Raw3>(Raw3(0x8D, 0x04, 0x95), 0x009868B0), Var<Raw3>(Raw3(0x8D, 0x04, 0x95), BlockB));
+
+	BlockC = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x005291BF, 0xBF, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x00529254, 0x8D, 0x3C, 0x85, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052A3E7, 0xD9, 0x1C, 0x8D, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052E686, 0xD9, 0x04, 0xB5, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052E69B, 0xD9, 0x04, 0xBD, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052E6B2, 0xD9, 0x04, 0x85, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052FF8C, 0xD9, 0x04, 0x9D, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052FFB1, 0xD9, 0x04, 0xAD, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH3(0x0052FFD8, 0xD9, 0x04, 0x85, 0x008D5E48, BlockC + 0x10);
+	Ok = Ok && PATCH1(0x0053078F, 0xBF, 0x008D5E48, BlockC + 0x10);
+
+	Ok = Ok && PATCH1(0x005291CB, 0xBF, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x0052923F, 0xD9, 0x14, 0x85, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x0052924D, 0x8D, 0x34, 0x85, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x0052A3CE, 0xD8, 0x14, 0x8D, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x0052A3DC, 0xD9, 0x14, 0x8D, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x0052E6CA, 0xD8, 0x1C, 0x8D, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH3(0x00530004, 0xD8, 0x1C, 0x8D, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH2(0x00530789, 0xD9, 0x1D, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH1(0x0053079C, 0xBE, 0x008D6E48, BlockC + 0x5010);
+	Ok = Ok && PATCH1(0x005307A1, 0xBF, 0x008D6E4C, BlockC + 0x5014);
+
+	uChar Raw_1[] = { 0xCC, 0xCC, 0xDF, 0x44, 0x24, 0x44, 0xDA, 0x74, 0x24, 0x40 }; 
+	Ok = Ok && PATCHZN(0x0082D1DA, sizeof(Raw_1), Raw_1);
+	Ok = Ok && PATCHZN(0x0082D1E4, 6, Var<Raw2>(Raw2(0xD9, 0x1D), BlockC));
+	uChar Raw_2[] = { 0x55, 0x89, 0x5C, 0x24, 0x08, 0xE9, 0x7C, 0xB6, 0xE2, 0xFF, 0xCC, 0xCC, 0x51, 0x8B, 0x41, 0x70, 0x85, 0xC0, 0x89, 0x44, 0x24, 0x00, 0x75, 0x08, 0xD9, 0x05, 0x2C, 0x1D, 0x83, 0x00, 0xEB, 0x07, 0xDB, 0x41, 0x74, 0xDA, 0x74, 0x24, 0x00, 0xD8, 0x4C, 0x24, 0x08, 0x8B, 0x44, 0x24, 0x08, 0x51, 0xD9, 0x1C, 0x24, 0x50, 0xE8, 0x3D, 0xD7, 0xD1, 0xFF, 0x59, 0xC2, 0x04, 0x00, 0xCC, 0xCC, 0x51 };
+	Ok = Ok && PATCHZN(0x0082D1EA, sizeof(Raw_2), Raw_2);
+	Ok = Ok && PATCHZN(0x0082D22A, 6, Var<Raw2>(Raw2(0xFF, 0x35), BlockC + 0x4));
+	uChar Raw_3[] = { 0xD9, 0x04, 0x24, 0xD8, 0x35, 0x0E, 0xA2, 0x54, 0x00 };
+	Ok = Ok && PATCHZN(0x0082D230, sizeof(Raw_3), Raw_3);
+	Ok = Ok && PATCHZN(0x0082D239, 6, Var<Raw2>(Raw2(0xD9, 0x1D), BlockC + 0x8));
+	Ok = Ok && PATCHZN(0x0082D23F, 6, Var<Raw2>(Raw2(0xD9, 0x05), BlockC));
+	Ok = Ok && PATCHZN(0x0082D245, 6, Var<Raw2>(Raw2(0xD9, 0x05), BlockC + 0x8));
+	uChar Raw_4[] = { 0xDE, 0xF1, 0xD9, 0xE8, 0xD9, 0xF3, 0xD8, 0x0D, 0x8C, 0x02, 0x83, 0x00, 0xD8, 0x0D, 0x84, 0x00, 0x83, 0x00, 0x50, 0xD9, 0x1C, 0x24, 0xE8, 0xFA, 0xD6, 0xD1, 0xFF, 0x59, 0xC2, 0x04, 0x00, 0xCC, 0xCC, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xCC, 0xCC, 0x8B, 0x02, 0x83, 0xEC, 0x0C, 0x85, 0xC0, 0x53, 0x55, 0x56, 0x8B, 0xF1, 0x89, 0x46, 0x30, 0x8B, 0x4A, 0x04, 0x57, 0x89, 0x4E, 0x34, 0xBD, 0x01, 0x00, 0x00, 0x00, 0x7F, 0x03, 0x89, 0x6E, 0x30, 0x8B, 0x46, 0x34, 0x85, 0xC0, 0x7F, 0x03, 0x89, 0x6E, 0x34, 0x33, 0xC0, 0x33, 0xC9, 0x89, 0x46, 0x40, 0x89, 0x4E, 0x44, 0x8B, 0x46, 0x4C, 0x85, 0xC0, 0x74, 0x44, 0x8B, 0x56, 0x30, 0x89, 0x56, 0x40, 0x8B, 0x46, 0x34, 0x89, 0x46, 0x44, 0x8B, 0x4E, 0x4C, 0x8B, 0x56, 0x30, 0xDF, 0x41, 0x44, 0xD8, 0x35, 0x8F, 0x30, 0x6C, 0x00, 0x50, 0xDB, 0x1C, 0x24, 0x58, 0x0F, 0xB7, 0x1D, 0x40, 0xBB, 0x83, 0x00, 0x0F, 0xAF, 0xC2, 0x99, 0xF7, 0xFB, 0x8B, 0x7E, 0x34, 0x8B, 0xD8, 0x8B, 0x41, 0x44, 0x0F, 0xB7, 0x0D, 0x42, 0xBB, 0x83, 0x00, 0x0F, 0xAF, 0xC7, 0x89, 0x5E, 0x40, 0xEB, 0x38, 0xA1, 0x08, 0x2F, 0x98, 0x00, 0x8B, 0x48, 0x0C, 0x8B, 0x40, 0x10, 0x89, 0x46, 0x44, 0x89, 0x4E, 0x40, 0x8B, 0x46, 0x30, 0x0F, 0xAF, 0xC1, 0x89, 0x46, 0x40, 0x0F, 0xB7, 0x0D, 0x40, 0xBB, 0x83, 0x00, 0x99, 0xF7, 0xF9, 0x89, 0x46, 0x40, 0x8B, 0x46, 0x34, 0x0F, 0xAF, 0x46, 0x44, 0x89, 0x46, 0x44, 0x0F, 0xB7, 0x0D, 0x42, 0xBB, 0x83, 0x00, 0x99, 0xF7, 0xF9, 0x89, 0x46, 0x44, 0x8B, 0x46, 0x40, 0x85, 0xC0, 0x7F, 0x03, 0x89, 0x6E, 0x40, 0x8B, 0x46, 0x44, 0x85, 0xC0, 0x7F, 0x03, 0x89, 0x6E, 0x44, 0x8B, 0x46, 0x58, 0x33, 0xC9, 0x85, 0xC0, 0x74, 0x09, 0x90, 0x8B, 0x40, 0x08, 0x41, 0x85, 0xC0, 0x75, 0xF8, 0x85, 0xC9, 0x8B, 0xE9, 0x0F, 0x84, 0x88, 0x00, 0x00, 0x00, 0x8B, 0x46, 0x58, 0x4D, 0x33, 0xC9, 0x85, 0xC0, 0x89, 0x6C, 0x24, 0x10, 0x74, 0x10, 0x3B, 0xCD, 0x0F, 0x84, 0xA6, 0x00, 0x00, 0x00, 0x8B, 0x40, 0x08, 0x41, 0x85, 0xC0, 0x75, 0xF0, 0x33, 0xFF, 0x8B, 0x4F, 0x4C, 0x33, 0xC0, 0x85, 0xC9, 0x8D, 0x5F, 0x38, 0x89, 0x03, 0x89, 0x43, 0x04, 0x74, 0x48, 0x8B, 0x41, 0x40, 0x8B, 0x57, 0x28, 0x0F, 0xB7, 0x2D, 0x40, 0xBB, 0x83, 0x00, 0x0F, 0xAF, 0xC2, 0x99, 0xF7, 0xFD, 0x8B, 0xE8, 0x8B, 0x41, 0x44, 0x0F, 0xAF, 0x47, 0x2C, 0x0F, 0xB7, 0x0D, 0x42, 0xBB, 0x83, 0x00, 0x99, 0xF7, 0xF9, 0x8D, 0x54, 0x24, 0x14, 0x52, 0x8B, 0xCB, 0x89, 0x6C, 0x24, 0x18, 0x89, 0x44, 0x24, 0x1C, 0xE8, 0x63, 0x4D, 0xE6, 0xFF, 0x8B, 0x4F, 0x4C, 0x8B, 0xD3, 0xE8, 0x79, 0x4F, 0xE6, 0xFF, 0x8B, 0x6C, 0x24, 0x10, 0x8B, 0xCF, 0xE8, 0x0E, 0x52, 0xE6, 0xFF, 0x85, 0xED, 0x0F, 0x85, 0x78, 0xFF, 0xFF, 0xFF, 0x8B, 0x46, 0x58, 0x33, 0xDB, 0x85, 0xC0, 0x74, 0x08, 0x8B, 0x40, 0x08, 0x43, 0x85, 0xC0, 0x75, 0xF8, 0x85, 0xDB, 0x74, 0x4A, 0x33, 0xED, 0x8B, 0x46, 0x58, 0x4B, 0x33, 0xC9, 0x85, 0xC0, 0x74, 0x20, 0x90, 0x8D, 0x64, 0x24, 0x00, 0x3B, 0xCB, 0x74, 0x12, 0x8B, 0x40, 0x08, 0x41, 0x85, 0xC0, 0x75, 0xF4, 0xEB, 0x0D, 0x8B, 0x78, 0x04, 0xE9, 0x5C, 0xFF, 0xFF, 0xFF, 0x8B, 0x78, 0x04, 0xEB, 0x02, 0x33, 0xFF, 0x8D, 0x57, 0x40, 0x33, 0xC0, 0x8B, 0xCF, 0x89, 0x2A, 0x89, 0x42, 0x04, 0xE8, 0x72, 0x4F, 0xE6, 0xFF, 0x8B, 0xCF, 0xE8, 0x6B, 0x52, 0xE6, 0xFF, 0x85, 0xDB, 0x75, 0xB8, 0x5F, 0x5E, 0x5D, 0x5B, 0x83, 0xC4, 0x0C, 0xC3, 0xCC, 0xCC };
+	Ok = Ok && PATCHZN(0x0082D24B, sizeof(Raw_4), Raw_4);
+
+	Ok = Ok && Patch((uChar*)0x0068C9FC, sizeof(VarMem<uChar>), Var<uChar>(0xE8, 0x0000555F), Var<uChar>(0xE8, 0x001A0884));
+	Ok = Ok && Patch((uChar*)0x004C0CC3, sizeof(VarMem<uChar>), Var<uChar>(0xE8, 0x00089C58), Var<uChar>(0xE8, 0x0036C561));
+	Ok = Ok && Patch((uChar*)0x004C2F65, sizeof(VarMem<uChar>), Var<uChar>(0xE8, 0x000879B6), Var<uChar>(0xE8, 0x0036A2BF));
+	Ok = Ok && Patch((uChar*)0x0054A214, sizeof(VarMem<uChar>), Var<uChar>(0xE8, 0x00000707), Var<uChar>(0xE8, 0x002E3010));
+	Ok = Ok && Patch((uChar*)0x0071384E, sizeof(VarMem<uChar>), Var<uChar>(0xE8, 0xFFE370CD), Var<uChar>(0xE8, 0x001199A3));
+	Ok = Ok && Patch((uChar*)0x0065886B, sizeof(VarMem<uChar>), Var<uChar>(0x55, 0x08245C89), Var<uChar>(0xE9, 0x001D496C));
+
+	Ok = Ok && PATCH2(0x005E9EA0, 0xD8, 0x1D, 0x00830718, 0x00830708);
+
+	//Disable_D3DVBCAPS_WRITEONLY
+	{
+		const char* NvidiaVga = HasVgaVendor(0x10DE) ? "1" : "0";
+		char NvidiaVgaIni[256];
+		if(!GothicReadIniString("DEBUG", "NvidiaVga", "0", NvidiaVgaIni, 256, "SystemPack.ini") || strcmp(NvidiaVgaIni, NvidiaVga))
+		{
+			GothicWriteIniString("DEBUG", "NvidiaVga", NvidiaVga, "SystemPack.ini");
+			GothicWriteIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", NvidiaVga, "SystemPack.ini");
+		}
+		char Disable_D3DVBCAPS_WRITEONLY[256];
+		if(GothicReadIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", "0", Disable_D3DVBCAPS_WRITEONLY, 256, "SystemPack.ini") && (atoi(Disable_D3DVBCAPS_WRITEONLY) == 1))
+		{
+			Ok = Ok && PATCH3(0x00656F37, 0x4C, 0x24, 0x1C, 0x10000, (uInt)0x0);
+		}
+	}
+
+	// zPM_NUM_VBUFFER_VERT
+	{
+		DWORD Value = 65535;
+		Ok = Ok && Patch((uChar*)0x005C8BF3, sizeof(DWORD), NULL, (uChar*)&Value);
+	}
+
+	// s_posCacheList
+	{
+		char s_posCacheList[256];
+		if(!GothicReadIniString("DEBUG", "s_posCacheList", "100000", s_posCacheList, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "s_posCacheList", s_posCacheList, "SystemPack.ini");
+
+		DWORD Value = 0x100000;
+		sscanf_s(s_posCacheList, "%x", &Value);
+		if(Value < 0x100000)
+			Value = 0x100000;
+
+		uInt OldBlockD = 0x0096AA78;
+		BlockD = (uChar*)VirtualAlloc(NULL, Value, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+		Ok = Ok && PATCH3(0x005C969F, 0x81, 0x7E, 0x38, 0x00000800, 0x00080000);
+
+		size_t size = 0;
+		const uChar* data = GetSectionAddress((const uChar*)GetModuleHandle(NULL), ".text", size);
+		for(size_t i = 0; Ok && (i < size); i++)
+		{
+			if(*(uInt*)&data[i] == OldBlockD)
+				Ok = Ok && Patch((uChar*)&data[i], sizeof(float), (uChar*)&OldBlockD, (uChar*)&BlockD);
+		}
+	}
+
+	// VerticalFOV
+	{
+		char VerticalFOV[256];
+		if(!GothicReadIniString("PARAMETERS", "VerticalFOV", "67.5", VerticalFOV, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "VerticalFOV", VerticalFOV, "SystemPack.ini");
+
+		float Value = (float)atof(VerticalFOV);
+		Ok = Ok && Patch((uChar*)(BlockC + 0x4), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DisableLOD
+	{
+		char DisableLOD[256];
+		if(!GothicReadIniString("PARAMETERS", "DisableLOD", "0", DisableLOD, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DisableLOD", DisableLOD, "SystemPack.ini");
+
+		if(atoi(DisableLOD))
+		{
+			float Value = 0.0f;
+			Ok = Ok && Patch((uChar*)0x00832A34, sizeof(float), NULL, (uChar*)&Value);
+		}
+	}
+
+	// SPAWN_INSERTRANGE
+	{
+		char SPAWN_INSERTRANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTRANGE", "4500", SPAWN_INSERTRANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTRANGE", SPAWN_INSERTRANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTRANGE);
+		Ok = Ok && Patch((uChar*)0x008BACD0, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_REMOVERANGE
+	{
+		char SPAWN_REMOVERANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_REMOVERANGE", "5000", SPAWN_REMOVERANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_REMOVERANGE", SPAWN_REMOVERANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_REMOVERANGE);
+		Ok = Ok && Patch((uChar*)0x008BACD4, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_INSERTTIME_MAX
+	{
+		char SPAWN_INSERTTIME_MAX[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", "1000", SPAWN_INSERTTIME_MAX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", SPAWN_INSERTTIME_MAX, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTTIME_MAX);
+		Ok = Ok && Patch((uChar*)0x008BACCC, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DrawDistanceMultiplier
+	{
+		Ok = Ok && PATCH2(0x004283C0, 0xD8, 0x0D, 0x0082EE44, BlockC + 0xC);
+
+		float Mul = 1.0f;
+		char DrawDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "DrawDistanceMultiplier", "1", DrawDistanceMultiplier, 256, "SystemPack.ini") || ((Mul = (float)atof(DrawDistanceMultiplier)) > 26.0f) || (Mul < 1.0f))
+		{
+			if(Mul > 26.0f)
+				Mul = 26.0f;
+			else
+			if(Mul < 1.0f)
+				Mul = 1.0f;
+
+			sprintf(DrawDistanceMultiplier, "%d", (int)Mul);
+			GothicWriteIniString("PARAMETERS", "DrawDistanceMultiplier", DrawDistanceMultiplier, "SystemPack.ini");
+		}
+
+		float Value = Mul * 0.01f;
+		Ok = Ok && Patch((uChar*)(BlockC + 0xC), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// OutDoorPortalDistanceMultiplier
+	{
+		char OutDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", "1", OutDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", OutDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(OutDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x0052F25E, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x0052F266, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// OutDoorPortalStart
+	//{
+	//	char OutDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalStart", "3240000", OutDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalStart", OutDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052F25E, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorPortalFadeout
+	//{
+	//	char OutDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalFadeout", "1440000", OutDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalFadeout", OutDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0052F266, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// InDoorPortalDistanceMultiplier
+	{
+		char InDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", "1", InDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", InDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(InDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x005348A9, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x005348B1, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// InDoorPortalStart
+	//{
+	//	char InDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalStart", "3240000", InDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalStart", InDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x005348A9, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorPortalFadeout
+	//{
+	//	char InDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalFadeout", "1440000", InDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalFadeout", InDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x005348B1, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// ZNORESTHREAD
+	{
+		char ZNORESTHREAD[256];
+		if(!GothicReadIniString("DEBUG", "ZNORESTHREAD", "1", ZNORESTHREAD, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "ZNORESTHREAD", ZNORESTHREAD, "SystemPack.ini");
+
+		if(atoi(ZNORESTHREAD))
+		{
+			uChar Org = 0x40;
+			uChar New = 0x90;
+			Ok = Ok && Patch((uChar*)0x00558D39, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// DialogBoxX
+	{
+		char DialogBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxX", "800", DialogBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxX", DialogBoxX, "SystemPack.ini");
+
+		int Org = 800;
+		int Val = atoi(DialogBoxX);
+		Ok = Ok && Patch((uChar*)0x0065F837, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// DialogBoxY
+	{
+		char DialogBoxY[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxY", "600", DialogBoxY, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxY", DialogBoxY, "SystemPack.ini");
+
+		int Org = 600;
+		int Val = atoi(DialogBoxY);
+		Ok = Ok && Patch((uChar*)0x0065F846, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// SubtitlesBoxX
+	{
+		char SubtitlesBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesBoxX", "600", SubtitlesBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesBoxX", SubtitlesBoxX, "SystemPack.ini");
+
+		int Org = 600;
+		int Val = atoi(SubtitlesBoxX);
+		Ok = Ok && Patch((uChar*)0x006C2E39, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// EnableShields
+	{
+		char EnableShields[256];
+		if(!GothicReadIniString("DEBUG", "EnableShields", "1", EnableShields, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "EnableShields", EnableShields, "SystemPack.ini");
+		if(atoi(EnableShields))
+		{
+			uChar Shields_1_org[] = { 0x67, 0x65, 0x66, 0x6F, 0x72, 0x63, 0x65, 0x20, 0x33, 0x20, 0x6F, 0x72 };
+			uChar Shields_1_patch[] = { 0x00, 0x5A, 0x53, 0x5F, 0x4C, 0x45, 0x46, 0x54, 0x41, 0x52, 0x4D, 0x00 };
+			Ok = Ok && Patch((uChar*)0x008AC14B, sizeof(Shields_1_org), Shields_1_org, Shields_1_patch);
+
+			uChar Shields_2[] = { 0x60, 0x8B, 0xCE, 0x6A, 0x9, 0x68, 0x50, 0x83, 0x8B, 0x0, 0x6A, 0x0, 0x68, 0xF0, 0xE6, 0x82, 0x0, 0x54, 0xE8, 0x4A, 0xC3, 0xF1, 0xFF, 0x83, 0xC4, 0x10, 0x61, 0x60, 0x8B, 0xCE, 0x6A, 0xA, 0x68, 0x4C, 0xC1, 0x8A, 0x0, 0x6A, 0x0, 0x68, 0xF0, 0xE6, 0x82, 0x0, 0x54, 0xE8, 0x2F, 0xC3, 0xF1, 0xFF, 0x83, 0xC4, 0x10, 0x61, 0x60, 0x68, 0xFF, 0xD4, 0x82, 0x0, 0x8B, 0xCE, 0xE8, 0xAE, 0xC1, 0xF1, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0xB, 0x61, 0x68, 0xC, 0x1E, 0xAB, 0x0, 0xE9, 0x98, 0xCC, 0xF0, 0xFF, 0x51, 0x8B, 0xCE, 0xE8, 0xC3, 0x51, 0xF0, 0xFF, 0xEB, 0xEB, 0xF0, 0xE6, 0x82, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2C, 0x83, 0x8B, 0x0, 0xC, 0x0, 0x0, 0x0, 0x1F };
+			Ok = Ok && PATCHZN(0x0082D49F, sizeof(Shields_2), Shields_2);
+
+			uChar Shields_3_org[] = { 0x68, 0x0C, 0x1E, 0xAB, 0x00 };
+			uChar Shields_3_patch[] = { 0xE9, 0x12, 0x33, 0x0F, 0x00 };
+			Ok = Ok && Patch((uChar*)0x0073A188, sizeof(Shields_3_org), Shields_3_org, Shields_3_patch);
+
+			uChar Shields_4_org[] = { 0x68, 0xF4, 0x1E, 0xAB, 0x00 };
+			uChar Shields_4_patch[] = { 0xE9, 0xD9, 0x44, 0x0F, 0x00 };
+			Ok = Ok && Patch((uChar*)0x0073905D, sizeof(Shields_4_org), Shields_4_org, Shields_4_patch);
+
+			uChar Shields_5_org[] = { 0x68, 0xF4, 0x1E, 0xAB, 0x00 };
+			uChar Shields_5_patch[] = { 0xE9, 0xDD, 0x40, 0x0F, 0x00 };
+			Ok = Ok && Patch((uChar*)0x00739489, sizeof(Shields_5_org), Shields_5_org, Shields_5_patch);
+
+			uChar Shields_6_org[] = { 0x8B, 0x86, 0xB8, 0x09, 0x00, 0x00 };
+			uChar Shields_6_patch[] = { 0xE9, 0x7A, 0x5F, 0x0F, 0x00, 0x90 };
+			Ok = Ok && Patch((uChar*)0x00737621, sizeof(Shields_6_org), Shields_6_org, Shields_6_patch);
+
+			uChar Shields_7[] = { 0xF0, 0xE6, 0x82, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4C, 0xC1, 0x8A, 0x0, 0xA, 0x0, 0x0, 0x0, 0x1F, 0x0, 0x0, 0x0, 0xF0, 0xE6, 0x82, 0x0, 0x0, 0x0, 0x0, 0x0, 0x50, 0x83, 0x8B, 0x0, 0x9, 0x0, 0x0, 0x0, 0x1F, 0x0, 0x0, 0x0, 0x68, 0xF4, 0x1E, 0xAB, 0x0, 0x60, 0x8B, 0xCE, 0xE8, 0x8, 0xA9, 0xF0, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0x6, 0x61, 0xE9, 0x2D, 0xBB, 0xF0, 0xFF, 0x61, 0x60, 0x8B, 0xCE, 0x68, 0x13, 0xD5, 0x82, 0x0, 0x68, 0x27, 0xD5, 0x82, 0x0, 0xE8, 0x57, 0x68, 0xF1, 0xFF, 0xEB, 0xE5, 0x68, 0xF4, 0x1E, 0xAB, 0x0, 0x60, 0x8B, 0xCE, 0x68, 0x13, 0xD5, 0x82, 0x0, 0xE8, 0x13, 0xC1, 0xF1, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0x6, 0x61, 0xE9, 0x3, 0xBF, 0xF0, 0xFF, 0x61, 0x60, 0x8B, 0xCE, 0x68, 0x27, 0xD5, 0x82, 0x0, 0x68, 0x13, 0xD5, 0x82, 0x0, 0xE8, 0x22, 0x68, 0xF1, 0xFF, 0xEB, 0xE5, 0x8B, 0x86, 0xB8, 0x9, 0x0, 0x0, 0x33, 0xFF, 0x85, 0xC0, 0x7E, 0x35, 0x8D, 0x49, 0x0, 0x8B, 0x96, 0xB0, 0x9, 0x0, 0x0, 0x8B, 0x4, 0xBA, 0x68, 0x17, 0xD5, 0x82, 0x0, 0x8D, 0x48, 0x4, 0xE8, 0xEB, 0xAA, 0xBE, 0xFF, 0x85, 0xC0, 0x74, 0xD, 0x8B, 0x86, 0xB8, 0x9, 0x0, 0x0, 0x47, 0x3B, 0xF8, 0x7C, 0xDB, 0xEB, 0xB, 0x8B, 0x86, 0xB0, 0x9, 0x0, 0x0, 0x8B, 0x3C, 0xB8, 0xEB, 0x2, 0x33, 0xFF, 0x57, 0x8B, 0xCE, 0xE8, 0x75, 0xD0, 0xF1, 0xFF, 0x8B, 0x86, 0xB8, 0x9, 0x0, 0x0, 0xE9, 0x31, 0xA0, 0xF0, 0xFF };
+			Ok = Ok && PATCHZN(0x0082D513, sizeof(Shields_7), Shields_7);
+
+			uChar Shields_8[] = { 0x60, 0x68, 0xC, 0x1E, 0xAB, 0x0, 0x8B, 0xCE, 0xE8, 0x8D, 0x49, 0xF0, 0xFF, 0x85, 0xC0, 0x75, 0xB, 0x61, 0x68, 0xF0, 0x1E, 0xAB, 0x0, 0xE9, 0x2A, 0xEC, 0xF1, 0xFF, 0x50, 0x8B, 0xCE, 0xE8, 0xA6, 0x50, 0xF0, 0xFF, 0xEB, 0xEB };
+			Ok = Ok && PATCHZN(0x0082D5F6, sizeof(Shields_8), Shields_8);
+
+			uChar Shields_9_org[] = { 0x68, 0xF0, 0x1E, 0xAB, 0x00 };
+			uChar Shields_9_patch[] = { 0xE9, 0xBA, 0x13, 0x0E, 0x00 };
+			Ok = Ok && Patch((uChar*)0x0074C237, sizeof(Shields_9_org), Shields_9_org, Shields_9_patch);
+		}
+	}
+
+	// MoverFix 
+	{
+		char MoverFix[256];
+		GothicReadIniString("DEBUG", "MoverFix", "1", MoverFix, 256, "SystemPack.ini");
+		if(atoi(MoverFix))
+		{
+			uChar Mover_1_org[] = { 0xC7, 0x44, 0x24, 0x24, 0xF0, 0x23, 0x74, 0x49 };
+			uChar Mover_1_patch[] = { 0xC7, 0x44, 0x24, 0x24, 0xF0, 0x23, 0x74, 0x44 };
+			Ok = Ok && Patch((uChar*)0x0052FD71, sizeof(Mover_1_org), Mover_1_org, Mover_1_patch);
+
+			uChar Mover_2_org[] = { 0xC7, 0x44, 0x24, 0x20, 0x00, 0x00, 0x80, 0xBF };
+			uChar Mover_2_patch[] = { 0xC7, 0x44, 0x24, 0x20, 0x00, 0x00, 0x00, 0xBF };
+			Ok = Ok && Patch((uChar*)0x0054B01F, sizeof(Mover_2_org), Mover_2_org, Mover_2_patch);
+		}
+	}
+
+	// ShowManaBar
+	{
+		char ShowManaBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowManaBar", "1", ShowManaBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowManaBar", ShowManaBar, "SystemPack.ini");
+
+		switch(atoi(ShowManaBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0xA1, 0x86, 0x0E, 0x00 };
+				uChar New[] = { 0xE8, 0xB0, 0x88, 0x0E, 0x00 };
+				Ok = Ok && Patch((uChar*)0x006C342A, sizeof(Org), Org, New);
+			}
+			break;
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x0F, 0x85, 0xAB, 0x00, 0x00, 0x00 };
+				uChar New[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+				Ok = Ok && Patch((uChar*)0x006C33FC, sizeof(Org), Org, New);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// ShowSwimBar
+	{
+		char ShowSwimBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowSwimBar", "1", ShowSwimBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowSwimBar", ShowSwimBar, "SystemPack.ini");
+
+		switch(atoi(ShowSwimBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0x58, 0x87, 0x0E, 0x00 };
+				uChar New[] = { 0xE8, 0x67, 0x89, 0x0E, 0x00 };
+				Ok = Ok && Patch((uChar*)0x006C3373, sizeof(Org), Org, New);
+			}
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x0F, 0x84, 0xA4, 0x00, 0x00, 0x00 };
+				uChar New[] = { 0xEB, 0x1C, 0x90, 0x90, 0x90, 0x90 };
+				Ok = Ok && Patch((uChar*)0x006C332C, sizeof(Org), Org, New);
+			}
+		default:
+			break;
+		}
+	}
+
+	// HideHealthBar
+	{
+		char HideHealthBar[256];
+		if(!GothicReadIniString("PARAMETERS", "HideHealthBar", "0", HideHealthBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "HideHealthBar", HideHealthBar, "SystemPack.ini");
+
+		if(atoi(HideHealthBar))
+		{
+			uChar Org[] = { 0xE8, 0x5F, 0x88, 0x0E, 0x00 };
+			uChar New[] = { 0xE8, 0x6E, 0x8A, 0x0E, 0x00 };
+			Ok = Ok && Patch((uChar*)0x006C326C, sizeof(Org), Org, New);
+		}
+	}
+
+	// SubtitlesTimeMultiplier
+	{
+		char SubtitlesTimeMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesTimeMultiplier", "1.0", SubtitlesTimeMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesTimeMultiplier", SubtitlesTimeMultiplier, "SystemPack.ini");
+
+		float Multiplier = (float)atof(SubtitlesTimeMultiplier);
+		if(Multiplier != 1.0f)
+		{
+			uChar Org[] = { 0x8B, 0xCD, 0xFF, 0x50, 0x30 };
+			uChar New[] = { 0xE9, 0x93, 0x4F, 0x0D, 0x00 };
+			Ok = Ok && Patch((uChar*)0x00758688, sizeof(Org), Org, New);
+
+			uChar New2[] = { 0x8B, 0xCD, 0xFF, 0x50, 0x30, 0xD8, 0x0D, 0x1C, 0xD6, 0x82, 0x00, 0xE9, 0x5D, 0xB0, 0xF2, 0xFF };			
+			Ok = Ok && PATCHZN((uChar*)0x0082D620, sizeof(New2), New2);
+
+			Ok = Ok && PATCHZN((uChar*)0x0082D61C, sizeof(float), (uChar*)&Multiplier);
+		}
+	}
+
+	char Version[] = "2.6(fix-SP 1.1)";
+	Ok = Ok && PATCHZN(0x0082D48F, sizeof(Version), (uChar*)Version);
+	uInt O = 0x0089DA98; uInt N = 0x0082D48F; 
+	Ok = Ok && Patch((uChar*)0x0089D9B0, sizeof(uInt), (uChar*)&O, (uChar*)&N);
+
+	return Ok;
+}
+
+bool IsInitEngIntl(void)
+{
+	bool Result = false;
+
+	bool ChangeWorkDir = false;
+	TString WorkPath;
+	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
+		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
+
+	if(!vdf_initall_internal())
+	{
+		long vf = vdf_fopen("\\_WORK\\DATA\\SCRIPTS\\_COMPILED\\GOTHIC.DAT", VDF_VIRTUAL | VDF_PHYSICAL);
+		if(vf > 0)
+		{
+			long size = vdf_ffilesize(vf);
+			if(size)
+			{
+				char* Buffer = new char[size];
+				if(vdf_fread(vf, Buffer, size) == size)
+				{
+					for(long i = 0; !Result && (i < size); i++)
+					{
+						if(!memcmp(&Buffer[i], "GAME_INITENGINTL", 16))
+							Result = true;
+					}
+				}
+				delete[] Buffer;
+			}
+			vdf_fclose(vf);
+		}
+	}
+
+	if(ChangeWorkDir)
+		SetCurrentDirectory(_T("System\\"));
+
+	return Result;
+}
+
+bool Patch_G1_mod(void)
+{
+	bool Ok = true;
+
+	uInt OldBlockA = 0x00871060;
+	BlockA = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x0051828E, 0xBF, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051831C, 0x8D, 0x3C, 0x85, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00519347, 0xD9, 0x1C, 0x8D, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051BD1B, 0xD9, 0x04, 0xB5, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051BD2D, 0xD9, 0x04, 0xBD, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051BD44, 0xD9, 0x04, 0x95, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051D73A, 0xD9, 0x04, 0xAD, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051D777, 0xD9, 0x04, 0x8D, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0051D79E, 0xD9, 0x04, 0x85, OldBlockA, BlockA);
+	Ok = Ok && PATCH1(0x0051DE29, 0xBF, OldBlockA, BlockA);
+
+	Ok = Ok && PATCH1(0x0051829A, 0xBF, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x00518307, 0xD9, 0x14, 0x85, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x00518315, 0x8D, 0x34, 0x85, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0051932E, 0xD8, 0x14, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0051933C, 0xD9, 0x14, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0051BD5C, 0xD8, 0x1C, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0051D7C4, 0xD8, 0x1C, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH2(0x0051DE23, 0xD9, 0x1D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH1(0x0051DE36, 0xBE, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH1(0x0051DE3B, 0xBF, OldBlockA + 0x1004, BlockA + 0x5004);
+	
+	uInt OldBlockB = 0x0086FC58;
+	BlockB = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x00517D3A, 0x68, 0x100, 0xC00);
+	Ok = Ok && PATCH1(0x00517D41, 0x68, OldBlockB, BlockB);
+	Ok = Ok && PATCH1(0x00517E61, 0x68, 0x100, 0xC00);
+	Ok = Ok && PATCH1(0x00517E6A, 0x68, OldBlockB, BlockB);
+	Ok = Ok && PATCH2(0x00517E9F, 0x81, 0xFB, 0x100, 0xC00);
+	Ok = Ok && PATCH3(0x00517F46, 0x8D, 0x04, 0x95, OldBlockB, BlockB);
+	Ok = Ok && PATCH1(0x0051A9CF, 0x3D, 0x100, 0xC00);
+	Ok = Ok && PATCH3(0x0051AA3B, 0x8D, 0x3C, 0x95, OldBlockB, BlockB);
+
+	Ok = Ok && PATCH3(0x00518043, 0x8B, 0x0C, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x0051806A, 0xC7, 0x04, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x005180A3, 0x8B, 0x0C, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x005180CA, 0xC7, 0x04, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x00519A89, 0x8B, 0x0C, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x00519AB0, 0x89, 0x2C, 0x8D, OldBlockB + 0xC, BlockB + 0xC);
+	Ok = Ok && PATCH3(0x0051AA34, 0x8B, 0x0C, 0x95, OldBlockB + 0xC, BlockB + 0xC);
+
+	uInt OldBlockC = 0x008C98F0;
+	BlockC = (uChar*)VirtualAlloc(NULL, 0x20000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x005B116A, 0x68, 0x400, 0x1800);
+	Ok = Ok && PATCH1(0x005B1171, 0x68, OldBlockC, BlockC);
+	Ok = Ok && PATCH1(0x005B11E1, 0x68, 0x400, 0x1800);
+	Ok = Ok && PATCH1(0x005B11EA, 0x68, OldBlockC, BlockC);
+	Ok = Ok && PATCH2(0x005B126F, 0x81, 0xFB, 0x400, 0x1800);
+	Ok = Ok && PATCH3(0x005B132A, 0x8D, 0x04, 0x95, OldBlockC, BlockC);
+
+	uChar Raw_1[] = { 0xCC, 0xCC, 0x8B, 0x02, 0x83, 0xEC, 0x0C, 0x85, 0xC0, 0x53, 0x55, 0x56, 0x8B, 0xF1, 0x89, 0x46, 0x30, 0x8B, 0x4A, 0x04, 0x57, 0x89, 0x4E, 0x34, 0xBD, 0x01, 0x00, 0x00, 0x00, 0x7F, 0x03, 0x89, 0x6E, 0x30, 0x8B, 0x46, 0x34, 0x85, 0xC0, 0x7F, 0x03, 0x89, 0x6E, 0x34, 0x33, 0xC0, 0x33, 0xC9, 0x89, 0x46, 0x40, 0x89, 0x4E, 0x44, 0x8B, 0x46, 0x4C, 0x85, 0xC0, 0x0F, 0x84, 0xA5, 0x5F, 0xF8, 0xFF, 0x8B, 0x56, 0x30, 0x89, 0x56, 0x40, 0x8B, 0x46, 0x34, 0x89, 0x46, 0x44, 0x8B, 0x4E, 0x4C, 0x36, 0xDF, 0x41, 0x44, 0xD8, 0x35, 0x4E, 0x1C, 0x4D, 0x00, 0x50, 0xDB, 0x1C, 0x24, 0x58, 0x8B, 0x56, 0x30, 0xE9, 0x5B, 0x5F, 0xF8, 0xFF, 0xCC, 0xCC };
+	Ok = Ok && PATCHZN(0x007CF49E, sizeof(Raw_1), Raw_1);
+
+	uChar Raw_2[] = { 0xCC, 0xCC, 0x51 };
+	Ok = Ok && PATCHZN(0x007CF533, sizeof(Raw_2), Raw_2);
+	Ok = Ok && PATCHZN(0x007CF536, 6, Var<Raw2>(Raw2(0xFF, 0x35), BlockC + 0x1FFF4));
+
+	uChar Raw_3[] = { 0xD9, 0x04, 0x24, 0xD8, 0x35, 0x70, 0xD7, 0x49, 0x00 };
+	Ok = Ok && PATCHZN(0x007CF53C, sizeof(Raw_3), Raw_3);
+	Ok = Ok && PATCHZN(0x007CF545, 6, Var<Raw2>(Raw2(0xD9, 0x1D), BlockC + 0x1FFF0));
+	Ok = Ok && PATCHZN(0x007CF54B, 6, Var<Raw2>(Raw2(0xDF, 0x41), 0x7071DA74));
+	Ok = Ok && PATCHZN(0x007CF551, 6, Var<Raw2>(Raw2(0xD9, 0x05), BlockC + 0x1FFF0));
+
+	uChar Raw_4[] = { 0xDE, 0xF1, 0xD9, 0xE8, 0xD9, 0xF3, 0xD8, 0x0D, 0xFC, 0x20, 0x7D, 0x00, 0xD8, 0x0D, 0xFC, 0x1E, 0x7D, 0x00, 0x50, 0xD9, 0x1C, 0x24, 0xE8, 0xAE, 0x71, 0xD6, 0xFF, 0x59, 0xC2, 0x04, 0x00 };
+	Ok = Ok && PATCHZN(0x007CF557, sizeof(Raw_4), Raw_4);
+
+	Ok = Ok && PATCH1(0x0074CF5F, 0xE8, 0xFFEA1B4C, 0xFFEA1BD8);
+
+	Ok = Ok && PATCH1(0x00725595, 0xE8, 0x0002FE76, 0x000A9F06);
+	Ok = Ok && PATCH1(0x0049D774, 0xE8, 0x00098F67, 0x00331DBC);
+	Ok = Ok && PATCH1(0x004B7A15, 0xE8, 0x0007ECC6, 0x00317B1B);
+	Ok = Ok && PATCH1(0x004B9B1F, 0xE8, 0x0007CBBC, 0x00315A11);
+
+	Ok = Ok && PATCH2(0x005C0590, 0xD8, 0x1D, 0x007D2634, 0x007D2628);
+
+	Ok = Ok && PATCH1(0x0042A05B, 0x3D, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH2(0x0042A430, 0x81, 0xF9, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH2(0x0042A489, 0x81, 0xFD, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH1(0x0042BCD7, 0x3D, 0x00000640, 0x00006400);
+
+	uShort A = 0x0E76;
+	uShort B = 0x0EEB;
+	Ok = Ok && Patch((uChar*)0x005CE58B, sizeof(uShort), (uChar*)&A, (uChar*)&B);
+
+	uChar Raw_5[] = { 0x83, 0xEC, 0x08, 0x56, 0x8B, 0xF1, 0x8B, 0x46, 0x18, 0x8B, 0x0D, 0xE4, 0x31, 0x84, 0x00, 0x3B, 0xC8, 0x57, 0x73, 0x08, 0x8B, 0xC8, 0x89, 0x0D, 0xE4, 0x31, 0x84, 0x00, 0x83, 0xF9, 0x01, 0x76, 0x07, 0x49, 0x89, 0x0D, 0xE4, 0x31, 0x84, 0x00, 0xE8, 0xAA, 0x73, 0xD2, 0xFF, 0x2B, 0x46, 0x0C, 0x8B, 0x0D, 0xE4, 0x31, 0x84, 0x00, 0xC1, 0xE0, 0x03, 0x3B, 0xC8, 0x0F, 0x86, 0xD1, 0xEF, 0xDF, 0xFF, 0x2B, 0xC8, 0xC1, 0xE9, 0x03, 0x51, 0xFF, 0x15, 0xF0, 0x00, 0x7D, 0x00, 0xE9, 0xC5, 0xEF, 0xDF, 0xFF };
+	Ok = Ok && PATCHZN(0x007CF589, sizeof(Raw_5), Raw_5);
+
+	Ok = Ok && PATCH1(0x004D0DF7, 0xE8, 0x000FD754, 0x002FE78D);
+	Ok = Ok && PATCH1(0x004D0E69, 0xE8, 0x000FD6E2, 0x002FE71B);
+
+	//Disable_D3DVBCAPS_WRITEONLY
+	{
+		const char* NvidiaVga = HasVgaVendor(0x10DE) ? "1" : "0";
+		char NvidiaVgaIni[256];
+		if(!GothicReadIniString("DEBUG", "NvidiaVga", "0", NvidiaVgaIni, 256, "SystemPack.ini") || strcmp(NvidiaVgaIni, NvidiaVga))
+		{
+			GothicWriteIniString("DEBUG", "NvidiaVga", NvidiaVga, "SystemPack.ini");
+			GothicWriteIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", NvidiaVga, "SystemPack.ini");
+		}
+		char Disable_D3DVBCAPS_WRITEONLY[256];
+		if(GothicReadIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", "0", Disable_D3DVBCAPS_WRITEONLY, 256, "SystemPack.ini") && (atoi(Disable_D3DVBCAPS_WRITEONLY) == 1))
+		{
+			Ok = Ok && PATCH3(0x0071E657, 0x4C, 0x24, 0x1C, 0x10000, (uInt)0x0);
+		}
+	}
+
+	// PfxFix
+	{
+		char PfxFix[256];
+		if(!GothicReadIniString("DEBUG", "PfxFix", "1", PfxFix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "PfxFix", PfxFix, "SystemPack.ini");
+
+		if(atoi(PfxFix))
+		{
+			uChar Org = 0x74;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x0058D7B8, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// TorchFix
+	{
+		char TorchFix[256];
+		if(!GothicReadIniString("DEBUG", "TorchFix", "1", TorchFix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "TorchFix", TorchFix, "SystemPack.ini");
+
+		if(atoi(TorchFix))
+		{
+			uChar Org1[] = { 0xC7, 0x44, 0x24, 0x24, 0xF0, 0x23, 0x74, 0x49 };
+			uChar New1[] = { 0xC7, 0x44, 0x24, 0x24, 0xF0, 0x23, 0x74, 0x44 };
+			Ok = Ok && Patch((uChar*)0x0051D53A, sizeof(Org1), Org1, New1);
+
+			uChar Org2[] = { 0xC7, 0x44, 0x24, 0x14, 0x00, 0x00, 0x80, 0xBF };
+			uChar New2[] = { 0xC7, 0x44, 0x24, 0x14, 0x00, 0x00, 0x00, 0xBF };
+			Ok = Ok && Patch((uChar*)0x00536B8D, sizeof(Org2), Org2, New2);
+		}
+	}
+
+	// zPM_NUM_VBUFFER_VERT
+	{
+		DWORD Value = 65535;
+		Ok = Ok && Patch((uChar*)0x005A64F4, sizeof(DWORD), NULL, (uChar*)&Value);
+	}
+
+	// s_posCacheList
+	{
+		char s_posCacheList[256];
+		if(!GothicReadIniString("DEBUG", "s_posCacheList", "100000", s_posCacheList, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "s_posCacheList", s_posCacheList, "SystemPack.ini");
+
+		DWORD Value = 0x100000;
+		sscanf_s(s_posCacheList, "%x", &Value);
+		if(Value < 0x100000)
+			Value = 0x100000;
+
+		uInt OldBlockD = 0x008B9AA0;
+		BlockD = (uChar*)VirtualAlloc(NULL, Value, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+		Ok = Ok && PATCH3(0x005A6B5F, 0x81, 0x7E, 0x38, 0x00000800, 0x00080000);
+
+		size_t size = 0;
+		const uChar* data = GetSectionAddress((const uChar*)GetModuleHandle(NULL), ".text", size);
+		for(size_t i = 0; Ok && (i < size); i++)
+		{
+			if(*(uInt*)&data[i] == OldBlockD)
+				Ok = Ok && Patch((uChar*)&data[i], sizeof(float), (uChar*)&OldBlockD, (uChar*)&BlockD);
+		}
+	}
+
+	// VerticalFOV
+	{
+		char VerticalFOV[256];
+		if(!GothicReadIniString("PARAMETERS", "VerticalFOV", "67.5", VerticalFOV, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "VerticalFOV", VerticalFOV, "SystemPack.ini");
+
+		float Value = (float)atof(VerticalFOV);
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFF4), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DisableLOD
+	{
+		char DisableLOD[256];
+		if(!GothicReadIniString("PARAMETERS", "DisableLOD", "0", DisableLOD, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DisableLOD", DisableLOD, "SystemPack.ini");
+
+		if(atoi(DisableLOD))
+		{
+			float Value = 0.0f;
+			Ok = Ok && Patch((uChar*)0x007D4654, sizeof(float), NULL, (uChar*)&Value);
+		}
+	}
+
+	// SPAWN_INSERTRANGE
+	{
+		char SPAWN_INSERTRANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTRANGE", "4500", SPAWN_INSERTRANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTRANGE", SPAWN_INSERTRANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTRANGE);
+		Ok = Ok && Patch((uChar*)0x00850FB4, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_REMOVERANGE
+	{
+		char SPAWN_REMOVERANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_REMOVERANGE", "5000", SPAWN_REMOVERANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_REMOVERANGE", SPAWN_REMOVERANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_REMOVERANGE);
+		Ok = Ok && Patch((uChar*)0x00850FB8, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_INSERTTIME_MAX
+	{
+		char SPAWN_INSERTTIME_MAX[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", "1000", SPAWN_INSERTTIME_MAX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", SPAWN_INSERTTIME_MAX, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTTIME_MAX);
+		Ok = Ok && Patch((uChar*)0x00850FB0, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DrawDistanceMultiplier
+	{
+		Ok = Ok && PATCH2(0x00426E89, 0xD8, 0x0D, 0x007D0E0C, BlockC + 0x1FFF8);
+
+		float Mul = 1.0f;
+		char DrawDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "DrawDistanceMultiplier", "1", DrawDistanceMultiplier, 256, "SystemPack.ini") || ((Mul = (float)atof(DrawDistanceMultiplier)) > 26.0f) || (Mul < 1.0f))
+		{
+			if(Mul > 26.0f)
+				Mul = 26.0f;
+			else
+			if(Mul < 1.0f)
+				Mul = 1.0f;
+
+			sprintf(DrawDistanceMultiplier, "%d", (int)Mul);
+			GothicWriteIniString("PARAMETERS", "DrawDistanceMultiplier", DrawDistanceMultiplier, "SystemPack.ini");
+		}
+
+		float Value = Mul * 0.01f;
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFF8), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// OutDoorPortalDistanceMultiplier
+	{
+		char OutDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", "1", OutDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", OutDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(OutDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x0051C989, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x0051C991, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// OutDoorPortalStart
+	//{
+	//	char OutDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalStart", "3240000", OutDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalStart", OutDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0051C989, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorPortalFadeout
+	//{
+	//	char OutDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalFadeout", "1440000", OutDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalFadeout", OutDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0051C991, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorWoodPortalStart
+	//{
+	//	char OutDoorWoodPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorWoodPortalStart", "30250000", OutDoorWoodPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorWoodPortalStart", OutDoorWoodPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorWoodPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0051C9BF, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorWoodPortalFadeout
+	//{
+	//	char OutDoorWoodPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorWoodPortalFadeout", "16000000", OutDoorWoodPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorWoodPortalFadeout", OutDoorWoodPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorWoodPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0051C9C7, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// InDoorPortalDistanceMultiplier
+	{
+		char InDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", "1", InDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", InDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(InDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x00521059, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x00521061, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// InDoorPortalStart
+	//{
+	//	char InDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalStart", "3240000", InDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalStart", InDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x00521059, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorPortalFadeout
+	//{
+	//	char InDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalFadeout", "1440000", InDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalFadeout", InDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x00521061, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorWoodPortalStart
+	//{
+	//	char InDoorWoodPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorWoodPortalStart", "30250000", InDoorWoodPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorWoodPortalStart", InDoorWoodPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorWoodPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052108F, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorWoodPortalFadeout
+	//{
+	//	char InDoorWoodPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorWoodPortalFadeout", "16000000", InDoorWoodPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorWoodPortalFadeout", InDoorWoodPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorWoodPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x00521097, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// WoodPortalDistanceMultiplier
+	{
+		char WoodPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "WoodPortalDistanceMultiplier", "1", WoodPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "WoodPortalDistanceMultiplier", WoodPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(WoodPortalDistanceMultiplier);
+
+		float Value = Mul * 30250000.0f;
+		Ok = Ok && Patch((uChar*)0x0051C9BF, sizeof(float), NULL, (uChar*)&Value);
+		Ok = Ok && Patch((uChar*)0x0052108F, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (30250000.0f - 16000000.0f);
+		Ok = Ok && Patch((uChar*)0x0051C9C7, sizeof(float), NULL, (uChar*)&Value);
+		Ok = Ok && Patch((uChar*)0x00521097, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DisableCacheOut
+	{
+		char DisableCacheOut[256];
+		if(!GothicReadIniString("DEBUG", "DisableCacheOut", "1", DisableCacheOut, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "DisableCacheOut", DisableCacheOut, "SystemPack.ini");
+
+		if(atoi(DisableCacheOut))
+		{
+			Ok = Ok && PATCH1(0x00712594, 0xE8, 0xFFEA2F47, 0xFFEA2F59);
+		}
+	}
+
+	// ZNORESTHREAD
+	{
+		char ZNORESTHREAD[256];
+		if(!GothicReadIniString("DEBUG", "ZNORESTHREAD", "1", ZNORESTHREAD, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "ZNORESTHREAD", ZNORESTHREAD, "SystemPack.ini");
+
+		if(atoi(ZNORESTHREAD))
+		{
+			uChar Org = 0x40;
+			uChar New = 0x90;
+			Ok = Ok && Patch((uChar*)0x005444BB, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// MoverBugfix
+	{
+		char MoverBugfix[256];
+		if(!GothicReadIniString("DEBUG", "MoverBugfix", "1", MoverBugfix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "MoverBugfix", MoverBugfix, "SystemPack.ini");
+
+		if(atoi(MoverBugfix))
+		{
+			uChar Org = 0x75;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x005E53E6, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// zMouseRotationScale
+	{
+		Ok = Ok && PATCH2(0x006148FE, 0xD8, 0x0D, 0x007D1110, BlockC + 0x1FFFC);
+		Ok = Ok && PATCH2(0x00614A09, 0xD8, 0x0D, 0x007D1110, BlockC + 0x1FFFC);
+
+		char zMouseRotationScale[256];
+		if(!GothicReadIniString("PARAMETERS", "zMouseRotationScale", "0.1", zMouseRotationScale, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "zMouseRotationScale", zMouseRotationScale, "SystemPack.ini");
+
+		float Value = (float)atof(zMouseRotationScale);
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFFC), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// keyDelay
+	{
+		uChar Org = 0x7A;
+		uChar New = 0xEB;
+		Ok = Ok && Patch((uChar*)0x004C89BC, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+
+		char keyDelayRate[256];
+		float Value = 150.0f;
+		if(!GothicReadIniString("PARAMETERS", "keyDelayRate", "150", keyDelayRate, 256, "SystemPack.ini") || ((Value = (float)atof(keyDelayRate)) < 10.0f) || (Value > 300.0f))
+		{
+			if(Value < 10.0f)
+				Value = 10.0f;
+			else
+			if(Value > 300.0f)
+				Value = 300.0f;
+
+			sprintf(keyDelayRate, "%.0f", Value);
+
+			GothicWriteIniString("PARAMETERS", "keyDelayRate", keyDelayRate, "SystemPack.ini");
+		}
+
+		Value = (float)atof(keyDelayRate);
+		Ok = Ok && Patch((uChar*)0x004C81F5, sizeof(float), NULL, (uChar*)&Value);
+
+		char keyDelayFirst[256];
+		Value = 150.0f;
+		if(!GothicReadIniString("PARAMETERS", "keyDelayFirst", "150", keyDelayFirst, 256, "SystemPack.ini") || ((Value = (float)atof(keyDelayRate)) < 100.0f) || (Value > 1000.0f))
+		{
+			if(Value < 100.0f)
+				Value = 100.0f;
+			else
+			if(Value > 1000.0f)
+				Value = 1000.0f;
+
+			sprintf(keyDelayFirst, "%.0f", Value);
+
+			GothicWriteIniString("PARAMETERS", "keyDelayFirst", keyDelayFirst, "SystemPack.ini");
+		}
+
+		Value = (float)atof(keyDelayFirst);
+		Ok = Ok && Patch((uChar*)0x004C81FA, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// USInternationalKeyboardLayout
+	{
+		char USInternationalKeyboardLayout[256];
+		if(!GothicReadIniString("DEBUG", "USInternationalKeyboardLayout", "1", USInternationalKeyboardLayout, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "USInternationalKeyboardLayout", USInternationalKeyboardLayout, "SystemPack.ini");
+
+		if(atoi(USInternationalKeyboardLayout))
+		{
+			uChar Org = 0x45;
+			uChar New = 0x4E;
+			Ok = Ok && Patch((uChar*)0x004C782C, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+			Org = 0x4E;
+			New = 0x45;
+			Ok = Ok && Patch((uChar*)0x004C7888, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+			Org = 0xDB;
+			New = 0x7F;
+			Ok = Ok && Patch((uChar*)0x004C7808, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// DialogBoxX
+	{
+		char DialogBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxX", "640", DialogBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxX", DialogBoxX, "SystemPack.ini");
+
+		int Org = 640;
+		int Val = atoi(DialogBoxX);
+		Ok = Ok && Patch((uChar*)0x0072AC77, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// DialogBoxY
+	{
+		char DialogBoxY[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxY", "480", DialogBoxY, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxY", DialogBoxY, "SystemPack.ini");
+
+		int Org = 480;
+		int Val = atoi(DialogBoxY);
+		Ok = Ok && Patch((uChar*)0x0072AC86, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// SubtitlesBoxX
+	{
+		char SubtitlesBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesBoxX", "600", SubtitlesBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesBoxX", SubtitlesBoxX, "SystemPack.ini");
+
+		int Org = 600;
+		int Val = atoi(SubtitlesBoxX);
+		Ok = Ok && Patch((uChar*)0x00638C89, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// NumLockDisable
+	{
+		char NumLockDisable[256];
+		if(!GothicReadIniString("DEBUG", "NumLockDisable", "1", NumLockDisable, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "NumLockDisable", NumLockDisable, "SystemPack.ini");
+
+		if(atoi(NumLockDisable))
+		{
+			uChar Org = 0x74;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x0042596F, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// QuickSaveEnable
+	{
+		char QuickSaveEnable[256];
+		if(!GothicReadIniString("DEBUG", "QuickSaveEnable", "1", QuickSaveEnable, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "QuickSaveEnable", QuickSaveEnable, "SystemPack.ini");
+
+		if(atoi(QuickSaveEnable))
+		{
+			uChar Org1[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+			uChar New1[] = { 0x8B, 0x0D, 0xE4, 0xE9, 0x85, 0x00, 0x6A, 0x0F, 0xEB, 0x7A };
+			Ok = Ok && Patch((uChar*)0x004293B5, 10, Org1, New1);
+
+			uChar Org2[] = { 0x8B, 0x0D, 0xE4, 0xE9, 0x85, 0x00 };
+			uChar New2[] = { 0xEB, 0x81, 0x90, 0x90, 0x90, 0x90 };
+			Ok = Ok && Patch((uChar*)0x00429432, 6, Org2, New2);
+
+			uChar Org3 = 0x00;
+			uChar New3 = 0x0F;
+			Ok = Ok && Patch((uChar*)0x004294C6, sizeof(uChar), (uChar*)&Org3, (uChar*)&New3);
+		}
+	}
+
+	// EnableShields
+	{
+		char EnableShields[256];
+		if(!GothicReadIniString("DEBUG", "EnableShields", "1", EnableShields, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "EnableShields", EnableShields, "SystemPack.ini");
+		if(atoi(EnableShields))
+		{
+			uChar Shields_1_org[] = { 0x42, 0x3A, 0x20, 0x28, 0x6E, 0x65, 0x74, 0x57, 0x69, 0x6E, 0x64, 0x6F };
+			uChar Shields_1_patch[] = { 0x0, 0x5A, 0x53, 0x5F, 0x4C, 0x45, 0x46, 0x54, 0x41, 0x52, 0x4D, 0x0 };
+			Ok = Ok && Patch((uChar*)0x00830230, sizeof(Shields_1_org), Shields_1_org, Shields_1_patch);
+
+			uChar Shields_2_org[] = { 0x68, 0xF4, 0xB3, 0x8D, 0x00 };
+			uChar Shields_2_patch[] = { 0xE9, 0x5E, 0x88, 0x13, 0x00 };
+			Ok = Ok && Patch((uChar*)0x00696D78, sizeof(Shields_2_org), Shields_2_org, Shields_2_patch);
+
+			uChar Shields_3_org[] = { 0x68, 0x9C, 0xB4, 0x8D, 0x00 };
+			uChar Shields_3_patch[] = { 0xE9, 0x35, 0x9A, 0x13, 0x00 };
+			Ok = Ok && Patch((uChar*)0x00695C3D, sizeof(Shields_3_org), Shields_3_org, Shields_3_patch);
+
+			uChar Shields_4_org[] = { 0x68, 0x9C, 0xB4, 0x8D, 0x00 };
+			uChar Shields_4_patch[] = { 0xE9, 0xF1, 0x95, 0x13, 0x00 };
+			Ok = Ok && Patch((uChar*)0x006960B1, sizeof(Shields_4_org), Shields_4_org, Shields_4_patch);
+
+			uChar Shields_5_org[] = { 0x8B, 0x86, 0xF0, 0x09, 0x00, 0x00 };
+			uChar Shields_5_patch[] = { 0xE9, 0x66, 0xB4, 0x13, 0x00, 0x90 };
+			Ok = Ok && Patch((uChar*)0x00694271, sizeof(Shields_5_org), Shields_5_org, Shields_5_patch);
+
+			uChar Shields_6[] = { 0x60, 0x8B, 0xCE, 0x6A, 0x9, 0x68, 0x80, 0xE0, 0x84, 0x0, 0x6A, 0x0, 0x68, 0xE8, 0x6, 0x7D, 0x0, 0x54, 0xE8, 0x8E, 0x5E, 0xED, 0xFF, 0x83, 0xC4, 0x10, 0x61, 0x60, 0x8B, 0xCE, 0x6A, 0xA, 0x68, 0x31, 0x2, 0x83, 0x0, 0x6A, 0x0, 0x68, 0xE8, 0x6, 0x7D, 0x0, 0x54, 0xE8, 0x73, 0x5E, 0xED, 0xFF, 0x83, 0xC4, 0x10, 0x61, 0x60, 0x68, 0x3B, 0xF6, 0x7C, 0x0, 0x8B, 0xCE, 0xE8, 0x32, 0x5D, 0xED, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0xB, 0x61, 0x68, 0xF4, 0xB3, 0x8D, 0x0, 0xE9, 0x4C, 0x77, 0xEC, 0xFF, 0x51, 0x8B, 0xCE, 0xE8, 0x87, 0x5, 0xEC, 0xFF, 0xEB, 0xEB, 0xE8, 0x6, 0x7D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5C, 0xE0, 0x84, 0x0, 0xC, 0x0, 0x0, 0x0, 0x1F, 0x0, 0x0, 0x0, 0xE8, 0x6, 0x7D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x31, 0x2, 0x83, 0x0, 0xA, 0x0, 0x0, 0x0, 0x1F, 0x0, 0x0, 0x0, 0xE8, 0x6, 0x7D, 0x0, 0x0, 0x0, 0x0, 0x0, 0x80, 0xE0, 0x84, 0x0, 0x9, 0x0, 0x0, 0x0, 0x1F, 0x0, 0x0, 0x0, 0x68, 0x9C, 0xB4, 0x8D, 0x0, 0x60, 0x8B, 0xCE, 0xE8, 0x6C, 0x53, 0xEC, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0x6, 0x61, 0xE9, 0xD1, 0x65, 0xEC, 0xFF, 0x61, 0x60, 0x8B, 0xCE, 0x68, 0x4F, 0xF6, 0x7C, 0x0, 0x68, 0x63, 0xF6, 0x7C, 0x0, 0xE8, 0x8B, 0xA, 0xED, 0xFF, 0xEB, 0xE5, 0x68, 0x9C, 0xB4, 0x8D, 0x0, 0x60, 0x8B, 0xCE, 0x68, 0x4F, 0xF6, 0x7C, 0x0, 0xE8, 0x97, 0x5C, 0xED, 0xFF, 0x81, 0xF9, 0x0, 0x1, 0x0, 0x0, 0x7D, 0x6, 0x61, 0xE9, 0xEF, 0x69, 0xEC, 0xFF, 0x61, 0x60, 0x8B, 0xCE, 0x68, 0x63, 0xF6, 0x7C, 0x0, 0x68, 0x4F, 0xF6, 0x7C, 0x0, 0xE8, 0x56, 0xA, 0xED, 0xFF, 0xEB, 0xE5, 0x8B, 0x86, 0xF0, 0x9, 0x0, 0x0, 0x33, 0xFF, 0x85, 0xC0, 0x7E, 0x35, 0x8D, 0x49, 0x0, 0x8B, 0x96, 0xE8, 0x9, 0x0, 0x0, 0x8B, 0x4, 0xBA, 0x68, 0x53, 0xF6, 0x7C, 0x0, 0x8D, 0x48, 0x4, 0xE8, 0x3F, 0x83, 0xC4, 0xFF, 0x85, 0xC0, 0x74, 0xD, 0x8B, 0x86, 0xF0, 0x9, 0x0, 0x0, 0x47, 0x3B, 0xF8, 0x7C, 0xDB, 0xEB, 0xB, 0x8B, 0x86, 0xE8, 0x9, 0x0, 0x0, 0x8B, 0x3C, 0xB8, 0xEB, 0x2, 0x33, 0xFF, 0x57, 0x8B, 0xCE, 0xE8, 0x49, 0x6B, 0xED, 0xFF, 0x8B, 0x86, 0xF0, 0x9, 0x0, 0x0, 0xE9, 0x45, 0x4B, 0xEC, 0xFF };
+			Ok = Ok && PATCHZN(0x007CF5DB, sizeof(Shields_6), Shields_6);
+		}
+	}
+
+	// ShowBarrier
+	{
+		char ShowBarrier[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowBarrier", "1", ShowBarrier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowBarrier", ShowBarrier, "SystemPack.ini");
+
+		switch(atoi(ShowBarrier))
+		{
+		case 0: // Never
+			{
+				uChar Org1[] = { 0x74, 0x57 };
+				uChar New1[] = { 0xEB, 0x57 };
+				Ok = Ok && Patch((uChar*)0x006321A8, sizeof(Org1), Org1, New1);
+			}
+			break;
+		case 2: // Constantly
+			{
+				uChar Org1[] = { 0x75, 0x06 };
+				uChar New1[] = { 0xEB, 0x06 };
+				Ok = Ok && Patch((uChar*)0x006321F9, sizeof(Org1), Org1, New1);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// ShowManaBar
+	{
+		char ShowManaBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowManaBar", "1", ShowManaBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowManaBar", ShowManaBar, "SystemPack.ini");
+
+		switch(atoi(ShowManaBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0xCF, 0x8C, 0x0C, 0x00 };
+				uChar New[] = { 0xE8, 0xDE, 0x8E, 0x0C, 0x00 };
+				Ok = Ok && Patch((uChar*)0x006391CC, sizeof(Org), Org, New);
+			}
+			break;
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x75, 0x7B };
+				uChar New[] = { 0x75, 0x00 };
+				Ok = Ok && Patch((uChar*)0x006391A6, sizeof(Org), Org, New);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// ShowSwimBar
+	{
+		char ShowSwimBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowSwimBar", "1", ShowSwimBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowSwimBar", ShowSwimBar, "SystemPack.ini");
+
+		switch(atoi(ShowSwimBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0x7E, 0x8D, 0x0C, 0x00 };
+				uChar New[] = { 0xE8, 0x8D, 0x8F, 0x0C, 0x00 };
+				Ok = Ok && Patch((uChar*)0x0063911D, sizeof(Org), Org, New);
+			}
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x0F, 0x85, 0x8C, 0x00, 0x00, 0x00 }; 
+				uChar New[] = { 0xEB, 0x04, 0x90, 0x90, 0x90, 0x90 };
+				Ok = Ok && Patch((uChar*)0x006390EE, sizeof(Org), Org, New);
+			}
+		default:
+			break;
+		}
+	}
+
+	// HideHealthBar
+	{
+		char HideHealthBar[256];
+		if(!GothicReadIniString("PARAMETERS", "HideHealthBar", "0", HideHealthBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "HideHealthBar", HideHealthBar, "SystemPack.ini");
+
+		if(atoi(HideHealthBar))
+		{
+			uChar Org[] = { 0xE8, 0x59, 0x8E, 0x0C, 0x00 };
+			uChar New[] = { 0xE8, 0x68, 0x90, 0x0C, 0x00 };
+			Ok = Ok && Patch((uChar*)0x00639042, sizeof(Org), Org, New);
+		}
+	}
+
+	// SubtitlesTimeMultiplier
+	{
+		char SubtitlesTimeMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesTimeMultiplier", "1.0", SubtitlesTimeMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesTimeMultiplier", SubtitlesTimeMultiplier, "SystemPack.ini");
+
+		float Multiplier = (float)atof(SubtitlesTimeMultiplier);
+		if(Multiplier != 1.0f)
+		{
+			uChar Org[] = { 0x8B, 0xCD, 0xFF, 0x50, 0x30 };
+			uChar New[] = { 0xE9, 0xE2, 0xCD, 0x11, 0x00 };
+			Ok = Ok && Patch((uChar*)0x006B294F, sizeof(Org), Org, New);
+
+			uChar New2[] = { 0x8B, 0xCD, 0xFF, 0x50, 0x30, 0xD8, 0x0D, 0x32, 0xF7, 0x7C, 0x00, 0xE9, 0x0E, 0x32, 0xEE, 0xFF };
+			Ok = Ok && PATCHZN((uChar*)0x007CF736, sizeof(New2), New2);
+
+			Ok = Ok && PATCHZN((uChar*)0x007CF732, sizeof(float), (uChar*)&Multiplier);
+		}
+	}
+
+	char Version[] = "1.08k_mod(SP 1.1)";
+	Ok = Ok && PATCHZN(0x007CF576, sizeof(Version), (uChar*)Version);
+	uInt O = 0x00839D18; uInt N = 0x007CF576; 
+	Ok = Ok && Patch((uChar*)0x00839C18, sizeof(uInt), (uChar*)&O, (uChar*)&N);
+	Ok = Ok && PATCH1(0x004D0625, 0x68, 0x00001964, 0x00001464);
+
+	return Ok;
+}
+
+bool Patch_G1_mod_patched(void)
+{
+	uChar Org[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+	uChar New[] = { 0x51, 0xFF, 0x15, 0xF0, 0x00, 0x7D, 0x00 };
+	if(Patch((uChar*)0x005CE592, 7, Org, New))
+		return Patch_G1_mod();
+	return false;
+}
+
+bool Patch_G1(void)
+{
+	bool Ok = true;
+
+	uInt OldBlockA = 0x00897F10;
+	BlockA = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x00525DCD, 0xBF, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00525E55, 0x8D, 0x34, 0x85, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00526F5B, 0xD9, 0x1C, 0x8D, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00529902, 0xD9, 0x04, 0xB5, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00529913, 0xD9, 0x04, 0xBD, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x00529929, 0xD9, 0x04, 0x95, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0052B31D, 0xD9, 0x04, 0x9D, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0052B340, 0xD9, 0x04, 0x8D, OldBlockA, BlockA);
+	Ok = Ok && PATCH3(0x0052B362, 0xD9, 0x04, 0x85, OldBlockA, BlockA);
+	Ok = Ok && PATCH1(0x0052B967, 0xBF, OldBlockA, BlockA);
+
+	Ok = Ok && PATCH1(0x00525DD9, 0xBF, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x00525E5C, 0x8D, 0x1C, 0x85, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x00526F43, 0xD8, 0x14, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x00526F51, 0xD9, 0x14, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0052993D, 0x8D, 0x14, 0xBD, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH3(0x0052B382, 0x8D, 0x14, 0x8D, OldBlockA + 0x1000, BlockA + 0x5000);
+	Ok = Ok && PATCH1(0x0052B976, 0xBF, OldBlockA + 0x1000, BlockA + 0x5000);
+	
+	uInt OldBlockB = 0x00896B08;
+	BlockB = (uChar*)VirtualAlloc(NULL, 0x10000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x0052586A, 0x68, 0x100, 0xC00);
+	Ok = Ok && PATCH1(0x00525871, 0x68, OldBlockB, BlockB);
+	Ok = Ok && PATCH1(0x00525991, 0x68, 0x100, 0xC00);
+	Ok = Ok && PATCH1(0x0052599A, 0x68, OldBlockB, BlockB);
+	Ok = Ok && PATCH2(0x005259CF, 0x81, 0xFB, 0x100, 0xC00);
+	Ok = Ok && PATCH3(0x00525A8B, 0x8D, 0x04, 0x85, OldBlockB, BlockB);
+	Ok = Ok && PATCH1(0x00528643, 0x3D, 0x100, 0xC00);
+	Ok = Ok && PATCH3(0x0052869E, 0x8D, 0x3C, 0x95, OldBlockB, BlockB);
+
+	uInt OldBlockC = 0x008F0870;
+	BlockC = (uChar*)VirtualAlloc(NULL, 0x20000, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+	Ok = Ok && PATCH1(0x005C25DA, 0x68, 0x400, 0x1800);
+	Ok = Ok && PATCH1(0x005C25E1, 0x68, OldBlockC, BlockC);
+	Ok = Ok && PATCH1(0x005C2651, 0x68, 0x400, 0x1800);
+	Ok = Ok && PATCH1(0x005C265A, 0x68, OldBlockC, BlockC);
+	Ok = Ok && PATCH2(0x005C26DF, 0x81, 0xFB, 0x400, 0x1800);
+	Ok = Ok && PATCH3(0x005C27AF, 0x8D, 0x04, 0x85, OldBlockC, BlockC);
+
+	uChar Raw_1[] = { 0xCC, 0xCC, 0x8B, 0x02, 0x83, 0xEC, 0x0C, 0x53, 0x55, 0x56, 0x8B, 0xF1, 0x89, 0x46, 0x30, 0x8B, 0x4A, 0x04, 0x89, 0x4E, 0x34, 0x8B, 0x46, 0x30, 0x85, 0xC0, 0x57, 0xBD, 0x01, 0x00, 0x00, 0x00, 0x7F, 0x03, 0x89, 0x6E, 0x30, 0x8B, 0x46, 0x34, 0x85, 0xC0, 0x7F, 0x03, 0x89, 0x6E, 0x34, 0x33, 0xC0, 0x33, 0xC9, 0x89, 0x46, 0x40, 0x89, 0x4E, 0x44, 0x8B, 0x46, 0x4C, 0x85, 0xC0, 0x0F, 0x84, 0x9C, 0x68, 0xF8, 0xFF, 0x8B, 0x56, 0x30, 0x89, 0x56, 0x40, 0x8B, 0x46, 0x34, 0x89, 0x46, 0x44, 0x8B, 0x4E, 0x4C, 0x36, 0xDF, 0x41, 0x44, 0xD8, 0x35, 0x93, 0x0F, 0x4E, 0x00, 0x50, 0xDB, 0x1C, 0x24, 0x58, 0xE9, 0x4B, 0x68, 0xF8, 0xFF, 0xCC, 0xCC, 0x51 };
+	Ok = Ok && PATCHZN(0x007F42DE, sizeof(Raw_1), Raw_1);
+	Ok = Ok && PATCHZN(0x007F4348, 6, Var<Raw2>(Raw2(0xFF, 0x35), BlockC + 0x1FFF4));
+
+	uChar Raw_2[] = { 0xD9, 0x04, 0x24, 0xD8, 0x35, 0x36, 0x6B, 0x4A, 0x00 };
+	Ok = Ok && PATCHZN(0x007F434E, sizeof(Raw_2), Raw_2);
+	Ok = Ok && PATCHZN(0x007F4357, 6, Var<Raw2>(Raw2(0xD9, 0x1D), BlockC + 0x1FFF0));
+
+	uChar Raw_3[] = { 0xDF, 0x41, 0x74, 0xDA, 0x71, 0x70 };
+	Ok = Ok && PATCHZN(0x007F435D, sizeof(Raw_3), Raw_3);
+	Ok = Ok && PATCHZN(0x007F4363, 6, Var<Raw2>(Raw2(0xD9, 0x05), BlockC + 0x1FFF0));
+
+	uChar Raw_4[] = { 0xDE, 0xF1, 0xD9, 0xE8, 0xD9, 0xF3, 0xD8, 0x0D, 0xCC, 0x70, 0x7F, 0x00, 0xD8, 0x0D, 0xD4, 0x6E, 0x7F, 0x00, 0x50, 0xD9, 0x1C, 0x24, 0xE8, 0x3C, 0x06, 0xD5, 0xFF, 0x59, 0xC2, 0x04, 0x00, 0xCC, 0xCC };
+	Ok = Ok && PATCHZN(0x007F4369, sizeof(Raw_4), Raw_4);
+
+	Ok = Ok && PATCH1(0x007481BD, 0xE8, 0x0003297E, 0x000AC11E);
+	Ok = Ok && PATCH1(0x004A6B3A, 0xE8, 0x0009DE41, 0x0034D808);
+	Ok = Ok && PATCH1(0x004C1879, 0xE8, 0x00083102, 0x00332AC9);
+	Ok = Ok && PATCH1(0x004C3A0D, 0xE8, 0x00080F6E, 0x00330935);
+
+	Ok = Ok && PATCH2(0x005D1B70, 0xD8, 0x1D, 0x007F7604, 0x007F7614);
+
+	Ok = Ok && PATCH1(0x0042C71B, 0x3D, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH2(0x0042CB45, 0x81, 0xF9, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH2(0x0042CB9E, 0x81, 0xFD, 0x00000640, 0x00006400);
+	Ok = Ok && PATCH1(0x0042E60C, 0x3D, 0x00000640, 0x00006400);
+
+	Ok = Ok && PATCH1(0x0077246F, 0xE8, 0xFFE8F8BC, 0xFFE8F944);
+
+	uShort A = 0x0E76;
+	uShort B = 0x0EEB;
+	Ok = Ok && Patch((uChar*)0x005E0893, sizeof(uShort), (uChar*)&A, (uChar*)&B);
+
+	uChar Raw_5[] = { 0x83, 0xEC, 0x08, 0x56, 0x8B, 0xF1, 0x8B, 0x46, 0x18, 0x8B, 0x0D, 0x6C, 0x9C, 0x86, 0x00, 0x3B, 0xC8, 0x57, 0x73, 0x08, 0x8B, 0xC8, 0x89, 0x0D, 0x6C, 0x9C, 0x86, 0x00, 0x83, 0xF9, 0x01, 0x76, 0x07, 0x49, 0x89, 0x0D, 0x6C, 0x9C, 0x86, 0x00, 0xE8, 0x3E, 0xE8, 0xD0, 0xFF, 0x8B, 0x56, 0x0C, 0x8B, 0xCA, 0xC1, 0xE1, 0x1D, 0x2B, 0xCA, 0x03, 0xC8, 0xA1, 0x6C, 0x9C, 0x86, 0x00, 0xC1, 0xE1, 0x03, 0x3B, 0xC1, 0x0F, 0x86, 0x95, 0xC4, 0xDE, 0xFF, 0x2B, 0xC1, 0xC1, 0xE8, 0x03, 0x50, 0xFF, 0x15, 0xF0, 0x50, 0x7F, 0x00, 0xE9, 0x8A, 0xC4, 0xDE, 0xFF };
+	Ok = Ok && PATCHZN(0x007F43C5, sizeof(Raw_5), Raw_5);
+
+	Ok = Ok && PATCH1(0x004DAF96, 0xE8, 0x001058B5, 0x0031942A);
+	Ok = Ok && PATCH1(0x004DB008, 0xE8, 0x00105843, 0x003193B8);
+
+	//Disable_D3DVBCAPS_WRITEONLY
+	{
+		const char* NvidiaVga = HasVgaVendor(0x10DE) ? "1" : "0";
+		char NvidiaVgaIni[256];
+		if(!GothicReadIniString("DEBUG", "NvidiaVga", "0", NvidiaVgaIni, 256, "SystemPack.ini") || strcmp(NvidiaVgaIni, NvidiaVga))
+		{
+			GothicWriteIniString("DEBUG", "NvidiaVga", NvidiaVga, "SystemPack.ini");
+			GothicWriteIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", NvidiaVga, "SystemPack.ini");
+		}
+		char Disable_D3DVBCAPS_WRITEONLY[256];
+		if(GothicReadIniString("DEBUG", "Disable_D3DVBCAPS_WRITEONLY", "0", Disable_D3DVBCAPS_WRITEONLY, 256, "SystemPack.ini") && (atoi(Disable_D3DVBCAPS_WRITEONLY) == 1))
+		{
+			Ok = Ok && PATCH3(0x00740D68, 0x4C, 0x24, 0x1C, 0x10000, (uInt)0x0);
+		}
+	}
+
+	// PfxFix
+	{
+		char PfxFix[256];
+		if(!GothicReadIniString("DEBUG", "PfxFix", "1", PfxFix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "PfxFix", PfxFix, "SystemPack.ini");
+
+		if(atoi(PfxFix))
+		{
+			uChar Org = 0x74;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x0059E7FE, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// TorchFix
+	{
+		char TorchFix[256];
+		if(!GothicReadIniString("DEBUG", "TorchFix", "1", TorchFix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "TorchFix", TorchFix, "SystemPack.ini");
+
+		if(atoi(TorchFix))
+		{
+			uChar Org1[] = { 0xC7, 0x45, 0x0C, 0xF0, 0x23, 0x74, 0x49 };
+			uChar New1[] = { 0xC7, 0x45, 0x0C, 0xF0, 0x23, 0x74, 0x44 };
+			Ok = Ok && Patch((uChar*)0x0052B0D4, sizeof(Org1), Org1, New1);
+
+			uChar Org2[] = { 0xC7, 0x44, 0x24, 0x1C, 0x00, 0x00, 0x80, 0xBF };
+			uChar New2[] = { 0xC7, 0x44, 0x24, 0x1C, 0x00, 0x00, 0x00, 0xBF };
+			Ok = Ok && Patch((uChar*)0x00544E3F, sizeof(Org2), Org2, New2);
+		}
+	}
+
+	// zPM_NUM_VBUFFER_VERT
+	{
+		DWORD Value = 65535;
+		Ok = Ok && Patch((uChar*)0x005B7893, sizeof(DWORD), NULL, (uChar*)&Value);
+	}
+
+	// s_posCacheList
+	{
+		char s_posCacheList[256];
+		if(!GothicReadIniString("DEBUG", "s_posCacheList", "100000", s_posCacheList, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "s_posCacheList", s_posCacheList, "SystemPack.ini");
+
+		DWORD Value = 0x100000;
+		sscanf_s(s_posCacheList, "%x", &Value);
+		if(Value < 0x100000)
+			Value = 0x100000;
+
+		uInt OldBlockD = 0x008E0A10;
+		BlockD = (uChar*)VirtualAlloc(NULL, Value, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+		Ok = Ok && PATCH3(0x005B7EEF, 0x81, 0x7D, 0x38, 0x00000800, 0x00080000);
+
+		size_t size = 0;
+		const uChar* data = GetSectionAddress((const uChar*)GetModuleHandle(NULL), ".text", size);
+		for(size_t i = 0; Ok && (i < size); i++)
+		{
+			if(*(uInt*)&data[i] == OldBlockD)
+				Ok = Ok && Patch((uChar*)&data[i], sizeof(float), (uChar*)&OldBlockD, (uChar*)&BlockD);
+		}
+	}
+
+	// VerticalFOV
+	{
+		char VerticalFOV[256];
+		if(!GothicReadIniString("PARAMETERS", "VerticalFOV", "67.5", VerticalFOV, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "VerticalFOV", VerticalFOV, "SystemPack.ini");
+
+		float Value = (float)atof(VerticalFOV);
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFF4), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DisableLOD
+	{
+		char DisableLOD[256];
+		if(!GothicReadIniString("PARAMETERS", "DisableLOD", "0", DisableLOD, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DisableLOD", DisableLOD, "SystemPack.ini");
+
+		if(atoi(DisableLOD))
+		{
+			float Value = 0.0f;
+			Ok = Ok && Patch((uChar*)0x007F9600, sizeof(float), NULL, (uChar*)&Value);
+		}
+	}
+
+	// SPAWN_INSERTRANGE
+	{
+		char SPAWN_INSERTRANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTRANGE", "4500", SPAWN_INSERTRANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTRANGE", SPAWN_INSERTRANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTRANGE);
+		Ok = Ok && Patch((uChar*)0x00877AB4, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_REMOVERANGE
+	{
+		char SPAWN_REMOVERANGE[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_REMOVERANGE", "5000", SPAWN_REMOVERANGE, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_REMOVERANGE", SPAWN_REMOVERANGE, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_REMOVERANGE);
+		Ok = Ok && Patch((uChar*)0x00877AB8, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// SPAWN_INSERTTIME_MAX
+	{
+		char SPAWN_INSERTTIME_MAX[256];
+		if(!GothicReadIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", "1000", SPAWN_INSERTTIME_MAX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SPAWN_INSERTTIME_MAX", SPAWN_INSERTTIME_MAX, "SystemPack.ini");
+
+		float Value = (float)atof(SPAWN_INSERTTIME_MAX);
+		Ok = Ok && Patch((uChar*)0x00877AB0, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DrawDistanceMultiplier
+	{
+		Ok = Ok && PATCH2(0x004292E9, 0xD8, 0x0D, 0x007F5DE4, BlockC + 0x1FFF8);
+
+		float Mul = 1.0f;
+		char DrawDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "DrawDistanceMultiplier", "1", DrawDistanceMultiplier, 256, "SystemPack.ini") || ((Mul = (float)atof(DrawDistanceMultiplier)) > 10.0f) || (Mul < 1.0f))
+		{
+			if(Mul > 10.0f)
+				Mul = 10.0f;
+			else
+			if(Mul < 1.0f)
+				Mul = 1.0f;
+
+			sprintf(DrawDistanceMultiplier, "%d", (int)Mul);
+			GothicWriteIniString("PARAMETERS", "DrawDistanceMultiplier", DrawDistanceMultiplier, "SystemPack.ini");
+		}
+
+		float Value = Mul * 0.01f;
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFF8), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// OutDoorPortalDistanceMultiplier
+	{
+		char OutDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", "1", OutDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "OutDoorPortalDistanceMultiplier", OutDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(OutDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x0052A59C, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x0052A5A3, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// OutDoorPortalStart
+	//{
+	//	char OutDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalStart", "3240000", OutDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalStart", OutDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052A59C, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorPortalFadeout
+	//{
+	//	char OutDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorPortalFadeout", "1440000", OutDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorPortalFadeout", OutDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0052A5A3, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorWoodPortalStart
+	//{
+	//	char OutDoorWoodPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorWoodPortalStart", "30250000", OutDoorWoodPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorWoodPortalStart", OutDoorWoodPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorWoodPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052A5CE, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// OutDoorWoodPortalFadeout
+	//{
+	//	char OutDoorWoodPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "OutDoorWoodPortalFadeout", "16000000", OutDoorWoodPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "OutDoorWoodPortalFadeout", OutDoorWoodPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(OutDoorWoodPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0052A5D5, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// InDoorPortalDistanceMultiplier
+	{
+		char InDoorPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", "1", InDoorPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "InDoorPortalDistanceMultiplier", InDoorPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(InDoorPortalDistanceMultiplier);
+
+		float Value = Mul * 3240000.0f;
+		Ok = Ok && Patch((uChar*)0x0052EBB6, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (3240000.0f - 1440000.0f);
+		Ok = Ok && Patch((uChar*)0x0052EBBD, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	//// InDoorPortalStart
+	//{
+	//	char InDoorPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalStart", "3240000", InDoorPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalStart", InDoorPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052EBB6, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorPortalFadeout
+	//{
+	//	char InDoorPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorPortalFadeout", "1440000", InDoorPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorPortalFadeout", InDoorPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0052EBBD, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorWoodPortalStart
+	//{
+	//	char InDoorWoodPortalStart[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorWoodPortalStart", "30250000", InDoorWoodPortalStart, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorWoodPortalStart", InDoorWoodPortalStart, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorWoodPortalStart);
+	//	Ok = Ok && Patch((uChar*)0x0052EBE8, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	//// InDoorWoodPortalFadeout
+	//{
+	//	char InDoorWoodPortalFadeout[256];
+	//	if(!GothicReadIniString("PARAMETERS", "InDoorWoodPortalFadeout", "16000000", InDoorWoodPortalFadeout, 256, "SystemPack.ini"))
+	//		GothicWriteIniString("PARAMETERS", "InDoorWoodPortalFadeout", InDoorWoodPortalFadeout, "SystemPack.ini");
+
+	//	float Value = (float)atof(InDoorWoodPortalFadeout);
+	//	Ok = Ok && Patch((uChar*)0x0052EBEF, sizeof(float), NULL, (uChar*)&Value);
+	//}
+
+	// WoodPortalDistanceMultiplier
+	{
+		char WoodPortalDistanceMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "WoodPortalDistanceMultiplier", "1", WoodPortalDistanceMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "WoodPortalDistanceMultiplier", WoodPortalDistanceMultiplier, "SystemPack.ini");
+
+		float Mul = (float)atof(WoodPortalDistanceMultiplier);
+
+		float Value = Mul * 30250000.0f;
+		Ok = Ok && Patch((uChar*)0x0052A5D5, sizeof(float), NULL, (uChar*)&Value);
+		Ok = Ok && Patch((uChar*)0x0052EBE8, sizeof(float), NULL, (uChar*)&Value);
+
+		Value = Value - (30250000.0f - 16000000.0f);
+		Ok = Ok && Patch((uChar*)0x0052EBBD, sizeof(float), NULL, (uChar*)&Value);
+		Ok = Ok && Patch((uChar*)0x0052EBEF, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// DisableCacheOut
+	{
+		char DisableCacheOut[256];
+		if(!GothicReadIniString("DEBUG", "DisableCacheOut", "1", DisableCacheOut, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "DisableCacheOut", DisableCacheOut, "SystemPack.ini");
+
+		if(atoi(DisableCacheOut))
+		{
+			Ok = Ok && PATCH1(0x00734078, 0xE8, 0xFFE92993, 0xFFE929A5);
+		}
+	}
+
+	// ZNORESTHREAD
+	{
+		char ZNORESTHREAD[256];
+		if(!GothicReadIniString("DEBUG", "ZNORESTHREAD", "1", ZNORESTHREAD, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "ZNORESTHREAD", ZNORESTHREAD, "SystemPack.ini");
+
+		if(atoi(ZNORESTHREAD))
+		{
+			uChar Org = 0x40;
+			uChar New = 0x90;
+			Ok = Ok && Patch((uChar*)0x00552885, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// MoverBugfix
+	{
+		char MoverBugfix[256];
+		if(!GothicReadIniString("DEBUG", "MoverBugfix", "1", MoverBugfix, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "MoverBugfix", MoverBugfix, "SystemPack.ini");
+
+		if(atoi(MoverBugfix))
+		{
+			uChar Org = 0x75;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x005F8276, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// zMouseRotationScale
+	{
+		Ok = Ok && PATCH2(0x006291A9, 0xD8, 0x0D, 0x007F7064, BlockC + 0x1FFFC);
+
+		char zMouseRotationScale[256];
+		if(!GothicReadIniString("PARAMETERS", "zMouseRotationScale", "0.1", zMouseRotationScale, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "zMouseRotationScale", zMouseRotationScale, "SystemPack.ini");
+
+		float Value = (float)atof(zMouseRotationScale);
+		Ok = Ok && Patch((uChar*)(BlockC + 0x1FFFC), sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// keyDelay
+	{
+		uChar Org = 0x74;
+		uChar New = 0xEB;
+		Ok = Ok && Patch((uChar*)0x004D2C62, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+
+		char keyDelayRate[256];
+		float Value = 150.0f;
+		if(!GothicReadIniString("PARAMETERS", "keyDelayRate", "150", keyDelayRate, 256, "SystemPack.ini") || ((Value = (float)atof(keyDelayRate)) < 10.0f) || (Value > 300.0f))
+		{
+			if(Value < 10.0f)
+				Value = 10.0f;
+			else
+			if(Value > 300.0f)
+				Value = 300.0f;
+
+			sprintf(keyDelayRate, "%.0f", Value);
+
+			GothicWriteIniString("PARAMETERS", "keyDelayRate", keyDelayRate, "SystemPack.ini");
+		}
+
+		Value = (float)atof(keyDelayRate);
+		Ok = Ok && Patch((uChar*)0x004D2465, sizeof(float), NULL, (uChar*)&Value);
+
+		char keyDelayFirst[256];
+		Value = 150.0f;
+		if(!GothicReadIniString("PARAMETERS", "keyDelayFirst", "150", keyDelayFirst, 256, "SystemPack.ini") || ((Value = (float)atof(keyDelayRate)) < 100.0f) || (Value > 1000.0f))
+		{
+			if(Value < 100.0f)
+				Value = 100.0f;
+			else
+			if(Value > 1000.0f)
+				Value = 1000.0f;
+
+			sprintf(keyDelayFirst, "%.0f", Value);
+
+			GothicWriteIniString("PARAMETERS", "keyDelayFirst", keyDelayFirst, "SystemPack.ini");
+		}
+
+		Value = (float)atof(keyDelayFirst);
+		Ok = Ok && Patch((uChar*)0x004D246A, sizeof(float), NULL, (uChar*)&Value);
+	}
+
+	// USInternationalKeyboardLayout
+	{
+		char USInternationalKeyboardLayout[256];
+		if(!GothicReadIniString("DEBUG", "USInternationalKeyboardLayout", "1", USInternationalKeyboardLayout, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "USInternationalKeyboardLayout", USInternationalKeyboardLayout, "SystemPack.ini");
+
+		if(atoi(USInternationalKeyboardLayout))
+		{
+			uChar Org = 0x83;
+			uChar New = 0x8C;
+			Ok = Ok && Patch((uChar*)0x004D1A6C, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+			Org = 0x8C;
+			New = 0x83;
+			Ok = Ok && Patch((uChar*)0x004D1AC8, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+			Org = 0x1A;
+			New = 0xBD;
+			Ok = Ok && Patch((uChar*)0x004D1A48, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+			Org = 0x1A;
+			New = 0x19;
+			Ok = Ok && Patch((uChar*)0x004D1A49, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// DialogBoxX
+	{
+		char DialogBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxX", "640", DialogBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxX", DialogBoxX, "SystemPack.ini");
+
+		int Org = 640;
+		int Val = atoi(DialogBoxX);
+		Ok = Ok && Patch((uChar*)0x0074D7C7, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// DialogBoxY
+	{
+		char DialogBoxY[256];
+		if(!GothicReadIniString("PARAMETERS", "DialogBoxY", "480", DialogBoxY, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "DialogBoxY", DialogBoxY, "SystemPack.ini");
+
+		int Org = 480;
+		int Val = atoi(DialogBoxY);
+		Ok = Ok && Patch((uChar*)0x0074D7D6, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// SubtitlesBoxX
+	{
+		char SubtitlesBoxX[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesBoxX", "600", SubtitlesBoxX, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesBoxX", SubtitlesBoxX, "SystemPack.ini");
+
+		int Org = 600;
+		int Val = atoi(SubtitlesBoxX);
+		Ok = Ok && Patch((uChar*)0x0064F509, sizeof(int), (uChar*)&Org, (uChar*)&Val);
+	}
+
+	// NumLockDisable
+	{
+		char NumLockDisable[256];
+		if(!GothicReadIniString("DEBUG", "NumLockDisable", "1", NumLockDisable, 256, "SystemPack.ini"))
+			GothicWriteIniString("DEBUG", "NumLockDisable", NumLockDisable, "SystemPack.ini");
+
+		if(atoi(NumLockDisable))
+		{
+			uChar Org = 0x74;
+			uChar New = 0xEB;
+			Ok = Ok && Patch((uChar*)0x00427CDF, sizeof(uChar), (uChar*)&Org, (uChar*)&New);
+		}
+	}
+
+	// ShowBarrier
+	{
+		char ShowBarrier[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowBarrier", "1", ShowBarrier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowBarrier", ShowBarrier, "SystemPack.ini");
+
+		switch(atoi(ShowBarrier))
+		{
+		case 0: // Never
+			{
+				uChar Org1[] = { 0x74, 0x57 };
+				uChar New1[] = { 0xEB, 0x57 };
+				Ok = Ok && Patch((uChar*)0x00648808, sizeof(Org1), Org1, New1);
+			}
+			break;
+		case 2: // Constantly
+			{
+				uChar Org1[] = { 0x75, 0x06 };
+				uChar New1[] = { 0xEB, 0x06 };
+				Ok = Ok && Patch((uChar*)0x00648859, sizeof(Org1), Org1, New1);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// ShowManaBar
+	{
+		char ShowManaBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowManaBar", "1", ShowManaBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowManaBar", ShowManaBar, "SystemPack.ini");
+
+		switch(atoi(ShowManaBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0xC7, 0x2C, 0x0D, 0x00 };
+				uChar New[] = { 0xE8, 0x12, 0x2F, 0x0D, 0x00 };
+				Ok = Ok && Patch((uChar*)0x0064FA44, sizeof(Org), Org, New);
+			}
+			break;
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x75, 0x78 };
+				uChar New[] = { 0x75, 0x00 };
+				Ok = Ok && Patch((uChar*)0x0064FA1F, sizeof(Org), Org, New);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// ShowSwimBar
+	{
+		char ShowSwimBar[256];
+		if(!GothicReadIniString("PARAMETERS", "ShowSwimBar", "1", ShowSwimBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "ShowSwimBar", ShowSwimBar, "SystemPack.ini");
+
+		switch(atoi(ShowSwimBar))
+		{
+		case 0: // Never
+			{
+				uChar Org[] = { 0xE8, 0x73, 0x2D, 0x0D, 0x00 };
+				uChar New[] = { 0xE8, 0xBE, 0x2F, 0x0D, 0x00 };
+				Ok = Ok && Patch((uChar*)0x0064F998, sizeof(Org), Org, New);
+			}
+		case 2: // Constantly
+			{
+				uChar Org[] = { 0x0F, 0x85, 0x89, 0x00, 0x00, 0x00 }; 
+				uChar New[] = { 0xEB, 0x04, 0x90, 0x90, 0x90, 0x90 };
+				Ok = Ok && Patch((uChar*)0x0064F96A, sizeof(Org), Org, New);
+			}
+		default:
+			break;
+		}
+	}
+
+	// HideHealthBar
+	{
+		char HideHealthBar[256];
+		if(!GothicReadIniString("PARAMETERS", "HideHealthBar", "0", HideHealthBar, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "HideHealthBar", HideHealthBar, "SystemPack.ini");
+
+		if(atoi(HideHealthBar))
+		{
+			uChar Org[] = { 0xE8, 0x4A, 0x2E, 0x0D, 0x00 };
+			uChar New[] = { 0xE8, 0x95, 0x30, 0x0D, 0x00 };
+			Ok = Ok && Patch((uChar*)0x0064F8C1, sizeof(Org), Org, New);
+		}
+	}
+
+	// SubtitlesTimeMultiplier
+	{
+		char SubtitlesTimeMultiplier[256];
+		if(!GothicReadIniString("PARAMETERS", "SubtitlesTimeMultiplier", "1.0", SubtitlesTimeMultiplier, 256, "SystemPack.ini"))
+			GothicWriteIniString("PARAMETERS", "SubtitlesTimeMultiplier", SubtitlesTimeMultiplier, "SystemPack.ini");
+
+		float Multiplier = (float)atof(SubtitlesTimeMultiplier);
+		if(Multiplier != 1.0f)
+		{
+			uChar Org[] = { 0x8B, 0xCF, 0xFF, 0x50, 0x30 };
+			uChar New[] = { 0xE9, 0x4B, 0x54, 0x12, 0x00 };
+			Ok = Ok && Patch((uChar*)0x006CEFD3, sizeof(Org), Org, New);
+
+			uChar New2[] = { 0x8B, 0xCF, 0xFF, 0x50, 0x30, 0xD8, 0x0D, 0x1F, 0x44, 0x7F, 0x00, 0xE9, 0xA5, 0xAB, 0xED, 0xFF };
+			Ok = Ok && PATCHZN((uChar*)0x007F4423, sizeof(New2), New2);
+
+			Ok = Ok && PATCHZN((uChar*)0x007F441F, sizeof(float), (uChar*)&Multiplier);
+		}
+	}
+
+	char Version[] = "1.08k(SP 1.1)";
+	Ok = Ok && PATCHZN(0x007F43B6, sizeof(Version), (uChar*)Version);
+	uInt O = 0x0086088C; uInt N = 0x007F43B6; 
+	Ok = Ok && Patch((uChar*)0x0086078C, sizeof(uInt), (uChar*)&O, (uChar*)&N);
+	Ok = Ok && PATCH1(0x004DAAAB, 0x68, 0x00001964, 0x00001764);
+
+	return Ok;
+}
+
+bool InstallKillerFix(void)
+{
+	uLong CRC = GetExeCrc32();
+	switch(CRC)
+	{
+	case EXE_CRC_GOTHIC2_NOTR_REPORT_V2:
+		return Patch_G2_NotR_report_V2();
+	case EXE_CRC_GOTHIC2_FIX:
+		return Patch_G2_fix();
+	case EXE_CRC_GOTHIC_MOD_PATCHED:
+		return Patch_G1_mod_patched();
+	case EXE_CRC_GOTHIC_MOD:
+		return Patch_G1_mod();
+	default:
+		{
+			uLong CodeCRC = GetSectionCrc32(".text");
+			switch(CodeCRC)
+			{
+			case CODE_CRC_GOTHIC:
+				return Patch_G1();
+			default:
+				{
+					char UnknExeCrc[256];
+					if(!GothicReadIniString("DEBUG", "UnknExeCrc", "0", UnknExeCrc, 256, "SystemPack.ini") || (strtoul(UnknExeCrc, NULL, 16) != CRC))
+					{
+						TCHAR Buffer[256];
+						_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X), fix will not be applied"), CRC);
+						if(MessageBox(NULL, Buffer, _T("Warning"), MB_ICONWARNING | MB_OKCANCEL) != IDOK)
+							return false;
+
+						sprintf_s(UnknExeCrc, 256, "0x%X", CRC);
+						GothicWriteIniString("DEBUG", "UnknExeCrc", UnknExeCrc, "SystemPack.ini");
+					}
+				}
+				break;
+			}
+		}
+		break;
+	}
+	return true;
+}
+
+void RemoveKillerFix(void)
+{
+	if(BlockA)
+	{
+		VirtualFree(BlockA, 0, MEM_RELEASE);
+		BlockA = NULL;
+	}
+	if(BlockC)
+	{
+		VirtualFree(BlockB, 0, MEM_RELEASE);
+		BlockB = NULL;
+	}
+	if(BlockB)
+	{
+		VirtualFree(BlockB, 0, MEM_RELEASE);
+		BlockB = NULL;
+	}
+	if(BlockD)
+	{
+		VirtualFree(BlockD, 0, MEM_RELEASE);
+		BlockD = NULL;
+	}
+}

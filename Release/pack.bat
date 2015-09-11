@@ -1,0 +1,1 @@
+upx.exe -9 vdfs32g.dll

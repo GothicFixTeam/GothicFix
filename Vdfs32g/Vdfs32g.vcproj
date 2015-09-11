@@ -93,7 +93,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Release"
 			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
