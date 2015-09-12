@@ -31,6 +31,7 @@ public:
 	virtual void GetLastError(char* text) { EnterCriticalSection(&CS); strncpy(text, LastError.GetData(), LastError.Length()); text[LastError.Length()] = '\0'; LeaveCriticalSection(&CS); };
 
 public:
+	virtual bool UpdateStdFileIndex(const AString& file, uInt size);
 	virtual bool InitVirtual(void);
 	virtual bool Init(void);
 	virtual void Clear(void); 

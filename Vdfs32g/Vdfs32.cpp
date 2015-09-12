@@ -1,6 +1,6 @@
 #include "PreCompiled.h"
 
-Vdfs	VdfsBase;
+Vdfs VdfsBase;
 
 long _cdecl vdf_fopen(const char* filename, long flags) 
 {
@@ -126,7 +126,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			bool Ok = true;
 			if(!IsVdfs() && !IsSpacer())
 			{
-				//RedirectIOToConsole();
+				Ok = Ok && InstallFsHook(VdfsBase);
 				Ok = Ok && InstallKillerFix();
 				Ok = Ok && InstallGUXFix();
 				Ok = Ok && InstallD3DFix();

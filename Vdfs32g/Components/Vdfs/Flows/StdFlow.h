@@ -22,6 +22,7 @@ public:
 	virtual VdfsIndex::FileInfo*	GetFileInfo(const AString& filename);
 	virtual bool					FileExists(const AString& filename);
 
+	virtual bool	UpdateFileIndex(const AString& file, uInt size, bool failifexists, VdfsIndex* index);
 	virtual bool	UpdateIndex(VdfsIndex* index);
 
 	virtual IFS*	Open(VdfsIndex::FileInfoPtr& fileinfo);

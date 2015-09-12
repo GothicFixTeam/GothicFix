@@ -60,6 +60,7 @@ using namespace COMMON;
 #include "PatchUtils.h"
 
 #include "Fixes/KillerFix.h"
+#include "Fixes/FsHook.h"
 #include "Fixes/D3DFix.h"
 #include "Fixes/GUXFix.h"
 #include "Fixes/IniFix.h"

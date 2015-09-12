@@ -182,6 +182,13 @@ void Vdfs::MountDir(const TCHAR* dir, const TCHAR* ext)
 	}
 }
 
+bool Vdfs::UpdateStdFileIndex(const AString& file, uInt size)
+{
+	if(PhysicalFlow && Index)
+		return dcast<StdFlow*>(PhysicalFlow)->UpdateFileIndex(file, size, false, Index);
+	return true;
+}
+
 bool Vdfs::InitVirtual(void)
 {
 	EnterCriticalSection(&CS);

@@ -1,5 +1,35 @@
 #include "PreCompiled.h"
 
+bool StdFlow::UpdateFileIndex(const AString& file, uInt size, bool failifexists, VdfsIndex* index)
+{
+	if(!index->FullIndexes[file])
+	{
+		VdfsIndex::FileInfo* Info = index->Files.Add(new VdfsIndex::FileInfo);
+		Info->Flow = this;
+		Info->Name = file;
+		Info->Size = size;
+		index->FullIndexes[Info->Name] = index->Files.Size();
+
+		AString Name(file);
+		Name.TruncateBeforeLast("\\");
+		Name.ToUpperCase();
+
+		uInt FileIndex = index->FileIndexes[Name];
+		if(!FileIndex || (strcmp(Info->Name, index->Files[FileIndex - 1]->Name) < 0))
+			index->FileIndexes[Name] = index->Files.Size();
+
+		return true;
+	}
+	else
+	if(!failifexists)
+	{
+		VdfsIndex::FileInfo* Info = index->Files[(uInt)index->FullIndexes[file] - 1];
+		Info->Size = size;
+		return true;
+	}
+	return false;
+}
+
 uInt StdFlow::BuildIndex(const TCHAR* dir, VdfsIndex* index)
 {
 	uInt result = 0;
@@ -19,26 +49,9 @@ uInt StdFlow::BuildIndex(const TCHAR* dir, VdfsIndex* index)
 			FullName += dir;
 			FullName += findfiledata.cFileName;
 			FullName.ToUpperCase();
-			if(!index->FullIndexes[FullName])
-			{
-				VdfsIndex::FileInfo* Info = index->Files.Add(new VdfsIndex::FileInfo);
-				Info->Flow = this;
-				Info->Name = FullName;
-				Info->Size = findfiledata.nFileSizeLow;
-				index->FullIndexes[Info->Name] = index->Files.Size();
 
-				AString Name(findfiledata.cFileName);
-				Name.ToUpperCase();
-
-				if(Name.Compare("A2EE682C.PATCH"))
-					printf("!");
-
-				uInt FileIndex = index->FileIndexes[Name];
-				if(!FileIndex || (strcmp(Info->Name, index->Files[FileIndex - 1]->Name) < 0))
-					index->FileIndexes[Name] = index->Files.Size();
-
+			if(UpdateFileIndex(FullName, findfiledata.nFileSizeLow, true, index))
 				result++;
-			}
 		}
 		else
 		{

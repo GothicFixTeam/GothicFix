@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)Work\G1\System"
 			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -710,6 +710,14 @@
 				</File>
 				<File
 					RelativePath=".\Components\Fixes\D3DFix.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Components\Fixes\FsHook.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Components\Fixes\FsHook.h"
 					>
 				</File>
 				<File

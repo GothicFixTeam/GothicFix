@@ -12,6 +12,7 @@ extern uInt PlatformGetCurrentThreadId(void);
 extern bool PlatformGetWorkPath(TString& path);
 extern bool PlatformGetTempPath(TString& path);
 extern bool PlatformGetTempFileName(TString& name);
+extern bool PlatformGetExePath(TString& name);
 
 }
 

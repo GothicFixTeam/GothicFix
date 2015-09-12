@@ -484,4 +484,19 @@ bool PlatformGetTempFileName(TString& name)
 	return false;
 }
 
+bool PlatformGetExePath(TString& name)
+{
+	SetLastError(ERROR_INSUFFICIENT_BUFFER);
+	for(uInt i = 1; GetLastError() == ERROR_INSUFFICIENT_BUFFER; i++)
+	{
+		name.Resize(i * MAX_PATH);
+		SetLastError(0);
+		DWORD Size = GetModuleFileName(NULL, (TCHAR*)name.GetData(), i * MAX_PATH);
+		if(!Size)
+			return false;
+		name.SetSizeDirectly(Size);
+	}
+	return (name.Length() != 0);
+}
+
 }

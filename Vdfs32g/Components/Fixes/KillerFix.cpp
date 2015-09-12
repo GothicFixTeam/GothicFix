@@ -468,6 +468,9 @@ bool ApplyPatch(const TString& filename)
 
 bool InstallKillerFix(void)
 {
+	if(IsWindows7OrGreater())
+		SetProcessDPIAware();
+
 	bool Result = false;
 	TString TempFile;
 
@@ -522,10 +525,13 @@ bool InstallKillerFix(void)
 			_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X), fix will not be applied"), CRC);
 			if(MessageBox(NULL, Buffer, _T("Warning"), MB_ICONWARNING | MB_OKCANCEL) != IDOK)
 				return false;
+			Result = true;
 
 			sprintf_s(UnknExeCrc, 256, "0x%X", CRC);
 			GothicWriteIniString("DEBUG", "UnknExeCrc", UnknExeCrc, "SystemPack.ini");
 		}
+		else
+			Result = true;
 	}
 
 	if(ChangeWorkDir)
