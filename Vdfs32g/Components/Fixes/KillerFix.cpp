@@ -466,10 +466,78 @@ bool ApplyPatch(const TString& filename)
 	return true;
 }
 
+typedef enum PROCESS_DPI_AWARENESS {
+    PROCESS_DPI_UNAWARE = 0,
+    PROCESS_SYSTEM_DPI_AWARE = 1,
+    PROCESS_PER_MONITOR_DPI_AWARE = 2
+} PROCESS_DPI_AWARENESS;
+
+typedef HRESULT (STDAPICALLTYPE* SetProcessDpiAwarenessPtr)(PROCESS_DPI_AWARENESS value);
+typedef HRESULT (STDAPICALLTYPE* GetProcessDpiAwarenessPtr)(HANDLE hprocess, PROCESS_DPI_AWARENESS *value);
+
+HRESULT SetProcessDpiAwareness(PROCESS_DPI_AWARENESS value)
+{
+	HRESULT hResult = S_FALSE;
+	HMODULE hModule = LoadLibrary(_T("Shcore.dll"));
+	if(hModule)
+	{
+		SetProcessDpiAwarenessPtr Func = (SetProcessDpiAwarenessPtr)GetProcAddress(hModule, "SetProcessDpiAwareness");
+		if(Func)
+			hResult = Func(value);
+		FreeLibrary(hModule);
+	}
+	return hResult; 
+}
+
+HRESULT GetProcessDpiAwareness(HANDLE hprocess, PROCESS_DPI_AWARENESS* value)
+{
+	HRESULT hResult = S_FALSE;
+	HMODULE hModule = LoadLibrary(_T("Shcore.dll"));
+	if(hModule)
+	{
+		GetProcessDpiAwarenessPtr Func = (GetProcessDpiAwarenessPtr)GetProcAddress(hModule, "GetProcessDpiAwareness");
+		if(Func)
+			hResult = Func(hprocess, value);
+		FreeLibrary(hModule);
+	}
+	return hResult; 
+}
+
+typedef BOOL (WINAPI* SetProcessDPIAwarePtr)(VOID);
+
+BOOL SafeSetProcessDPIAware(VOID)
+{
+	BOOL hResult = FALSE;
+	HMODULE hModule = LoadLibrary(_T("user32.dll"));
+	if(hModule)
+	{
+		SetProcessDPIAwarePtr Func = (SetProcessDPIAwarePtr)GetProcAddress(hModule, "SetProcessDPIAware");
+		if(Func)
+			hResult = Func();
+		FreeLibrary(hModule);
+	}
+	return hResult; 
+}
+
 bool InstallKillerFix(void)
 {
+	if(IsWindows8Point1OrGreater())
+	{
+		if(SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
+		{
+			RedirectIOToConsole();
+			printf("Failed to set process DPI awareness\n");
+		}
+	}
+	else
 	if(IsWindows7OrGreater())
-		SetProcessDPIAware();
+	{
+		if(!SafeSetProcessDPIAware())
+		{
+			RedirectIOToConsole();
+			printf("Failed to set process DPI aware\n");
+		}
+	}
 
 	bool Result = false;
 	TString TempFile;

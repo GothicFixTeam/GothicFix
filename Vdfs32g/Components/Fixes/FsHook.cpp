@@ -141,7 +141,7 @@ bool InstallFsHook(Vdfs& vdfs)
 
 	if(PathFileExists(_T("_WORK\\DATA\\TEXTURES\\_COMPILED\\FONT_15_WHITE.FNT")))
 	{
-		if(GetFileCrc(_T("_WORK\\DATA\\TEXTURES\\_COMPILED\\FONT_15_WHITE.FNT")) == 0xB682B7BE)// == 0xC61A14B6)
+		if(GetFileCrc(_T("_WORK\\DATA\\TEXTURES\\_COMPILED\\FONT_15_WHITE.FNT")) == 0xC61A14B6)
 			DeleteFile(_T("_WORK\\DATA\\TEXTURES\\_COMPILED\\FONT_15_WHITE.FNT"));
 	}
 
