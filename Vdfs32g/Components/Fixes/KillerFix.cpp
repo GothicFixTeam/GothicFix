@@ -550,7 +550,8 @@ bool InstallKillerFix(void)
 		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
 
 	uLong CRC = GetExeCrc32();
-	if(PathFileExists(TempFile.Format(_T("Patches\\%X.patch"), CRC)))
+	uLong CodeCRC = GetSectionCrc32(".text");
+	if(PathFileExists(TempFile.Format(_T("Patches\\%X.patch"), CRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_%X.patch"), CodeCRC)))
 	{
 		Result = true;
 	}
@@ -559,7 +560,7 @@ bool InstallKillerFix(void)
 	{	
 		char PatchFileName[256];
 		PatchFileName[0] = '\\';
-		if(vdf_searchfile(String().Format("%X.PATCH", CRC), &PatchFileName[1]))
+		if(vdf_searchfile(String().Format("%X.PATCH", CRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_%X.PATCH", CodeCRC), &PatchFileName[1]))
 		{
 			long patch = vdf_fopen(PatchFileName, VDF_VIRTUAL);
 			if(patch > 0)
