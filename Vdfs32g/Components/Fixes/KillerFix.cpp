@@ -591,7 +591,7 @@ bool InstallKillerFix(void)
 		if(!GothicReadIniString("DEBUG", "UnknExeCrc", "0", UnknExeCrc, 256, "SystemPack.ini") || (strtoul(UnknExeCrc, NULL, 16) != CRC))
 		{
 			TCHAR Buffer[256];
-			_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X), fix will not be applied"), CRC);
+			_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X, CodeCRC: 0x%X), fix will not be applied"), CRC, CodeCRC);
 			if(MessageBox(NULL, Buffer, _T("Warning"), MB_ICONWARNING | MB_OKCANCEL) != IDOK)
 				return false;
 			Result = true;
