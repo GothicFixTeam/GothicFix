@@ -127,15 +127,65 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			if(!IsVdfs() && !IsSpacer())
 			{
 				Ok = Ok && InstallFsHook(VdfsBase);
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallFsHook failed\n");
+				}
 				Ok = Ok && InstallKillerFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallKillerFix failed\n");
+				}
 				Ok = Ok && InstallGUXFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallGUXFix failed\n");
+				}
 				Ok = Ok && InstallD3DFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallD3DFix failed\n");
+				}
 				Ok = Ok && InstallIniFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallIniFix failed\n");
+				}
 				Ok = Ok && InstallBinkFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallBinkFix failed\n");
+				}
 				Ok = Ok && InstallSplashFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallSplashFix failed\n");
+				}
 				Ok = Ok && InstallSendMsgFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallSendMsgFix failed\n");
+				}
 				Ok = Ok && InstallMssFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("InstallMssFix failed\n");
+				}
 				Ok = Ok && PrepareSteamOverlayFix();
+				if(!Ok)
+				{
+					RedirectIOToConsole();
+					printf("PrepareSteamOverlayFix failed\n");
+				}
 			}
 			return Ok ? TRUE : FALSE;
 		}

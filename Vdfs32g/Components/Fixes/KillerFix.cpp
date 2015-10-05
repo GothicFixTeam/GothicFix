@@ -542,7 +542,7 @@ bool InstallKillerFix(void)
 	bool Result = false;
 	TString TempFile;
 
-	GothicWriteIniString("DEBUG", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
+	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
 
 	bool ChangeWorkDir = false;
 	TString WorkPath;

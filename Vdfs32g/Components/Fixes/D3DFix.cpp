@@ -39,7 +39,7 @@ typedef int (__stdcall* SetAppCompatDataFunc)(int a1, int a2);
 
 HWND WINAPI MyCreateWindowExA(__in DWORD dwExStyle, __in_opt LPCSTR lpClassName, __in_opt LPCSTR lpWindowName, __in DWORD dwStyle, __in int X, __in int Y, __in int nWidth, __in int nHeight, __in_opt HWND hWndParent, __in_opt HMENU hMenu, __in_opt HINSTANCE hInstance, __in_opt LPVOID lpParam)
 {
-	if((dwExStyle == WS_EX_OVERLAPPEDWINDOW) && (dwStyle == (WS_CAPTION | WS_SYSMENU)))
+	if(!strcmp(lpClassName, "DDWndClass"))
 	{
 		if(!atoi(zStartupWindowed))
 		{
@@ -77,17 +77,17 @@ bool InstallD3DFix(void)
 			{
 			case 1:
 				{
-					uChar* codeBase = (uChar*)GetModuleHandle(NULL);
-					PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "USER32.dll");
-					if(importDesc)
-						PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "CreateWindowExA", (FARPROC)MyCreateWindowExA);
+					SetAppCompatDataFunc SetAppCompatData = (SetAppCompatDataFunc)GetProcAddress(hDDraw, "SetAppCompatData"); // DXPrimaryEmulation -DisableMaxWindowedMode
+					if(SetAppCompatData)
+						SetAppCompatData(12, 0);
 				}
 				break;
 			case 2:
 				{
-					SetAppCompatDataFunc SetAppCompatData = (SetAppCompatDataFunc)GetProcAddress(hDDraw, "SetAppCompatData"); // DXPrimaryEmulation -DisableMaxWindowedMode
-					if(SetAppCompatData)
-						SetAppCompatData(12, 0);
+					uChar* codeBase = (uChar*)GetModuleHandle(NULL);
+					PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "USER32.dll");
+					if(importDesc)
+						PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "CreateWindowExA", (FARPROC)MyCreateWindowExA);
 				}
 				break;
 			}
