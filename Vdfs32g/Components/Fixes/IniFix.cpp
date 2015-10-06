@@ -27,7 +27,7 @@ bool InstallIniFix(void)
 	{
 		char FixAppCompat[256];
 		GothicReadIniString("DEBUG", "FixAppCompat", "1", FixAppCompat, 256, "SystemPack.ini");
-		if(atoi(FixAppCompat) == 1)
+		if(atoi(FixAppCompat) == 2)
 		{
 			if(!(zStartupWindowedReaded = GothicReadIniString("VIDEO", "zStartupWindowed", "1", zStartupWindowed, 256, "Gothic.ini")) || (atoi(zStartupWindowed) != 1))
 				GothicWriteIniString("VIDEO", "zStartupWindowed", "1", "Gothic.ini");
