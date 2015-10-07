@@ -519,7 +519,10 @@ BOOL SafeSetProcessDPIAware(VOID)
 	return hResult; 
 }
 
-bool InstallKillerFix(void)
+uLong ExeCRC = 0;
+uLong CodeCRC = 0;
+
+bool PreInstallKillerFix(void)
 {
 	if(IsWindows8Point1OrGreater())
 	{
@@ -542,16 +545,14 @@ bool InstallKillerFix(void)
 	bool Result = false;
 	TString TempFile;
 
-	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
-
 	bool ChangeWorkDir = false;
 	TString WorkPath;
 	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
 		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
 
-	uLong CRC = GetExeCrc32();
-	uLong CodeCRC = GetSectionCrc32(".text");
-	if(PathFileExists(TempFile.Format(_T("Patches\\%X.patch"), CRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_%X.patch"), CodeCRC)))
+	ExeCRC = GetExeCrc32();
+	CodeCRC = GetSectionCrc32(".text");
+	if(PathFileExists(TempFile.Format(_T("Patches\\PRE_%X.patch"), ExeCRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_PRE_%X.patch"), CodeCRC)))
 	{
 		Result = true;
 	}
@@ -560,7 +561,7 @@ bool InstallKillerFix(void)
 	{	
 		char PatchFileName[256];
 		PatchFileName[0] = '\\';
-		if(vdf_searchfile(String().Format("%X.PATCH", CRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_%X.PATCH", CodeCRC), &PatchFileName[1]))
+		if(vdf_searchfile(String().Format("PRE_%X.PATCH", ExeCRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_PRE_%X.PATCH", CodeCRC), &PatchFileName[1]))
 		{
 			long patch = vdf_fopen(PatchFileName, VDF_VIRTUAL);
 			if(patch > 0)
@@ -588,20 +589,72 @@ bool InstallKillerFix(void)
 	else
 	{
 		char UnknExeCrc[256];
-		if(!GothicReadIniString("DEBUG", "UnknExeCrc", "0", UnknExeCrc, 256, "SystemPack.ini") || (strtoul(UnknExeCrc, NULL, 16) != CRC))
+		if(!GothicReadIniString("DEBUG", "UnknExeCrc", "0", UnknExeCrc, 256, "SystemPack.ini") || (strtoul(UnknExeCrc, NULL, 16) != ExeCRC))
 		{
 			TCHAR Buffer[256];
-			_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X, CodeCRC: 0x%X), fix will not be applied"), CRC, CodeCRC);
+			_stprintf_s(Buffer, 256, _T("Unsupported gothic exe version (CRC: 0x%X, CodeCRC: 0x%X), fix will not be applied"), ExeCRC, CodeCRC);
 			if(MessageBox(NULL, Buffer, _T("Warning"), MB_ICONWARNING | MB_OKCANCEL) != IDOK)
 				return false;
 			Result = true;
 
-			sprintf_s(UnknExeCrc, 256, "0x%X", CRC);
+			sprintf_s(UnknExeCrc, 256, "0x%X", ExeCRC);
 			GothicWriteIniString("DEBUG", "UnknExeCrc", UnknExeCrc, "SystemPack.ini");
 		}
 		else
 			Result = true;
 	}
+
+	if(ChangeWorkDir)
+		SetCurrentDirectory(_T("System\\"));
+	return Result;
+}
+
+bool InstallKillerFix(void)
+{
+	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
+
+	bool Result = false;
+	TString TempFile;
+
+	bool ChangeWorkDir = false;
+	TString WorkPath;
+	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
+		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
+
+	if(PathFileExists(TempFile.Format(_T("Patches\\POST_%X.patch"), ExeCRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_POST_%X.patch"), CodeCRC)))
+	{
+		Result = true;
+	}
+	else
+	if(!vdf_initall_internal())
+	{	
+		char PatchFileName[256];
+		PatchFileName[0] = '\\';
+		if(vdf_searchfile(String().Format("POST_%X.PATCH", ExeCRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_POST_%X.PATCH", CodeCRC), &PatchFileName[1]))
+		{
+			long patch = vdf_fopen(PatchFileName, VDF_VIRTUAL);
+			if(patch > 0)
+			{
+				if(vdf_ffilesize(patch) && PlatformGetTempFileName(TempFile))
+				{
+					FILE* temp = _tfopen(TempFile, _T("wb"));
+					if(temp)
+					{
+						char Buffer[256];
+						long readed = 0;
+						while(readed = vdf_fread(patch, Buffer, 256))
+							fwrite(Buffer, 1, readed, temp);
+						Result = true;
+						fclose(temp);
+					}
+				}
+				vdf_fclose(patch);
+			}
+		}
+	}
+
+	if(Result)
+		Result = ApplyPatch(TempFile);
 
 	if(ChangeWorkDir)
 		SetCurrentDirectory(_T("System\\"));

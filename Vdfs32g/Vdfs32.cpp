@@ -54,6 +54,7 @@ long _cdecl vdf_getlasterror(char* text)
 long _cdecl vdf_initall(long numdisks, const char* cdid, long* cddrives, long* disksfound)
 {
 	InstallSteamOverlayFix();
+	InstallKillerFix();
 
 	if(!IsVdfs())
 	{
@@ -132,7 +133,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 					RedirectIOToConsole();
 					printf("InstallFsHook failed\n");
 				}
-				Ok = Ok && InstallKillerFix();
+				Ok = Ok && PreInstallKillerFix();
 				if(!Ok)
 				{
 					RedirectIOToConsole();
