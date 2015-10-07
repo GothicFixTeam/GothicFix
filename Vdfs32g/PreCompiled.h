@@ -8,7 +8,6 @@
 #include <assert.h>
 #include <tchar.h>
 #include <windows.h>
-#include <VersionHelpers.h>
 
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
@@ -25,6 +24,8 @@
 #include "Common/UtilityEx.h"
 
 using namespace COMMON;
+
+#include "VersionHelpers.h"
 
 #include "Bink/BinkExports.h"
 #include "Bink/DLL.h"

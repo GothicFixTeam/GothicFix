@@ -34,6 +34,52 @@
 
 #endif // __cplusplus
 
+#pragma comment(lib, "Version.lib")
+
+inline bool KernelVersionNotLess(uInt major, uInt minor, uInt build, bool& res)
+{
+	bool Status = false;
+
+	DWORD Tmp = 0;
+	DWORD Size = GetFileVersionInfoSize(_T("kernel32.dll"), &Tmp);
+	if(Size)
+	{
+		BYTE* Buffer = new BYTE[Size];
+		if(GetFileVersionInfo(_T("kernel32.dll"), NULL, Size, Buffer))
+		{
+			struct LANGANDCODEPAGE {
+			  WORD wLanguage;
+			  WORD wCodePage;
+			} *lpTranslate = { 0 };
+			UINT cbTranslate = 0;
+
+			VerQueryValue(Buffer, TEXT("\\VarFileInfo\\Translation"), (LPVOID*)&lpTranslate, &cbTranslate);
+			if(cbTranslate/sizeof(struct LANGANDCODEPAGE) > 0)
+			{
+				LPTSTR file_version;
+				UINT   cchLength;
+				if(VerQueryValue(Buffer, TString().Format(_T("\\StringFileInfo\\%04x%04x\\FileVersion"), lpTranslate[0].wLanguage, lpTranslate[0].wCodePage), (void **)&file_version, &cchLength) && cchLength && file_version)
+				{
+					TStringArrayPtr Tokens = TString(file_version).GetAllTokens(_T("."));
+					if(Tokens && Tokens->Size() > 2)
+					{
+						Status = true;
+
+						res = (Tokens->GetElement(2).ToUInt() >= build);
+						uInt Major = Tokens->GetElement(0).ToUInt();
+						if(Major == major)
+							res &= (Tokens->GetElement(1).ToUInt() >= minor);
+						else
+							res &= (Major >= major);
+					}
+				}
+			}
+		}
+		delete[] Buffer;
+	}
+	return Status;
+}
+
 VERSIONHELPERAPI
 IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
 {
@@ -55,76 +101,51 @@ IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServiceP
 VERSIONHELPERAPI
 IsWindowsXPOrGreater()
 {
+	bool NotLess = false;
+	if(KernelVersionNotLess(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 2600, NotLess))
+		return NotLess;
+
     return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 0);
-}
-
-VERSIONHELPERAPI
-IsWindowsXPSP1OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 1);
-}
-
-VERSIONHELPERAPI
-IsWindowsXPSP2OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 2);
-}
-
-VERSIONHELPERAPI
-IsWindowsXPSP3OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINXP), LOBYTE(_WIN32_WINNT_WINXP), 3);
 }
 
 VERSIONHELPERAPI
 IsWindowsVistaOrGreater()
 {
+	bool NotLess = false;
+	if(KernelVersionNotLess(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 6000, NotLess))
+		return NotLess;
+
     return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 0);
-}
-
-VERSIONHELPERAPI
-IsWindowsVistaSP1OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 1);
-}
-
-VERSIONHELPERAPI
-IsWindowsVistaSP2OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_VISTA), LOBYTE(_WIN32_WINNT_VISTA), 2);
 }
 
 VERSIONHELPERAPI
 IsWindows7OrGreater()
 {
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 0);
-}
+	bool NotLess = false;
+	if(KernelVersionNotLess(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 7600, NotLess))
+		return NotLess;
 
-VERSIONHELPERAPI
-IsWindows7SP1OrGreater()
-{
-    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 1);
+    return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN7), LOBYTE(_WIN32_WINNT_WIN7), 0);
 }
 
 VERSIONHELPERAPI
 IsWindows8OrGreater()
 {
+	bool NotLess = false;
+	if(KernelVersionNotLess(HIBYTE(_WIN32_WINNT_WIN8), LOBYTE(_WIN32_WINNT_WIN8), 9200, NotLess))
+		return NotLess;
+
     return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WIN8), LOBYTE(_WIN32_WINNT_WIN8), 0);
 }
 
 VERSIONHELPERAPI
 IsWindows8Point1OrGreater()
 {
+	bool NotLess = false;
+	if(KernelVersionNotLess(HIBYTE(_WIN32_WINNT_WINBLUE), LOBYTE(_WIN32_WINNT_WINBLUE), 9200, NotLess))
+		return NotLess;
+
     return IsWindowsVersionOrGreater(HIBYTE(_WIN32_WINNT_WINBLUE), LOBYTE(_WIN32_WINNT_WINBLUE), 0);
-}
-
-VERSIONHELPERAPI
-IsWindowsServer()
-{
-    OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0, 0, VER_NT_WORKSTATION };
-    DWORDLONG        const dwlConditionMask = VerSetConditionMask( 0, VER_PRODUCT_TYPE, VER_EQUAL );
-
-    return !VerifyVersionInfoW(&osvi, VER_PRODUCT_TYPE, dwlConditionMask);
 }
 
 #endif // NTDDI_VERSION
