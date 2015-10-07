@@ -332,14 +332,14 @@ bool PatchHex(AString& section, TaggedArray<AString, AString>& params)
 	return true;
 }
 
-bool ApplyPatch(const TString& filename)
+bool ApplyPatch(const TString& filename, bool post)
 {
 	AStringArray Sections;
 	if(ReadIniSections(Sections, filename))
 	{
 		// ConVars
 		TaggedArray<AString, AString> ConVars;
-		if(ReadIniSectionParams(ConVars, "ConVars", filename))
+		if(ReadIniSectionParams(ConVars, post ? "PostConVars" : "ConVars", filename))
 		{
 			for(uInt v = 0; v < ConVars.Size(); v++)
 			{
@@ -370,18 +370,22 @@ bool ApplyPatch(const TString& filename)
 			}
 		}
 		Sections.Erase(_T("ConVars"));
+		Sections.Erase(_T("PostConVars"));
 
 		// MemBlocks
-		TaggedArray<AString, AString> MemBlocks;
-		if(ReadIniSectionParams(MemBlocks, "MemBlocks", filename))
+		if(!post)
 		{
-			for(uInt b = 0; b < MemBlocks.Size(); b++)
+			TaggedArray<AString, AString> MemBlocks;
+			if(ReadIniSectionParams(MemBlocks, "MemBlocks", filename))
 			{
-				MemBlocks.GetElement(b).TruncateBeforeFirst("\"");
-				MemBlocks.GetElement(b).TruncateAfterFirst("\"");
+				for(uInt b = 0; b < MemBlocks.Size(); b++)
+				{
+					MemBlocks.GetElement(b).TruncateBeforeFirst("\"");
+					MemBlocks.GetElement(b).TruncateAfterFirst("\"");
 
-				if(MemBlocks.GetElement(b).IsUInt())
-					MemoryBlocks.Add(MemBlocks.GetTag(b), (uChar*)VirtualAlloc(NULL, (SIZE_T)MemBlocks.GetElement(b).ToUInt(), MEM_COMMIT | MEM_RESERVE, MemBlocks.GetTag(b).Compare("Exe", true, 3) ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE));
+					if(MemBlocks.GetElement(b).IsUInt())
+						MemoryBlocks.Add(MemBlocks.GetTag(b), (uChar*)VirtualAlloc(NULL, (SIZE_T)MemBlocks.GetElement(b).ToUInt(), MEM_COMMIT | MEM_RESERVE, MemBlocks.GetTag(b).Compare("Exe", true, 3) ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE));
+				}
 			}
 		}
 		Sections.Erase(_T("MemBlocks"));
@@ -398,67 +402,71 @@ bool ApplyPatch(const TString& filename)
 					Params.GetElement(p).TruncateAfterFirst("\"");
 				}
 
-				AString& Condition = Params.GetElement("Condition");
-				if(Condition)
+				AString& Post = Params.GetElement("Post");
+				if((Post && post) || (!Post && !post))
 				{
-					bool Skip = true;
-
-					AString ConditionSect(Condition);
-					AString ConditionParam(Condition);
-					if(!ConditionSect.TruncateAfterFirst(":") || !ConditionParam.TruncateBeforeFirst(":"))
-						continue;
-					char Value[256];
-					if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini"))
-						continue;
-
-					AStringArrayPtr ConditionValues = Params.GetElement("ConditionValue").GetAllTokens(",");
-					if(ConditionValues)
+					AString& Condition = Params.GetElement("Condition");
+					if(Condition)
 					{
-						for(uInt v = 0; v < ConditionValues->Size(); v++)
+						bool Skip = true;
+
+						AString ConditionSect(Condition);
+						AString ConditionParam(Condition);
+						if(!ConditionSect.TruncateAfterFirst(":") || !ConditionParam.TruncateBeforeFirst(":"))
+							continue;
+						char Value[256];
+						if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini"))
+							continue;
+
+						AStringArrayPtr ConditionValues = Params.GetElement("ConditionValue").GetAllTokens(",");
+						if(ConditionValues)
 						{
-							if(!(Skip = !ConditionValues->GetElement(v).Compare(Value, true)))
-								break;
-						}
-					}
-					else
-					{
-						AStringArrayPtr ConditionNotValues = Params.GetElement("ConditionNotValue").GetAllTokens(",");
-						if(ConditionNotValues)
-						{
-							for(uInt v = 0; v < ConditionNotValues->Size(); v++)
+							for(uInt v = 0; v < ConditionValues->Size(); v++)
 							{
-								if(!(Skip = ConditionNotValues->GetElement(v).Compare(Value, true)))
+								if(!(Skip = !ConditionValues->GetElement(v).Compare(Value, true)))
 									break;
 							}
 						}
+						else
+						{
+							AStringArrayPtr ConditionNotValues = Params.GetElement("ConditionNotValue").GetAllTokens(",");
+							if(ConditionNotValues)
+							{
+								for(uInt v = 0; v < ConditionNotValues->Size(); v++)
+								{
+									if(!(Skip = ConditionNotValues->GetElement(v).Compare(Value, true)))
+										break;
+								}
+							}
+						}
+						if(Skip)
+							continue;
 					}
-					if(Skip)
-						continue;
-				}
 
-				AString& Type = Params.GetElement("Type");
-				if(Type.Compare("ptr", true))
-				{
-					if(!PatchPtr(Sections.GetElement(s), Params))
-						return false;
-				}
-				else
-				if(Type.Compare("int", true))
-				{
-					if(!PatchInt(Sections.GetElement(s), Params))
-						return false;
-				}
-				else
-				if(Type.Compare("float", true))
-				{
-					if(!PatchFloat(Sections.GetElement(s), Params))
-						return false;
-				}
-				else
-				if(Type.Compare("hex", true))
-				{
-					if(!PatchHex(Sections.GetElement(s), Params))
-						return false;
+					AString& Type = Params.GetElement("Type");
+					if(Type.Compare("ptr", true))
+					{
+						if(!PatchPtr(Sections.GetElement(s), Params))
+							return false;
+					}
+					else
+					if(Type.Compare("int", true))
+					{
+						if(!PatchInt(Sections.GetElement(s), Params))
+							return false;
+					}
+					else
+					if(Type.Compare("float", true))
+					{
+						if(!PatchFloat(Sections.GetElement(s), Params))
+							return false;
+					}
+					else
+					if(Type.Compare("hex", true))
+					{
+						if(!PatchHex(Sections.GetElement(s), Params))
+							return false;
+					}
 				}
 			}
 		}
@@ -521,10 +529,11 @@ BOOL SafeSetProcessDPIAware(VOID)
 
 uLong ExeCRC = 0;
 uLong CodeCRC = 0;
+TString PatchFileName;
 
 bool PreInstallKillerFix(void)
 {
-	if(IsWindows8Point1OrGreater())
+	if(IsWindows8Point1OrGreater()) 
 	{
 		if(SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
 		{
@@ -543,7 +552,6 @@ bool PreInstallKillerFix(void)
 	}
 
 	bool Result = false;
-	TString TempFile;
 
 	bool ChangeWorkDir = false;
 	TString WorkPath;
@@ -552,23 +560,23 @@ bool PreInstallKillerFix(void)
 
 	ExeCRC = GetExeCrc32();
 	CodeCRC = GetSectionCrc32(".text");
-	if(PathFileExists(TempFile.Format(_T("Patches\\PRE_%X.patch"), ExeCRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_PRE_%X.patch"), CodeCRC)))
+	if(PathFileExists(PatchFileName.Format(_T("Patches\\%X.patch"), ExeCRC)) || PathFileExists(PatchFileName.Format(_T("Patches\\CODE_%X.patch"), CodeCRC)))
 	{
 		Result = true;
 	}
 	else
 	if(!vdf_initall_internal())
 	{	
-		char PatchFileName[256];
-		PatchFileName[0] = '\\';
-		if(vdf_searchfile(String().Format("PRE_%X.PATCH", ExeCRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_PRE_%X.PATCH", CodeCRC), &PatchFileName[1]))
+		char TempFileName[256];
+		TempFileName[0] = '\\';
+		if(vdf_searchfile(String().Format("%X.PATCH", ExeCRC), &TempFileName[1]) || vdf_searchfile(String().Format("CODE_%X.PATCH", CodeCRC), &TempFileName[1]))
 		{
-			long patch = vdf_fopen(PatchFileName, VDF_VIRTUAL);
+			long patch = vdf_fopen(TempFileName, VDF_VIRTUAL);
 			if(patch > 0)
 			{
-				if(vdf_ffilesize(patch) && PlatformGetTempFileName(TempFile))
+				if(vdf_ffilesize(patch) && PlatformGetTempFileName(PatchFileName))
 				{
-					FILE* temp = _tfopen(TempFile, _T("wb"));
+					FILE* temp = _tfopen(PatchFileName, _T("wb"));
 					if(temp)
 					{
 						char Buffer[256];
@@ -585,7 +593,7 @@ bool PreInstallKillerFix(void)
 	}
 
 	if(Result)
-		Result = ApplyPatch(TempFile);
+		Result = ApplyPatch(PatchFileName, false);
 	else
 	{
 		char UnknExeCrc[256];
@@ -613,48 +621,12 @@ bool InstallKillerFix(void)
 {
 	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
 
-	bool Result = false;
-	TString TempFile;
-
 	bool ChangeWorkDir = false;
 	TString WorkPath;
 	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
 		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
 
-	if(PathFileExists(TempFile.Format(_T("Patches\\POST_%X.patch"), ExeCRC)) || PathFileExists(TempFile.Format(_T("Patches\\CODE_POST_%X.patch"), CodeCRC)))
-	{
-		Result = true;
-	}
-	else
-	if(!vdf_initall_internal())
-	{	
-		char PatchFileName[256];
-		PatchFileName[0] = '\\';
-		if(vdf_searchfile(String().Format("POST_%X.PATCH", ExeCRC), &PatchFileName[1]) || vdf_searchfile(String().Format("CODE_POST_%X.PATCH", CodeCRC), &PatchFileName[1]))
-		{
-			long patch = vdf_fopen(PatchFileName, VDF_VIRTUAL);
-			if(patch > 0)
-			{
-				if(vdf_ffilesize(patch) && PlatformGetTempFileName(TempFile))
-				{
-					FILE* temp = _tfopen(TempFile, _T("wb"));
-					if(temp)
-					{
-						char Buffer[256];
-						long readed = 0;
-						while(readed = vdf_fread(patch, Buffer, 256))
-							fwrite(Buffer, 1, readed, temp);
-						Result = true;
-						fclose(temp);
-					}
-				}
-				vdf_fclose(patch);
-			}
-		}
-	}
-
-	if(Result)
-		Result = ApplyPatch(TempFile);
+	bool Result = ApplyPatch(PatchFileName, true);
 
 	if(ChangeWorkDir)
 		SetCurrentDirectory(_T("System\\"));
