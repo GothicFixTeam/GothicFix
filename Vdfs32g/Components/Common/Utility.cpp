@@ -499,4 +499,58 @@ bool PlatformGetExePath(TString& name)
 	return (name.Length() != 0);
 }
 
+bool PlatformReadTextFile(const TString& file, TStringArray& lines)
+{
+	FILE* fp = _tfopen(file, _T("rb"));
+	if(!fp)
+		return false;
+	uChar BOM[3];
+	if(fread(BOM, 1, 3, fp) != 3)
+	{
+		fclose(fp);
+		return false;
+	}
+	fclose(fp);
+
+	const TCHAR* Mode = _T("r");
+	if((BOM[0] == 0xFF) && (BOM[1] == 0xFE))
+		Mode = _T("r, ccs=UTF-16LE");
+	else
+	if((BOM[0] == 0xFE) && (BOM[1] == 0xFF))
+		Mode = _T("r, ccs=UNICODE");
+	else
+	if((BOM[0] == 0xEF) && (BOM[1] == 0xBB) && (BOM[2] == 0xBF))
+		Mode = _T("r, ccs=UTF-8");
+
+	fp = _tfopen(file, Mode);
+	if(!fp)
+		return false;
+
+	setvbuf(fp, NULL, _IOFBF, 1024);
+
+	TString Line;
+	TCHAR Char = _T('\0');
+	while(Char = _fgettc(fp))
+	{
+		if(Char == _T('\n'))
+		{
+			lines.Add(Line);
+			Line.Clear();
+		}
+		else
+		if(Char == WEOF)
+			break;
+		else
+			Line.Append(Char);
+	}
+	if(Line.Length())
+	{
+		lines.Add(Line);
+		Line.Clear();
+	}
+
+	fclose(fp);
+	return true;
+}
+
 }

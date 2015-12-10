@@ -14,6 +14,8 @@ extern bool PlatformGetTempPath(TString& path);
 extern bool PlatformGetTempFileName(TString& name);
 extern bool PlatformGetExePath(TString& name);
 
+extern bool PlatformReadTextFile(const TString& file, TStringArray& lines);
+
 }
 
 #endif

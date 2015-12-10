@@ -53,11 +53,37 @@ long _cdecl vdf_getlasterror(char* text)
 
 long _cdecl vdf_initall(long numdisks, const char* cdid, long* cddrives, long* disksfound)
 {
-	InstallSteamOverlayFix();
-	InstallKillerFix();
-
 	if(!IsVdfs())
 	{
+		TStringArray Libraries;
+		if(PlatformReadTextFile(_T("System\\pre.load"), Libraries))
+		{
+			for(uInt l = 0; l < Libraries.Size(); l++)
+			{
+				if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
+				{
+					RedirectIOToConsole();
+					_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
+				}
+			}
+		}
+
+		InstallSteamOverlayFix();
+		InstallKillerFix();
+
+		Libraries.Clear();
+		if(PlatformReadTextFile(_T("System\\post.load"), Libraries))
+		{
+			for(uInt l = 0; l < Libraries.Size(); l++)
+			{
+				if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
+				{
+					RedirectIOToConsole();
+					_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
+				}
+			}
+		}
+
 		if(VdfsBase.Init())
 			return 0; // Ok
 		return -1; // No files
