@@ -2,6 +2,8 @@
 
 uInt ReadIniSections(AStringArray& sections, const TCHAR* file)
 {
+	if(!file)
+		return 0;
 	FILE* In = NULL;
 	if(!_tfopen_s(&In, file, _T("r")))
 	{
