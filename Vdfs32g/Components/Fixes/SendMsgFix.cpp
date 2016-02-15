@@ -3,8 +3,8 @@
 LRESULT WINAPI MySendMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if(hWnd == HWND_BROADCAST)
-		return SendMessageTimeout(hWnd, Msg, wParam, lParam, SMTO_BLOCK, 100, NULL);
-	return SendMessage(hWnd, Msg, wParam, lParam);
+		return SendMessageTimeoutA(hWnd, Msg, wParam, lParam, SMTO_BLOCK, 100, NULL);
+	return SendMessageA(hWnd, Msg, wParam, lParam);
 }
 
 bool InstallSendMsgFix(void)
