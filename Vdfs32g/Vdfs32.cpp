@@ -57,23 +57,10 @@ long _cdecl vdf_initall(long numdisks, const char* cdid, long* cddrives, long* d
 	{
 		if(!IsSpacer())
 		{
-			TStringArray Libraries;
-			if(PlatformReadTextFile(_T("System\\pre.load"), Libraries))
-			{
-				for(uInt l = 0; l < Libraries.Size(); l++)
-				{
-					if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
-					{
-						RedirectIOToConsole();
-						_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
-					}
-				}
-			}
-
 			InstallSteamOverlayFix();
 			InstallKillerFix();
 
-			Libraries.Clear();
+			TStringArray Libraries;
 			if(PlatformReadTextFile(_T("System\\post.load"), Libraries))
 			{
 				for(uInt l = 0; l < Libraries.Size(); l++)
@@ -156,6 +143,29 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			bool Ok = true;
 			if(!IsVdfs())
 			{
+				if(!IsSpacer())
+				{
+					bool ChangeWorkDir = false;
+					TString WorkPath;
+					if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
+						ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
+
+					TStringArray Libraries;
+					if(PlatformReadTextFile(_T("System\\pre.load"), Libraries))
+					{
+						for(uInt l = 0; l < Libraries.Size(); l++)
+						{
+							if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
+							{
+								RedirectIOToConsole();
+								_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
+							}
+						}
+					}
+
+					if(ChangeWorkDir)
+						SetCurrentDirectory(_T("System\\"));
+				}
 				Ok = Ok && InstallFsHook(VdfsBase);
 				if(!Ok)
 				{
