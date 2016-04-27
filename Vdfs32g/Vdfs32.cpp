@@ -150,6 +150,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 					if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
 						ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
 
+					char Buffer[256];
+					ReadIniString("SYSTEM", "RedirectToGothicIni", "0", Buffer, 256, "System\\SystemPack.ini");
+					SystemPackRedirectToGothicIni = (atoi(Buffer) != 0);
+
 					TStringArray Libraries;
 					if(PlatformReadTextFile(_T("System\\pre.load"), Libraries))
 					{

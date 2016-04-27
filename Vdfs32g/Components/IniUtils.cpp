@@ -160,8 +160,13 @@ bool WriteIniString(const char* section, const char* key, const char* val, const
 
 // Utility
 
+bool SystemPackRedirectToGothicIni = false;
+
 bool GothicReadIniString(const char* section, const char* key, const char* defval, char* val, size_t size, const char* file)
 {
+	if(SystemPackRedirectToGothicIni && !_stricmp(file, "SystemPack.ini"))
+		file = "Gothic.ini";
+
 	AString File(file);
 
 	TString WorkPath;
@@ -173,6 +178,9 @@ bool GothicReadIniString(const char* section, const char* key, const char* defva
 
 bool GothicWriteIniString(const char* section, const char* key, const char* val, const char* file)
 {
+	if(SystemPackRedirectToGothicIni && !_stricmp(file, "SystemPack.ini"))
+		file = "Gothic.ini";
+
 	AString File(file);
 
 	TString WorkPath;
