@@ -553,6 +553,8 @@ bool PreInstallKillerFix(void)
 
 	bool Result = false;
 
+	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
+
 	bool ChangeWorkDir = false;
 	TString WorkPath;
 	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
@@ -619,8 +621,6 @@ bool PreInstallKillerFix(void)
 
 bool InstallKillerFix(void)
 {
-	GothicWriteIniString("SYSTEM", "NvidiaVga", HasVgaVendor(0x10DE) ? "1" : "0", "SystemPack.ini");
-
 	bool ChangeWorkDir = false;
 	TString WorkPath;
 	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))

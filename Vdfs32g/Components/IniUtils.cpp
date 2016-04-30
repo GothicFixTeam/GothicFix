@@ -160,32 +160,56 @@ bool WriteIniString(const char* section, const char* key, const char* val, const
 
 // Utility
 
-bool SystemPackRedirectToGothicIni = false;
-
 bool GothicReadIniString(const char* section, const char* key, const char* defval, char* val, size_t size, const char* file)
 {
-	if(SystemPackRedirectToGothicIni && !_stricmp(file, "SystemPack.ini"))
-		file = "Gothic.ini";
-
-	AString File(file);
-
 	TString WorkPath;
-	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && !WorkPath.Compare(_T("System"), true))
-		File.Format("System\\%s", file);
+	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")))
+	{
+		AString File("SystemPack.ini");
+		if(!_stricmp(file, "SystemPack.ini"))
+		{
+			if(!WorkPath.Compare(_T("System"), true))
+				File.Assign("System\\SystemPack.ini");
 
-	return ReadIniString(section, key, defval, val, size, File);
+			char Buffer[256];
+			ReadIniString("SYSTEM", "RedirectToGothicIni", "0", Buffer, 256, File);
+
+			if((atoi(Buffer) != 0))
+				file = "Gothic.ini";
+		}
+
+		File.Assign(file);
+		if(!WorkPath.Compare(_T("System"), true))
+			File.Format("System\\%s", file);
+
+		return ReadIniString(section, key, defval, val, size, File);
+	}
+	return false;
 }
 
 bool GothicWriteIniString(const char* section, const char* key, const char* val, const char* file)
 {
-	if(SystemPackRedirectToGothicIni && !_stricmp(file, "SystemPack.ini"))
-		file = "Gothic.ini";
-
-	AString File(file);
-
 	TString WorkPath;
-	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && !WorkPath.Compare(_T("System"), true))
-		File.Format("System\\%s", file);
+	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")))
+	{
+		AString File("SystemPack.ini");
+		if(!_stricmp(file, "SystemPack.ini"))
+		{
+			if(!WorkPath.Compare(_T("System"), true))
+				File.Assign("System\\SystemPack.ini");
 
-	return WriteIniString(section, key, val, File);
+			char Buffer[256];
+			ReadIniString("SYSTEM", "RedirectToGothicIni", "0", Buffer, 256, File);
+
+			if((atoi(Buffer) != 0))
+				file = "Gothic.ini";
+		}
+
+		File.Assign(file);
+		if(!WorkPath.Compare(_T("System"), true))
+			File.Format("System\\%s", file);
+
+		return WriteIniString(section, key, val, File);
+	}
+	return false;
 }
