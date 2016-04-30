@@ -302,7 +302,7 @@ FARPROC* GetImportFunctionAddress(const uChar* codeBase, PIMAGE_IMPORT_DESCRIPTO
 			if(ordinal)
 			{
 				LPCSTR FuncOrdinal = (LPCSTR)IMAGE_ORDINAL(*thunkRef);
-				if(!memcmp(FuncOrdinal, name, sizeof(DWORD)))
+				if(FuncOrdinal == name)
 					return funcRef;
 			}
 		} 

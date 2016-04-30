@@ -1,7 +1,5 @@
 #include "PreCompiled.h"
 
-Vdfs VdfsBase;
-
 long _cdecl vdf_fopen(const char* filename, long flags) 
 {
 	IfsBase* res = VdfsBase.OpenFile(filename, flags);
@@ -55,24 +53,8 @@ long _cdecl vdf_initall(long numdisks, const char* cdid, long* cddrives, long* d
 {
 	if(!IsVdfs())
 	{
-		if(!IsSpacer())
-		{
-			InstallSteamOverlayFix();
-			InstallKillerFix();
-
-			TStringArray Libraries;
-			if(PlatformReadTextFile(_T("System\\post.load"), Libraries))
-			{
-				for(uInt l = 0; l < Libraries.Size(); l++)
-				{
-					if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
-					{
-						RedirectIOToConsole();
-						_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
-					}
-				}
-			}
-		}
+		//if(!IsSpacer())
+		//	InstallSteamOverlayFix();
 
 		if(VdfsBase.Init())
 			return 0; // Ok
@@ -140,114 +122,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	{
 	case DLL_PROCESS_ATTACH:
 		{
-			bool Ok = true;
 			if(!IsVdfs())
-			{
-				if(!IsSpacer())
-				{
-					bool ChangeWorkDir = false;
-					TString WorkPath;
-					if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
-						ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
-
-					TStringArray Libraries;
-					if(PlatformReadTextFile(_T("System\\pre.load"), Libraries))
-					{
-						for(uInt l = 0; l < Libraries.Size(); l++)
-						{
-							if(!LoadLibrary(TString(_T("System\\")) + Libraries[l]))
-							{
-								RedirectIOToConsole();
-								_tprintf(_T("%s not loaded\n"), Libraries[l].GetData());
-							}
-						}
-					}
-
-					if(ChangeWorkDir)
-						SetCurrentDirectory(_T("System\\"));
-				}
-				Ok = Ok && InstallFsHook(VdfsBase);
-				if(!Ok)
-				{
-					RedirectIOToConsole();
-					printf("InstallFsHook failed\n");
-				}
-				Ok = Ok && InstallSendMsgFix();
-				if(!Ok)
-				{
-					RedirectIOToConsole();
-					printf("InstallSendMsgFix failed\n");
-				}
-				if(!IsSpacer())
-				{
-					Ok = Ok && PreInstallKillerFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallKillerFix failed\n");
-					}
-					Ok = Ok && InstallGUXFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallGUXFix failed\n");
-					}
-					Ok = Ok && InstallD3DFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallD3DFix failed\n");
-					}
-					Ok = Ok && InstallIniFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallIniFix failed\n");
-					}
-					Ok = Ok && InstallBinkFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallBinkFix failed\n");
-					}
-					Ok = Ok && InstallSplashFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallSplashFix failed\n");
-					}
-					Ok = Ok && InstallMssFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("InstallMssFix failed\n");
-					}
-					Ok = Ok && PrepareSteamOverlayFix();
-					if(!Ok)
-					{
-						RedirectIOToConsole();
-						printf("PrepareSteamOverlayFix failed\n");
-					}
-				}
-			}
-			return Ok ? TRUE : FALSE;
+				AttachFixesInstaller();
 		}
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		{
-			if(!IsVdfs() && !IsSpacer())
-			{
-				RemoveMssFix();
-				RemoveSplashFix();
-				RemoveBinkFix();
-				RemoveIniFix();
-				RemoveD3DFix();
-				RemoveKillerFix();
-			}
-		}
+		RemoveFixes();
 		break;
 	}
 	return TRUE;

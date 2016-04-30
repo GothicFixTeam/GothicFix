@@ -558,6 +558,14 @@
 			Name="Components"
 			>
 			<File
+				RelativePath=".\Components\Fixes.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Components\Fixes.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Components\IniUtils.cpp"
 				>
 			</File>

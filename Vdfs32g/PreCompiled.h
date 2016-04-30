@@ -71,4 +71,8 @@ using namespace COMMON;
 #include "Fixes/MssFix.h"
 #include "Fixes/SteamOverlayFix.h"
 
+extern Vdfs VdfsBase;
+
+#include "Fixes.h"
+
 #include "../Vdfs32.h"

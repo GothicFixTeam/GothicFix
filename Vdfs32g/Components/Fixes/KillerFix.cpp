@@ -332,14 +332,14 @@ bool PatchHex(AString& section, TaggedArray<AString, AString>& params)
 	return true;
 }
 
-bool ApplyPatch(const TString& filename, bool post)
+bool ApplyPatch(const TString& filename)
 {
 	AStringArray Sections;
 	if(ReadIniSections(Sections, filename))
 	{
 		// ConVars
 		TaggedArray<AString, AString> ConVars;
-		if(ReadIniSectionParams(ConVars, post ? "PostConVars" : "ConVars", filename))
+		if(ReadIniSectionParams(ConVars, "ConVars", filename))
 		{
 			for(uInt v = 0; v < ConVars.Size(); v++)
 			{
@@ -373,19 +373,16 @@ bool ApplyPatch(const TString& filename, bool post)
 		Sections.Erase(_T("PostConVars"));
 
 		// MemBlocks
-		if(!post)
+		TaggedArray<AString, AString> MemBlocks;
+		if(ReadIniSectionParams(MemBlocks, "MemBlocks", filename))
 		{
-			TaggedArray<AString, AString> MemBlocks;
-			if(ReadIniSectionParams(MemBlocks, "MemBlocks", filename))
+			for(uInt b = 0; b < MemBlocks.Size(); b++)
 			{
-				for(uInt b = 0; b < MemBlocks.Size(); b++)
-				{
-					MemBlocks.GetElement(b).TruncateBeforeFirst("\"");
-					MemBlocks.GetElement(b).TruncateAfterFirst("\"");
+				MemBlocks.GetElement(b).TruncateBeforeFirst("\"");
+				MemBlocks.GetElement(b).TruncateAfterFirst("\"");
 
-					if(MemBlocks.GetElement(b).IsUInt())
-						MemoryBlocks.Add(MemBlocks.GetTag(b), (uChar*)VirtualAlloc(NULL, (SIZE_T)MemBlocks.GetElement(b).ToUInt(), MEM_COMMIT | MEM_RESERVE, MemBlocks.GetTag(b).Compare("Exe", true, 3) ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE));
-				}
+				if(MemBlocks.GetElement(b).IsUInt())
+					MemoryBlocks.Add(MemBlocks.GetTag(b), (uChar*)VirtualAlloc(NULL, (SIZE_T)MemBlocks.GetElement(b).ToUInt(), MEM_COMMIT | MEM_RESERVE, MemBlocks.GetTag(b).Compare("Exe", true, 3) ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE));
 			}
 		}
 		Sections.Erase(_T("MemBlocks"));
@@ -402,71 +399,67 @@ bool ApplyPatch(const TString& filename, bool post)
 					Params.GetElement(p).TruncateAfterFirst("\"");
 				}
 
-				AString& Post = Params.GetElement("Post");
-				if((Post && post) || (!Post && !post))
+				AString& Condition = Params.GetElement("Condition");
+				if(Condition)
 				{
-					AString& Condition = Params.GetElement("Condition");
-					if(Condition)
+					bool Skip = true;
+
+					AString ConditionSect(Condition);
+					AString ConditionParam(Condition);
+					if(!ConditionSect.TruncateAfterFirst(":") || !ConditionParam.TruncateBeforeFirst(":"))
+						continue;
+					char Value[256];
+					if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini"))
+						continue;
+
+					AStringArrayPtr ConditionValues = Params.GetElement("ConditionValue").GetAllTokens(",");
+					if(ConditionValues)
 					{
-						bool Skip = true;
-
-						AString ConditionSect(Condition);
-						AString ConditionParam(Condition);
-						if(!ConditionSect.TruncateAfterFirst(":") || !ConditionParam.TruncateBeforeFirst(":"))
-							continue;
-						char Value[256];
-						if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini"))
-							continue;
-
-						AStringArrayPtr ConditionValues = Params.GetElement("ConditionValue").GetAllTokens(",");
-						if(ConditionValues)
+						for(uInt v = 0; v < ConditionValues->Size(); v++)
 						{
-							for(uInt v = 0; v < ConditionValues->Size(); v++)
+							if(!(Skip = !ConditionValues->GetElement(v).Compare(Value, true)))
+								break;
+						}
+					}
+					else
+					{
+						AStringArrayPtr ConditionNotValues = Params.GetElement("ConditionNotValue").GetAllTokens(",");
+						if(ConditionNotValues)
+						{
+							for(uInt v = 0; v < ConditionNotValues->Size(); v++)
 							{
-								if(!(Skip = !ConditionValues->GetElement(v).Compare(Value, true)))
+								if(!(Skip = ConditionNotValues->GetElement(v).Compare(Value, true)))
 									break;
 							}
 						}
-						else
-						{
-							AStringArrayPtr ConditionNotValues = Params.GetElement("ConditionNotValue").GetAllTokens(",");
-							if(ConditionNotValues)
-							{
-								for(uInt v = 0; v < ConditionNotValues->Size(); v++)
-								{
-									if(!(Skip = ConditionNotValues->GetElement(v).Compare(Value, true)))
-										break;
-								}
-							}
-						}
-						if(Skip)
-							continue;
 					}
+					if(Skip)
+						continue;
+				}
 
-					AString& Type = Params.GetElement("Type");
-					if(Type.Compare("ptr", true))
-					{
-						if(!PatchPtr(Sections.GetElement(s), Params))
-							return false;
-					}
-					else
-					if(Type.Compare("int", true))
-					{
-						if(!PatchInt(Sections.GetElement(s), Params))
-							return false;
-					}
-					else
-					if(Type.Compare("float", true))
-					{
-						if(!PatchFloat(Sections.GetElement(s), Params))
-							return false;
-					}
-					else
-					if(Type.Compare("hex", true))
-					{
-						if(!PatchHex(Sections.GetElement(s), Params))
-							return false;
-					}
+				AString& Type = Params.GetElement("Type");
+				if(Type.Compare("ptr", true))
+				{
+					if(!PatchPtr(Sections.GetElement(s), Params))
+						return false;
+				}
+				else
+				if(Type.Compare("int", true))
+				{
+					if(!PatchInt(Sections.GetElement(s), Params))
+						return false;
+				}
+				else
+				if(Type.Compare("float", true))
+				{
+					if(!PatchFloat(Sections.GetElement(s), Params))
+						return false;
+				}
+				else
+				if(Type.Compare("hex", true))
+				{
+					if(!PatchHex(Sections.GetElement(s), Params))
+						return false;
 				}
 			}
 		}
@@ -531,7 +524,7 @@ uLong ExeCRC = 0;
 uLong CodeCRC = 0;
 TString PatchFileName;
 
-bool PreInstallKillerFix(void)
+bool InstallKillerFix(void)
 {
 	if(IsWindows8Point1OrGreater()) 
 	{
@@ -595,7 +588,7 @@ bool PreInstallKillerFix(void)
 	}
 
 	if(Result)
-		Result = ApplyPatch(PatchFileName, false);
+		Result = ApplyPatch(PatchFileName);
 	else
 	{
 		char UnknExeCrc[256];
@@ -613,20 +606,6 @@ bool PreInstallKillerFix(void)
 		else
 			Result = true;
 	}
-
-	if(ChangeWorkDir)
-		SetCurrentDirectory(_T("System\\"));
-	return Result;
-}
-
-bool InstallKillerFix(void)
-{
-	bool ChangeWorkDir = false;
-	TString WorkPath;
-	if(PlatformGetWorkPath(WorkPath) && WorkPath.TruncateBeforeLast(_T("\\")) && WorkPath.Compare(_T("System"), true))
-		ChangeWorkDir = (SetCurrentDirectory(_T("..\\")) == TRUE);
-
-	bool Result = ApplyPatch(PatchFileName, true);
 
 	if(ChangeWorkDir)
 		SetCurrentDirectory(_T("System\\"));
