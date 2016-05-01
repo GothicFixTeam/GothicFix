@@ -13,12 +13,6 @@ HRESULT WINAPI MyDirectDrawEnumerateExA(LPVOID lpCallback, LPVOID lpContext, DWO
 	{
 		FARPROC* Res = GetImportFunctionAddress(codeBase, importDesc, false, "DirectDrawCreateEx");
 		uChar* Raw = (uChar*)*Res;
-
-		//if(memcmp(Raw, Bak, 5))
-		//	MessageBoxA(NULL, "Diff", "Info", MB_ICONINFORMATION);
-		//else
-		//	MessageBoxA(NULL, "Equal", "Info", MB_ICONINFORMATION);
-
 		for(uInt i = 0; i < 5; i++)
 			PatchAddress<uChar>(&Raw[i], Bak[i]);
 	}
