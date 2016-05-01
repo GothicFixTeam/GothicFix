@@ -370,7 +370,6 @@ bool ApplyPatch(const TString& filename)
 			}
 		}
 		Sections.Erase(_T("ConVars"));
-		Sections.Erase(_T("PostConVars"));
 
 		// MemBlocks
 		TaggedArray<AString, AString> MemBlocks;

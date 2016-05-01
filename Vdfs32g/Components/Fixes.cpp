@@ -89,32 +89,31 @@ bool AttachSystemPack(void)
 			RedirectIOToConsole();
 			printf("InstallMssFix failed\n");
 		}
-		/*Ok = Ok && InstallSteamOverlayFix();
-		if(!Ok)
-		{
-			RedirectIOToConsole();
-			printf("PrepareSteamOverlayFix failed\n");
-		}*/
 	}
 	SystemPackAttached = true;
 	return Ok;
 }
 
-void WINAPI MyInitCommonControls(void)
+LPSTR WINAPI MyGetCommandLineA(void)
 {
-	InitCommonControls();
 	AttachSystemPack();
+	return GetCommandLineA();
 }
 
 bool AttachFixesInstaller(void)
 {
-	//PrepareSteamOverlayFix();
-
 	uChar* codeBase = (uChar*)GetModuleHandle(NULL);
-	PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "Comctl32.dll");
+	PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "Kernel32.dll");
 	if(importDesc)
-		PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, true, (char*)17, (FARPROC)MyInitCommonControls);
-	return true;
+		PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "GetCommandLineA", (FARPROC)MyGetCommandLineA);
+
+	bool Ok = InstallSteamOverlayFix();
+	if(!Ok)
+	{
+		RedirectIOToConsole();
+		printf("InstallSteamOverlayFix failed\n");
+	}
+	return Ok;
 }
 
 void RemoveFixes(void)
