@@ -173,9 +173,15 @@ bool GothicReadIniString(const char* section, const char* key, const char* defva
 
 			char Buffer[256];
 			ReadIniString("SYSTEM", "RedirectToGothicIni", "0", Buffer, 256, File);
+			if(atoi(Buffer) != 0)
+			{
+				File.Assign("Gothic.ini");
+				if(!WorkPath.Compare(_T("System"), true))
+					File.Assign("System\\Gothic.ini");
 
-			if((atoi(Buffer) != 0))
-				file = "Gothic.ini";
+				if(ReadIniString(section, key, defval, val, size, File))
+					return true;
+			}
 		}
 
 		File.Assign(file);
@@ -200,9 +206,14 @@ bool GothicWriteIniString(const char* section, const char* key, const char* val,
 
 			char Buffer[256];
 			ReadIniString("SYSTEM", "RedirectToGothicIni", "0", Buffer, 256, File);
+			if(atoi(Buffer) != 0)
+			{
+				File.Assign("Gothic.ini");
+				if(!WorkPath.Compare(_T("System"), true))
+					File.Assign("System\\Gothic.ini");
 
-			if((atoi(Buffer) != 0))
-				file = "Gothic.ini";
+				WriteIniString(section, key, val, File);
+			}
 		}
 
 		File.Assign(file);
