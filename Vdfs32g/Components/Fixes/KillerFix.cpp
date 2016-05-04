@@ -81,7 +81,7 @@ bool PatchInt(AString& section, TaggedArray<AString, AString>& params)
 		if(NewVarSect.TruncateAfterFirst(":") && NewVarParam.TruncateBeforeFirst(":"))
 		{
 			char Value[256];
-			if(GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "SystemPack.ini"))
+			if(GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "SystemPack.ini") || GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "Gothic.ini"))
 				New += atoi(Value);
 		}
 	}
@@ -172,7 +172,7 @@ bool PatchFloat(AString& section, TaggedArray<AString, AString>& params)
 		if(NewVarSect.TruncateAfterFirst(":") && NewVarParam.TruncateBeforeFirst(":"))
 		{
 			char Value[256];
-			if(GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "SystemPack.ini"))
+			if(GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "SystemPack.ini") || GothicReadIniString(NewVarSect, NewVarParam, "", Value, 256, "Gothic.ini"))
 				New += (float)atof(Value);
 		}
 	}
@@ -371,6 +371,40 @@ bool ApplyPatch(const TString& filename)
 		}
 		Sections.Erase(_T("ConVars"));
 
+		// zConVars
+		ConVars.Clear();
+		if(ReadIniSectionParams(ConVars, "zConVars", filename))
+		{
+			for(uInt v = 0; v < ConVars.Size(); v++)
+			{
+				ConVars.GetElement(v).TruncateBeforeFirst("\"");
+				ConVars.GetElement(v).TruncateAfterFirst("\"");
+
+				AString ConVarSect(ConVars.GetTag(v));
+				AString ConVar(ConVars.GetTag(v));
+				if(ConVarSect.TruncateAfterFirst(":") && ConVar.TruncateBeforeFirst(":"))
+				{
+					char Value[256];
+					if(!GothicReadIniString(ConVarSect, ConVar, ConVars.GetElement(v), Value, 256, "SystemPack.ini"))
+					{
+						if(ConVars.GetElement(v).GetData(":"))
+						{
+							AString ValueConVarSect(ConVars.GetElement(v));
+							AString ValueConVar(ConVars.GetElement(v));
+							if(!ValueConVarSect.TruncateAfterFirst(":") || !ValueConVar.TruncateBeforeFirst(":") || !GothicReadIniString(ValueConVarSect, ValueConVar, "", Value, 256, "Gothic.ini"))
+							{
+								RedirectIOToConsole();
+								printf("%s failed\n", ConVars.GetTag(v).GetData());
+								return false;
+							}
+						}
+						GothicWriteIniString(ConVarSect, ConVar, Value, "Gothic.ini");
+					}
+				}
+			}
+		}
+		Sections.Erase(_T("zConVars"));
+
 		// MemBlocks
 		TaggedArray<AString, AString> MemBlocks;
 		if(ReadIniSectionParams(MemBlocks, "MemBlocks", filename))
@@ -408,7 +442,7 @@ bool ApplyPatch(const TString& filename)
 					if(!ConditionSect.TruncateAfterFirst(":") || !ConditionParam.TruncateBeforeFirst(":"))
 						continue;
 					char Value[256];
-					if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini"))
+					if(!GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "SystemPack.ini") && !GothicReadIniString(ConditionSect, ConditionParam, "", Value, 256, "Gothic.ini"))
 						continue;
 
 					AStringArrayPtr ConditionValues = Params.GetElement("ConditionValue").GetAllTokens(",");
