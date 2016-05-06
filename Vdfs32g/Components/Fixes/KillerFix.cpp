@@ -385,7 +385,7 @@ bool ApplyPatch(const TString& filename)
 				if(ConVarSect.TruncateAfterFirst(":") && ConVar.TruncateBeforeFirst(":"))
 				{
 					char Value[256];
-					if(!GothicReadIniString(ConVarSect, ConVar, ConVars.GetElement(v), Value, 256, "SystemPack.ini"))
+					if(!GothicReadIniString(ConVarSect, ConVar, ConVars.GetElement(v), Value, 256, "Gothic.ini"))
 					{
 						if(ConVars.GetElement(v).GetData(":"))
 						{

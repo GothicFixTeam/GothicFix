@@ -53,12 +53,6 @@ bool AttachSystemPack(void)
 			RedirectIOToConsole();
 			printf("InstallKillerFix failed\n");
 		}
-		Ok = Ok && InstallGUXFix();
-		if(!Ok)
-		{
-			RedirectIOToConsole();
-			printf("InstallGUXFix failed\n");
-		}
 		Ok = Ok && InstallD3DFix();
 		if(!Ok)
 		{
@@ -112,6 +106,12 @@ bool AttachFixesInstaller(void)
 	{
 		RedirectIOToConsole();
 		printf("InstallSteamOverlayFix failed\n");
+	}
+	Ok = Ok && InstallGUXFix();
+	if(!Ok)
+	{
+		RedirectIOToConsole();
+		printf("InstallGUXFix failed\n");
 	}
 	return Ok;
 }
