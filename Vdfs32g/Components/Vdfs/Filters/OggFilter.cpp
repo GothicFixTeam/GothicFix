@@ -12,6 +12,10 @@ OggFilter* OggFilter::GetFreeStream(void)
 
 IfsFilter* OggFilter::Open(IFS* src)
 {
+	TString Ext(src->GetName());
+	if(!Ext.TruncateBeforeLast(_T(".")) || (!Ext.Compare(_T("WAV")) && !Ext.Compare(_T("OGG"))))
+		return NULL;
+
 	src->SetOffset(0);
 
 	uChar Buffer[4];

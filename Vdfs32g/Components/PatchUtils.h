@@ -49,8 +49,6 @@ extern uLong GetExeCrc32(void);
 extern uLong GetSectionCrc32(const char* name);
 extern const uChar* GetSectionAddress(const uChar* codeBase, const char* name, size_t& size);
 
-extern bool HasVgaVendor(DWORD ven);
-
 extern bool Patch(uChar* data, size_t size, uChar* org, uChar* patch);
 
 template<typename type>
