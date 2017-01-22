@@ -561,7 +561,8 @@ bool InstallKillerFix(void)
 {
 	if(IsWindows8Point1OrGreater()) 
 	{
-		if(SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
+		int Res = SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) ;
+		if((Res != S_OK) && (Res != E_ACCESSDENIED))
 		{
 			RedirectIOToConsole();
 			printf("Failed to set process DPI awareness\n");
