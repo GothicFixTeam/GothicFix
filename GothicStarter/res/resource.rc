@@ -556,7 +556,7 @@ LANGUAGE LANG_CZECH, 0x1
 STRINGTABLE 
 BEGIN
   IDS_ANSI "\\ansi\\ansicpg1250\\deflang1029\\deff0{\\fonttbl{\\f0\\fcharset0 MS Shell Dlg;}}\\fs16\\pard\\qc"
-  IDS_VERS "Version: "
+  IDS_VERS "Verze: "
 END
 #endif
 
