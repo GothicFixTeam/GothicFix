@@ -1207,6 +1207,7 @@ void StartSelectedMod(HWND hDlg)
                 GetDlgItemText(hDlg, IDC_PARA, &cmnd[lstrlen(cmnd)], charof(cmnd) - lstrlen(cmnd));
             }
 #endif
+			si.wShowWindow = SW_SHOWNORMAL;
             if (CreateProcess(NULL, cmnd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
             {
                 ShowWindow(hDlg, SW_MINIMIZE);

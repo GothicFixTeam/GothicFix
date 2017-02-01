@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="."
-			IntermediateDirectory=".\tmp"
+			OutputDirectory="$(SolutionDir)Release"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -88,7 +88,6 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalDependencies="comctl32.lib lib\libc.lib"
-				OutputFile="GothicStarter.exe"
 				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -131,8 +130,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\Work\G1\system"
+			IntermediateDirectory="$(SolutionDir)Output\$(ProjectName)\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -199,7 +198,6 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalDependencies="comctl32.lib lib\libc.lib"
-				OutputFile="GothicStarter.exe"
 				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
