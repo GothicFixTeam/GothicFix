@@ -481,7 +481,7 @@ BEGIN
     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_GROUP | WS_TABSTOP,
     7, 7, 197, 123,
     WS_EX_STATICEDGE
-  DEFPUSHBUTTON "Íà÷àòü &èãðó", IDC_PLAY,
+  DEFPUSHBUTTON "Запустить игру", IDC_PLAY,
     208, 7, 137, 22,
     BS_FLAT
   CONTROL         "", IDC_INFO, "RICHEDIT",
@@ -496,50 +496,50 @@ BEGIN
     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_GROUP | WS_TABSTOP,
     7, 7, 205, 192,
     WS_EX_STATICEDGE
-  CONTROL "&Ïàðàìåòðû:", IDS_PARA, "Static",
+  CONTROL "&Параметры:", IDS_PARA, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     7, 203, 45, 10
   EDITTEXT IDC_PARA,
     55, 202, 270, 12,
     ES_AUTOHSCROLL | NOT WS_BORDER,
     WS_EX_STATICEDGE
-  DEFPUSHBUTTON "Çàïóñòèòü &èãðó", IDC_PLAY,
+  DEFPUSHBUTTON "Запустить &игру", IDC_PLAY,
     215, 7, 110, 22,
     BS_FLAT | WS_GROUP
-  PUSHBUTTON "Çàïóñòèòü â &ðåäàêòîðå", IDC_EDIT,
+  PUSHBUTTON "Запустить в &редакторе", IDC_EDIT,
     215, 32, 110, 22,
     BS_FLAT | NOT WS_TABSTOP
-  CONTROL "&Ïåðåñîáðàòü ñêðèïòû", IDC_PARS, "Button",
+  CONTROL "&Пересобрать скрипты", IDC_PARS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     219, 60, 102, 10
-  CONTROL "&Îêîííûé ðåæèì", IDC_WIND, "Button",
+  CONTROL "&Оконный режим", IDC_WIND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 73, 102, 10
-  CONTROL "Âûêëþ÷èòü &ìóçûêó", IDC_NMUS, "Button",
+  CONTROL "Выключить &музыку", IDC_NMUS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 86, 102, 10
-  CONTROL "Âûêëþ÷èòü &çâóê", IDC_NSND, "Button",
+  CONTROL "Выключить &звук", IDC_NSND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 99, 102, 10
   RTEXT "", IDC_ZLOG,
     293, 115, 28, 8,
     NOT WS_GROUP
-  CONTROL "&Ñîîáùåíèÿ zSpy:", IDS_ZSPY, "Static",
+  CONTROL "&Сообщения zSpy:", IDS_ZSPY, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     219, 115, 70, 8
   CONTROL "", IDC_ZSPY, "msctls_trackbar32",
     TBS_AUTOTICKS | TBS_ENABLESELRANGE | WS_TABSTOP,
     215, 125, 110, 14
-  CONTROL "Êîíâåðòèðîâàòü &òåêñòóðû", IDC_ZTEX, "Button",
+  CONTROL "Конвертировать &текстуры", IDC_ZTEX, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     219, 146, 102, 10
-  CONTROL "Êîíâåðòèðîâàòü &äàííûå", IDC_AUTO, "Button",
+  CONTROL "Конвертировать &данные", IDC_AUTO, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 159, 102, 10
-  CONTROL "Êîíâåðòèðîâàòü &âñ¸", IDC_CALL, "Button",
+  CONTROL "Конвертировать &всё", IDC_CALL, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 172, 102, 10
-  CONTROL "Âíà÷àëå &ôèçè÷åñêèé VDFS", IDC_VDFS, "Button",
+  CONTROL "Вначале &физический VDFS", IDC_VDFS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 185, 102, 10
 #endif
