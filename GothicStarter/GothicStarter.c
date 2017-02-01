@@ -1210,7 +1210,7 @@ void StartSelectedMod(HWND hDlg)
 			si.wShowWindow = SW_SHOWNORMAL;
             if (CreateProcess(NULL, cmnd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
             {
-                ShowWindow(hDlg, SW_MINIMIZE);
+                //ShowWindow(hDlg, SW_MINIMIZE);
                 do
                 {
                     /* dialog */
