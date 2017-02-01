@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mssds3d", "Mssds3d\Mssds3d.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VdfsTool", "VdfsTool\VdfsTool.vcproj", "{14707CF0-973D-4028-80CB-E7AE42E9C10C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GothicStarter", "GothicStarter\GothicStarter.vcproj", "{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -69,6 +71,20 @@ Global
 		{14707CF0-973D-4028-80CB-E7AE42E9C10C}.ReleaseG2|Win32.Build.0 = Release|Win32
 		{14707CF0-973D-4028-80CB-E7AE42E9C10C}.RemoteDebug|Win32.ActiveCfg = Debug|Win32
 		{14707CF0-973D-4028-80CB-E7AE42E9C10C}.RemoteDebug|Win32.Build.0 = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.Debug|Win32.Build.0 = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.DebugExe|Win32.ActiveCfg = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.DebugExe|Win32.Build.0 = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.DebugG2|Win32.ActiveCfg = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.DebugG2|Win32.Build.0 = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.Release|Win32.ActiveCfg = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.Release|Win32.Build.0 = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.ReleaseExe|Win32.ActiveCfg = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.ReleaseExe|Win32.Build.0 = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.ReleaseG2|Win32.ActiveCfg = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.ReleaseG2|Win32.Build.0 = Release|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.RemoteDebug|Win32.ActiveCfg = Debug|Win32
+		{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}.RemoteDebug|Win32.Build.0 = Debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

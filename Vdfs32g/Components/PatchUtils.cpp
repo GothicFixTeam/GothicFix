@@ -53,9 +53,42 @@ bool GetModuleFileNameString(HMODULE hModule, TString& name)
 	return (name.Length() != 0);
 }
 
+HWND hGothicWindow = NULL;
+
+BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+{
+	DWORD ProcID = 0;
+	GetWindowThreadProcessId(hWnd, &ProcID);
+	if(ProcID == GetCurrentProcessId())
+	{
+		TCHAR Text[256];
+		if(GetClassName(hWnd, Text, 256) && !_tcscmp(Text, _T("DDWndClass")))
+		{
+			hGothicWindow = hWnd;
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
 bool GetGothicWindowSize(POINT& size)
 {
 	size.x = size.y = 0;
+
+	/*if(!hGothicWindow)
+		EnumWindows(EnumWindowsProc, NULL);
+
+	if(hGothicWindow)
+	{
+		RECT ClientRect;
+		if(GetClientRect(hGothicWindow, &ClientRect))
+		{
+			size.x = ClientRect.right - ClientRect.left;
+			size.y = ClientRect.bottom - ClientRect.top;
+			printf("%d %d\n", size.x, size.y);
+			return true;
+		}
+	}*/
 
 	char Buffer[256];
 	GothicReadIniString("VIDEO", "zVidResFullscreenX", "0", Buffer, 256, "Gothic.ini");

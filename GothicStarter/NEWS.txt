@@ -1,0 +1,31 @@
+=========================
+Changes for GothicStarter
+=========================
+
+Changes in 2.6f (2007-06-05)
+  * fix: Gothic1 detection fixed (wrong working directory)
+  * new: Vista Requested Execution Level added to manifest
+Changes in 2.6e (2006-01-02)
+  * new: conversion of \'xx codes (RTF) in [INFO]/title
+  * translation: splitted single INI files into INI/RTF
+Changes in 2.6d (2005-11-17)
+  * translation: added French dialog resources (beta)
+  * translation: added Italian dialog resources (beta)
+  * translation: added Russian dialog resources (beta)
+  * ini: added RTF codepage + font tags in description
+Changes in 2.6c (2005-09-23)
+  * new: close SmartHeap error message automatically
+  * new: added [MOD]/Base (override mod's base name)
+Changes in 2.6b (2005-09-20)
+  * fix: wait until zSpy is initialized (WaitForInputIdle)
+  * fix: zSpy will also be found in current directory (g1)
+  * fix: fixed rich edit control handling on Windows 9x/ME
+  * new: allow multiple start inside different directories
+  * ini: added [OVERRIDES] (Gothic.ini mod configurations)
+  * g1: support for legacy icons (GothicStarter 1.13 list)
+  * g1: disabled backup copy of VDFS volume map (VDFS.DMP)
+Changes in 2.6a (2005-07-13)
+  * translation: added English dialog resources (default)
+  * fix: do not copy - but move mod volumes (performance)
+  * mod: VDFS option enabled (requires vdfs replacement!)
+  * new: basic support for Gothic1 introduced (GothicMod)

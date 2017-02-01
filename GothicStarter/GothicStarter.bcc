@@ -1,0 +1,60 @@
+# ---------------------------------------------------------------------------
+#
+#      Makefile for Borland C++ Compiler 5.5 (Free Commandline Tools)
+#
+# ---------------------------------------------------------------------------
+
+!if !$d(BCC)
+BCC = $(MAKEDIR)\..
+!endif
+!if !$d(BCC32)
+BCC32 = $(BCC)\Bin\bcc32.exe
+!endif
+!if !$d(LINKER)
+LINKER = $(BCC)\Bin\ilink32.exe
+!endif
+!if !$d(BRCC32)
+BRCC32 = $(BCC)\Bin\brcc32.exe
+!endif
+
+PROJECT = .\GothicStarter.exe
+OBJFILES = c0w32.obj .\tmp\GothicStarter.obj
+LIBFILES = import32.lib cw32.lib
+RESFILES = .\tmp\resource.res
+
+!if $d(MOD_VERSION)
+DEFINES = NO_STRICT;_NO_VCL;MOD_VERSION
+!else
+DEFINES = NO_STRICT;_NO_VCL
+!endif
+INCLUDE = res;$(BCC)\Include
+LIBPATH = lib;$(BCC)\Lib
+WARNING = -w-par
+PATHCPP = .
+PATHOBJ = $(LIBPATH)
+PATHRC = .;res
+
+CFLAG1 = -Og -Ov -Q -w -Vx -Ve -x- -RT- -ff -X -pr -a1 -6 -b -d -k- -vi -tW -tWM -c
+RFLAGS = 
+LFLAGS = -l. -I. -Gz -aa -Tpe -x -Gn -w
+
+.PATH.C = $(PATHCPP)
+.PATH.RC = $(PATHRC)
+.PATH.OBJ = $(PATHOBJ)
+
+# ---------------------------------------------------------------------------
+
+$(PROJECT): $(OBJFILES) $(RESFILES)
+    $(LINKER) @&&!
+    $(LFLAGS) -L$(LIBPATH) +
+    $(OBJFILES), +
+    $(PROJECT),, +
+    $(LIBFILES),, +
+    $(RESFILES)
+!
+
+.c.obj:
+    $(BCC32) $(CFLAG1) $(WARNING) -I$(INCLUDE) -D$(DEFINES) -n$(@D) {$< }
+
+.rc.res:
+    $(BRCC32) $(RFLAGS) -I$(INCLUDE) -D$(DEFINES) -fo$@ $<

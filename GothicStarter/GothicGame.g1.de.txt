@@ -1,0 +1,183 @@
+;===============================================================================
+;
+;           Konfigurationsdatei um das originale Gothic I zu spielen
+;
+;===============================================================================
+
+
+;-------------------------------------------------------------------------------
+;
+; Informationen (GothicStarter)
+;
+;-------------------------------------------------------------------------------
+
+
+[INFO]
+
+title=Gothic I
+
+; Info: Name der Modifikation
+; Format: <Text>
+; Hinweise: Der umgekehrten Schrägstrich '\' sollte nicht verwendet werden.
+
+version=1.08
+
+; Info: Version der Modifikation
+; Format: <Text>
+; Hinweise: Der umgekehrten Schrägstrich '\' sollte nicht verwendet werden.
+
+authors=Piranha Bytes
+
+; Info: Autoren der Modifikation
+; Format: <Text>
+; Hinweise: Der umgekehrten Schrägstrich '\' sollte nicht verwendet werden.
+
+webpage=http://www.piranha-bytes.com
+
+; Info: Webseite der Modifikation
+; Format: <Text>
+; Hinweise: Der umgekehrten Schrägstrich '\' sollte nicht verwendet werden.
+
+description={\rtf1\ansi\ansicpg1252\deflang1031\deff0{\fonttbl{\f0\fcharset0 MS Shell Dlg;}}\fs16\pard Es herrscht Krieg im K\'f6nigreich der Menschen. Von Norden her fallen Scharen von Orks in das Land ein. Um die Kampfkraft der k\'f6niglichen Armee zu erhalten, sind die Schmiede des Reiches unentwegt damit besch\'e4ftigt, neue Waffen anzufertigen. Diejenigen, die in dieser Zeit das Gesetz brechen, trifft ein hartes Los: Sie werden zu Zwangsarbeit in der Strafkolonie verurteilt, wo sie tief aus der Erde das ERZ f\'f6rdern, das f\'fcr die Herstellung der Waffen ben\'f6tigt wird.\par\par Das gesamte Gebiet ist von einer magischen Barriere umschlossen; einer Sph\'e4re von zweitausend Meter Durchmesser, die das Gef\'e4ngnis wie eine Kuppel umspannt. Von au\'dfen kann die Barriere problemslos passiert werden; aber kein lebendiges Wesen kann aus ihr entkommen.\par\par Unschuldig wirst du in dieses Gef\'e4ngnis geworfen und mu\'dft dich dort gegen\'fcber feindlichen Kreaturen behaupten. F\'fcr dich gibt es ab sofort nur noch ein Ziel: Zu \'fcberleben, um dann irgendwann zu entfliehen.\par \pard\qc\par Weitere Informationen finden Sie unter\par http://www.piranha-bytes.com\par\par}
+
+; Info: Beschreibung der Modifikation
+; Format: <Text>|<RichText>|<SymLink>
+; Hinweise: Wenn der Wert mit "{\rtf1" beginnt, wird er als RTF interpretiert.
+; Wenn der Wert mit "!<symlink>" beginnt, wird der folgende Text als Dateiname
+; interpretiert und der Inhalt der Datei als Beschreibung angezeigt (RTF-Daten
+; werden ebenfalls an "{\rtf1" erkannt). Ansonsten wird es als Text eingelesen.
+; (BTW, der GothicStarter liesst bei den INI-Werten maximal 4096 Zeichen aus.)
+
+icon=0
+
+; Info: Angezeigtes Symbol
+; Format: <Dateipfad>[,<Index>]
+; Hinweise: Beim Dateinamen kann es sich um eine ausführbare Datei (.exe), eine
+; dynamisch ladbare Bibliothek (.dll) oder ein Icon (.ico) handeln. Die Pfadan-
+; gabe erfolgt relativ zum System-Verzeichnis von Gothic II.  Optional kann der
+; Index des Symbols angegeben werden (Standard = 0).  Bei einem positiven Index
+; wird (bei 0 beginnend) das <Index>-te Symbol aus der Datei verwendet. Bei ei-
+; nem negativen Index wird die Ressource mit der entsprechenden ID verwendet.
+; Seit der Version 2.6b des GothicStarters ist auch die interne Icon-Liste des
+; Original-GothicStarters von Gothic I enthalten. Wenn also als Icon nur eine
+; Zahl von 1 bis 29 angegeben wird, dann wird das Icon aus der internen Liste
+; geladen (im Gothic I-Modus ist das 'blaue G' (Index 1) das Standardsymbol).
+
+
+;-------------------------------------------------------------------------------
+;
+; Volumes/Skripte (GothicStarter/Engine)
+;
+;-------------------------------------------------------------------------------
+
+
+[FILES]
+
+vdf=GothicGame.mod
+
+; Wert: VDFS-Volume(s)
+; Format: <Dateiname>[  <Dateiname>[  ...]]
+; Hinweise: Der Dateiname muss ohne Pfad und mit Dateiendung angegeben werden.
+; Bei mehreren Dateien werden diese jeweils mit zwei Leerzeichen '  ' getrennt.
+; Der GothicStarter kopiert vor dem Starten einer Modifikation alle angegebenen
+; Dateien von [gothic]/Data/modvdf/ nach [gothic]/Data/ (nachdem er zuvor
+; alle [gothic]/Data/*.mod nach [gothic]/Data/modvdf/ verschoben hat).
+; [Achtung] Der Wert "VDF" muss existieren (selbst wenn er leer ist), damit der
+; GothicStarter die INI akzeptiert. Mit dem speziellen Wert "!<invalid>" kann
+; das Einlesen durch den GothicStarter expliziet deaktiviert werden.
+
+game=content\gothic
+fightai=content\fight
+menu=system\menu
+camera=system\camera
+music=system\music
+soundeffects=system\sfx
+particleseffects=system\particlefx
+visualeffects=system\visualfx
+
+; Wert: Skriptdateien
+; Format: <Dateipfad>
+; Hinweise: Die Dateinamen der Quellen (.src) für die jeweiligen Skripte muss
+; OHNE Erweiterung angegeben werden. Die Pfadangabe ist relativ zu DIR_SCRIPTS
+; (die Engine-Verzeichnisse werden in [gothic]/System/Paths.d definiert).
+; Mit dem Dateinamen (ohne Pfad) wird auch der Dateiname der kompilierten Ver-
+; sion der Skripte festgelegt (DIR_COMPILED_SCRIPTS/<Dateiname>.DAT).
+
+outputunits=content\cutscene\ou
+
+; Wert: Sprachausgabe/Untertitel
+; Format: <Dateipfad>
+; Hinweise: Der Dateiname der Sprachausgabe/Untertitel-Datenbank (.BIN) muss
+; OHNE Erweiterung angegeben werden. Die Angabe ist relativ zu DIR_SCRIPTS.
+
+
+;-------------------------------------------------------------------------------
+;
+; Startwelt/Spieler (Engine)
+;
+;-------------------------------------------------------------------------------
+
+
+[SETTINGS]
+
+world=world.zen
+
+; Wert: Startwelt
+; Format: <Dateipfad>
+; Hinweise: Der Dateiname der Startwelt (Neues Spiel) muss inklusive der Datei-
+; endung (.zen) angegeben werden. Die Pfadangabe erfolgt relativ zu DIR_WORLD.
+
+player=PC_HERO
+
+; Wert: Spieler
+; Format: <Instanz>
+; Hinweise: Der Name der Instanz, die für den Spielercharakter verwendet wird.
+
+
+;-------------------------------------------------------------------------------
+;
+;  Einstellungen (Engine)
+;
+;-------------------------------------------------------------------------------
+
+
+[OPTIONS]
+
+show_info=0
+
+; Mit show_info=0 wird die Anzeige des Spieltitels in den Menüs deaktiviert.
+
+force_subtitles=0
+
+; Mit force_subtitles=1 kann die Anzeige der Untertitel erzwungen werden.
+
+force_parameters=
+
+; Mit force_parameters werden zusätzliche Engine-Parameter angegeben.
+; (zum Beispiel "-time:17:05" damit ein neues Spiel um 17:05 beginnt)
+
+
+;-------------------------------------------------------------------------------
+;
+; Gothic.ini-Hacks (GothicStarter)
+;
+;-------------------------------------------------------------------------------
+
+
+[OVERRIDES]
+
+; Diese Sektion wird vom GothicStarter ab Vers. 2.6.2.0 (2.6b) gelesen.
+; Hier stehen die Parameter die vor dem Starten der Modifikation in der
+; Gothic.ini erzwungen werden sollen. Nach dem Beenden der Modifikation
+; werden wieder die alten Werte in die Gothic.ini geschrieben.  Da dies
+; den Zugriff auf die gesamte Gothic.ini des Spielers erlaubt,  sollten
+; die Optionen mit Bedacht eingesetzt werden!  Bitte beachtet, dass die
+; ZenGin (im Gegensatz zum GothicStarter) die Groß-/Kleinschreibung der
+; Parameter beachtet.
+
+INTERNAL.extendedMenu=1
+
+; Beispiel: Der Parameter 'extendedMenu' in der Sektion [INTERNAL] wird
+; auf 1 gesetzt (dadurch wird im Gothic I-Spielmenü die Auswahl des
+; 'Blut-Levels' ermöglicht).
+
