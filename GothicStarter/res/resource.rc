@@ -14,8 +14,9 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //  Icon
 */
 
-IDI_MAIN ICON "main.ico"
+//IDI_MAIN ICON "g1.ico"
 
+IDI_MAIN ICON "g2.ico"
 /*///////////////////////////////////////////////////////////////////////////
 //
 //  Bitmap
