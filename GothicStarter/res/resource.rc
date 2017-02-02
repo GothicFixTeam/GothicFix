@@ -14,9 +14,8 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //  Icon
 */
 
-//IDI_MAIN ICON "g1.ico"
-
 IDI_MAIN ICON "g2.ico"
+
 /*///////////////////////////////////////////////////////////////////////////
 //
 //  Bitmap
@@ -302,7 +301,7 @@ BEGIN
     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_GROUP | WS_TABSTOP,
     7, 7, 215, 192,
     WS_EX_STATICEDGE
-  CONTROL "&ParamГЁtres:", IDS_PARA, "Static",
+  CONTROL "&Paramиtres:", IDS_PARA, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     7, 203, 39, 10
   EDITTEXT IDC_PARA,
@@ -312,19 +311,19 @@ BEGIN
   DEFPUSHBUTTON "&Jouer le jeu", IDC_PLAY,
     225, 7, 100, 22,
     BS_FLAT | WS_GROUP
-  PUSHBUTTON "&Lancer l'Г©diteur", IDC_EDIT,
+  PUSHBUTTON "&Lancer l'йditeur", IDC_EDIT,
     225, 32, 100, 22,
     BS_FLAT | NOT WS_TABSTOP
   CONTROL "&Compiler les scripts", IDC_PARS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     229, 60, 92, 10
-  CONTROL "Mode &fenГЄtre", IDC_WIND, "Button",
+  CONTROL "Mode &fenкtre", IDC_WIND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 73, 92, 10
-  CONTROL "DГ©sabler &musique", IDC_NMUS, "Button",
+  CONTROL "Dйsabler &musique", IDC_NMUS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 86, 92, 10
-  CONTROL "DГ©sabler &son", IDC_NSND, "Button",
+  CONTROL "Dйsabler &son", IDC_NSND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 99, 92, 10
   RTEXT "", IDC_ZLOG,
@@ -339,7 +338,7 @@ BEGIN
   CONTROL "Converter des &textures", IDC_ZTEX, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     229, 146, 92, 10
-  CONTROL "Converter des &donnГ©es", IDC_AUTO, "Button",
+  CONTROL "Converter des &donnйes", IDC_AUTO, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 159, 92, 10
   CONTROL "Converter t&out", IDC_CALL, "Button",
@@ -481,7 +480,7 @@ BEGIN
     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_GROUP | WS_TABSTOP,
     7, 7, 197, 123,
     WS_EX_STATICEDGE
-  DEFPUSHBUTTON "Р—Р°РїСѓСЃС‚РёС‚СЊ РёРіСЂСѓ", IDC_PLAY,
+  DEFPUSHBUTTON "Начать &игру", IDC_PLAY,
     208, 7, 137, 22,
     BS_FLAT
   CONTROL         "", IDC_INFO, "RICHEDIT",
@@ -496,50 +495,50 @@ BEGIN
     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_GROUP | WS_TABSTOP,
     7, 7, 205, 192,
     WS_EX_STATICEDGE
-  CONTROL "&РџР°СЂР°РјРµС‚СЂС‹:", IDS_PARA, "Static",
+  CONTROL "&Параметры:", IDS_PARA, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     7, 203, 45, 10
   EDITTEXT IDC_PARA,
     55, 202, 270, 12,
     ES_AUTOHSCROLL | NOT WS_BORDER,
     WS_EX_STATICEDGE
-  DEFPUSHBUTTON "Р—Р°РїСѓСЃС‚РёС‚СЊ &РёРіСЂСѓ", IDC_PLAY,
+  DEFPUSHBUTTON "Запустить &игру", IDC_PLAY,
     215, 7, 110, 22,
     BS_FLAT | WS_GROUP
-  PUSHBUTTON "Р—Р°РїСѓСЃС‚РёС‚СЊ РІ &СЂРµРґР°РєС‚РѕСЂРµ", IDC_EDIT,
+  PUSHBUTTON "Запустить в &редакторе", IDC_EDIT,
     215, 32, 110, 22,
     BS_FLAT | NOT WS_TABSTOP
-  CONTROL "&РџРµСЂРµСЃРѕР±СЂР°С‚СЊ СЃРєСЂРёРїС‚С‹", IDC_PARS, "Button",
+  CONTROL "&Пересобрать скрипты", IDC_PARS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     219, 60, 102, 10
-  CONTROL "&РћРєРѕРЅРЅС‹Р№ СЂРµР¶РёРј", IDC_WIND, "Button",
+  CONTROL "&Оконный режим", IDC_WIND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 73, 102, 10
-  CONTROL "Р’С‹РєР»СЋС‡РёС‚СЊ &РјСѓР·С‹РєСѓ", IDC_NMUS, "Button",
+  CONTROL "Выключить &музыку", IDC_NMUS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 86, 102, 10
-  CONTROL "Р’С‹РєР»СЋС‡РёС‚СЊ &Р·РІСѓРє", IDC_NSND, "Button",
+  CONTROL "Выключить &звук", IDC_NSND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 99, 102, 10
   RTEXT "", IDC_ZLOG,
     293, 115, 28, 8,
     NOT WS_GROUP
-  CONTROL "&РЎРѕРѕР±С‰РµРЅРёСЏ zSpy:", IDS_ZSPY, "Static",
+  CONTROL "&Сообщения zSpy:", IDS_ZSPY, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     219, 115, 70, 8
   CONTROL "", IDC_ZSPY, "msctls_trackbar32",
     TBS_AUTOTICKS | TBS_ENABLESELRANGE | WS_TABSTOP,
     215, 125, 110, 14
-  CONTROL "РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ &С‚РµРєСЃС‚СѓСЂС‹", IDC_ZTEX, "Button",
+  CONTROL "Конвертировать &текстуры", IDC_ZTEX, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     219, 146, 102, 10
-  CONTROL "РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ &РґР°РЅРЅС‹Рµ", IDC_AUTO, "Button",
+  CONTROL "Конвертировать &данные", IDC_AUTO, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 159, 102, 10
-  CONTROL "РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ &РІСЃС‘", IDC_CALL, "Button",
+  CONTROL "Конвертировать &всё", IDC_CALL, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 172, 102, 10
-  CONTROL "Р’РЅР°С‡Р°Р»Рµ &С„РёР·РёС‡РµСЃРєРёР№ VDFS", IDC_VDFS, "Button",
+  CONTROL "Вначале &физический VDFS", IDC_VDFS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     219, 185, 102, 10
 #endif
@@ -607,7 +606,7 @@ BEGIN
   CONTROL "&Parsovat skripty", IDC_PARS, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     229, 60, 92, 10
-  CONTROL "&ReЕѕim v oknД›", IDC_WIND, "Button",
+  CONTROL "&Rezim v okne", IDC_WIND, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 73, 92, 10
   CONTROL "Vypnout &hudbu", IDC_NMUS, "Button",
@@ -619,19 +618,19 @@ BEGIN
   RTEXT "", IDC_ZLOG,
     293, 115, 28, 8,
     NOT WS_GROUP
-  CONTROL "&zSpy zprГЎvy:", IDS_ZSPY, "Static",
+  CONTROL "&zSpy zpravy:", IDS_ZSPY, "Static",
     SS_LEFTNOWORDWRAP | WS_GROUP,
     229, 115, 60, 8
   CONTROL "", IDC_ZSPY, "msctls_trackbar32",
     TBS_AUTOTICKS | TBS_ENABLESELRANGE | WS_TABSTOP,
     225, 125, 100, 14
-  CONTROL "PЕ™evГ©st &textury", IDC_ZTEX, "Button",
+  CONTROL "Prevest &textury", IDC_ZTEX, "Button",
     BS_AUTOCHECKBOX | BS_FLAT | WS_GROUP | WS_TABSTOP,
     229, 146, 92, 10
-  CONTROL "PЕ™evГ©st &data", IDC_AUTO, "Button",
+  CONTROL "Prevest &data", IDC_AUTO, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 159, 92, 10
-  CONTROL "PЕ™evГ©st &vЕЎe", IDC_CALL, "Button",
+  CONTROL "Prevest &vse", IDC_CALL, "Button",
     BS_AUTOCHECKBOX | BS_FLAT,
     229, 172, 92, 10
   CONTROL "Nejprve &VDFS z disku", IDC_VDFS, "Button",
