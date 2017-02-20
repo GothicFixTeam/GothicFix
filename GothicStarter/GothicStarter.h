@@ -14,12 +14,12 @@
 */
 
 #define APP_VERSION_MAJOR 2
-#define APP_VERSION_MINOR 6
-#define APP_VERSION_PATCH 6
+#define APP_VERSION_MINOR 8
+#define APP_VERSION_PATCH 0
 #ifndef MOD_VERSION
-#define APP_VERSION_STRING "2.6f\0"
+#define APP_VERSION_STRING "2.8\0"
 #else
-#define APP_VERSION_STRING "2.6f (mod)\0"
+#define APP_VERSION_STRING "2.8 (mod)\0"
 #endif
 #define APP_VERSION_FILEDESCRIPTION "Gothic - Modification Starter\0"
 #define APP_VERSION_COPYRIGHT       "Copyright (c) 2002-2007 Pluto 13 GmbH\0"
