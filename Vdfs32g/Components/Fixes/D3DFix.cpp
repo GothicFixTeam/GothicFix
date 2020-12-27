@@ -14,8 +14,9 @@ bool PatchD3D(uChar* codeBase)
 		{
 			if(!memcmp(&codeBase[i], &Signature, sizeof(Signature)))
 			{
-				size_t ToCheck = MIN(64, codeSize - i - sizeof(SubSignature));
-				for(size_t n = i; (n - i) < ToCheck; n++)
+				size_t StartToCheck = MAX(i - 1200, 0);
+				size_t ToCheck = MIN(2400, codeSize - i - sizeof(SubSignature));
+				for(size_t n = StartToCheck; n <= StartToCheck + ToCheck - 1; n++)
 				{
 					if(!memcmp(&codeBase[n], SubSignature, sizeof(SubSignature)))
 					{
