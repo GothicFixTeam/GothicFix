@@ -30,30 +30,10 @@ using namespace COMMON;
 #include "Bink/BinkExports.h"
 #include "Bink/DLL.h"
 
-#include <opencv\\cv.h>
-
-#ifndef _DEBUG
-#pragma comment (lib, "opencv_core249.lib")
-#pragma comment (lib, "zlib.lib")
-#else
-#pragma comment (lib, "opencv_core249d.lib")
-#pragma comment (lib, "zlibd.lib")
-#endif
-
-#include <vorbis/vorbisfile.h>
-#ifdef _DEBUG
-#pragma comment(lib, "oggd.lib")
-#pragma comment(lib, "vorbisd.lib")
-#else
-#pragma comment(lib, "ogg.lib")
-#pragma comment(lib, "vorbis.lib")
-#endif
-
 #include "Vdfs/VdfsIndex.h"
 #include "Vdfs/Flows/IFS.h"
 #include "Vdfs/Flows/StdFlow.h"
 #include "Vdfs/Flows/VdfFlow.h"
-#include "Vdfs/Filters/OggFilter.h"
 #include "Vdfs/Vdfs.h"
 
 #include "IniUtils.h"

@@ -1,13 +1,29 @@
 #include "PreCompiled.h"
+#include "Common/ComPtr.h"
+#include <wincodec.h>
 
-#include <fwImage.h>
-#ifdef _DEBUG
-#pragma comment(lib, "fwImaged.lib")
-#pragma comment(lib, "fwBased.lib")
-#else
-#pragma comment(lib, "fwImage.lib")
-#pragma comment(lib, "fwBase.lib")
-#endif
+HRESULT InitCom(void)
+{
+	// Due too lack of functionality in other modes (~ no DragDrop support)
+	// try OleInitialize first
+
+	HRESULT hRes = S_OK;
+	if (SUCCEEDED(hRes = OleInitialize(NULL)))
+		return hRes;
+	else
+		if (hRes == RPC_E_CHANGED_MODE)
+		{
+			if (SUCCEEDED(hRes = CoInitialize(NULL)))
+				return hRes;
+			else
+				if (hRes == RPC_E_CHANGED_MODE)
+				{
+					if (SUCCEEDED(hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED)))
+						return hRes;
+				}
+		}
+	return hRes;
+}
 
 struct BinkFix
 {
@@ -18,13 +34,15 @@ uInt		SrcHeight;
 uInt		DstWidth;
 uInt		DstHeight;
 
-IplImage*	Image;
+ComPtr<IWICBitmap> Image;
 uInt		SrcX;
 uInt		SrcY;
 
-IplImage*	Resized;
+ComPtr<IWICBitmapScaler> pIScaler;
 };
 
+HRESULT hRes;
+ComPtr<IWICImagingFactory> pImgFac;
 Array<BinkFix> Binks;
 
 uInt GetBinkIndex(BINK* bnk)
@@ -63,13 +81,29 @@ void ValidateAspect(BinkFix& Fix, uInt destx, uInt desty)
 		Fix.SrcX += (ImgWidth - Fix.SrcWidth) / 2;
 	}
 
-	if(Fix.Image && ((Fix.Image->width != ImgWidth) || (Fix.Image->height != ImgHeight)))
-		cvReleaseImage(&Fix.Image);
-
+	if (Fix.Image)
+	{
+		UINT width, height;
+		hRes = Fix.Image->GetSize(&width, &height);
+		if ((width != ImgWidth) || (height != ImgHeight))
+		{
+			Fix.Image = nullptr;
+		}
+	}
 	if(!Fix.Image)
 	{
-		Fix.Image = cvCreateImage(cvSize(ImgWidth, ImgHeight), IPL_DEPTH_8U, 4);
-		cvSet(Fix.Image, cvScalar(0));
+		if (FAILED(hRes = pImgFac->CreateBitmap(ImgWidth, ImgHeight, GUID_WICPixelFormat32bppRGBA, WICBitmapCacheOnDemand, Fix.Image.GetAddressOf())))
+		{
+			Fix.Image = nullptr;
+		}
+		if (FAILED(hRes = pImgFac->CreateBitmapScaler(Fix.pIScaler.GetAddressOf())))
+		{
+			Fix.pIScaler = nullptr;
+		}
+		if (FAILED(hRes = Fix.pIScaler->Initialize(Fix.Image, Fix.DstWidth, Fix.DstHeight, WICBitmapInterpolationModeFant)))
+		{
+			Fix.pIScaler = nullptr;
+		}
 	}
 }
 
@@ -90,7 +124,6 @@ bool CreateBinkFix(BINK* bnk)
 	if(!Index)
 	{
 		BinkFix& Fix = Binks.Add();
-		Fix.Image = Fix.Resized = NULL;
 
 		Fix.Bink = bnk;
 		Fix.SrcWidth = bnk->Width;
@@ -130,51 +163,27 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 	uInt Index = GetBinkIndex(bnk);
 	if(Index)
 	{
+		int res = 0;
 		BinkFix& Fix = Binks[Index - 1];
+		{
+			WICRect rect{0, 0, Fix.SrcWidth, Fix.SrcHeight };
 
-		//Fix.DstWidth = destpitch / 4;
-		//Fix.DstHeight = destheight;
-		//ValidateAspect(Fix, destx, desty);
+			ComPtr<IWICBitmapLock> srcLock;
+			hRes = Fix.Image->Lock(&rect, WICBitmapLockWrite, srcLock.GetAddressOf());
+			UINT size, stride;
+			BYTE* data;
+			srcLock->GetDataPointer(&size, &data);
+			srcLock->GetStride(&stride);
 
-		bnk->Width = Fix.SrcWidth;
-		bnk->Height = Fix.SrcHeight;
+			bnk->Width = Fix.SrcWidth;
+			bnk->Height = Fix.SrcHeight;
+			res = dll->BinkCopyToBuffer(bnk, data, stride, Fix.SrcHeight, Fix.SrcX, Fix.SrcY, flags);
+			bnk->Width = Fix.DstWidth;
+			bnk->Height = Fix.DstHeight;
+		}
 
-		int res = dll->BinkCopyToBuffer(bnk, Fix.Image->imageData, Fix.Image->widthStep, Fix.Image->height, Fix.SrcX, Fix.SrcY, flags);
-
-		bnk->Width = Fix.DstWidth;
-		bnk->Height = Fix.DstHeight;
-
-		if(Fix.Resized && ((Fix.Resized->width != destpitch / 4) || (Fix.Resized->height != destheight)))
-			cvReleaseImageHeader(&Fix.Resized);
-		if(!Fix.Resized)
-			Fix.Resized = cvCreateImageHeader(cvSize(destpitch / 4, destheight), Fix.Image->depth, Fix.Image->nChannels);
-		Fix.Resized->imageData = (char*)dest;
-
-		if((Fix.Resized->width != Fix.DstWidth) || (Fix.Resized->height != Fix.DstHeight))
-			cvSetImageROI(Fix.Resized, cvRect(0, 0, Fix.DstWidth, Fix.DstHeight));
-
-		FwiSize fwSrcSize;
-		fwSrcSize.width = Fix.Image->width;
-		fwSrcSize.height = Fix.Image->height;
-
-		FwiRect fwSrcRoi;
-		fwSrcRoi.x = 0;
-		fwSrcRoi.y = 0;
-		fwSrcRoi.width = fwSrcSize.width;
-		fwSrcRoi.height = fwSrcSize.height;
-
-		FwiSize fwDstRoi;
-		fwDstRoi.width = Fix.DstWidth;
-		fwDstRoi.height = Fix.DstHeight;
-
-		float xFactor = (float)Fix.DstWidth / (float)Fix.Image->width;
-		float yFactor = (float)Fix.DstHeight / (float)Fix.Image->height;
-
-		//Timer Measure;
-		//Measure.Start();
-		fwiResize_8u_C4R((Fw8u*)Fix.Image->imageData, fwSrcSize, Fix.Image->widthStep, fwSrcRoi, (Fw8u*)Fix.Resized->imageData, Fix.Resized->widthStep, fwDstRoi, xFactor, yFactor, FWI_INTER_LINEAR);
-		//cvResize(Fix.Image, Fix.Resized, CV_INTER_LINEAR);
-		//printf("%f\n", Measure.GetElapsedTimeSeconds());
+		UINT dstBufferSize = destpitch * destheight * 4;
+		hRes = Fix.pIScaler->CopyPixels(nullptr, destpitch, dstBufferSize, (BYTE*)dest);
 
 		return res;
 	}
@@ -209,9 +218,6 @@ bool DeleteBinkFix(BINK* bnk)
 		BinkFix& Fix = Binks[Index - 1];
 		bnk->Width = Fix.SrcWidth;
 		bnk->Height = Fix.SrcHeight;
-		cvReleaseImage(&Fix.Image);
-		if(Fix.Resized)
-			cvReleaseImageHeader(&Fix.Resized);
 		Binks.EraseIndex(Index - 1);
 		return true;
 	}
@@ -351,6 +357,15 @@ int __stdcall BinkPause(BINK* bnk,int pause)
 
 bool InstallBinkFix(void)
 {
+	if (FAILED(hRes = InitCom()))
+	{
+		return false;
+	}
+	if (FAILED(hRes = CoCreateInstance(CLSID_WICImagingFactory1, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(pImgFac.GetAddressOf()))))
+	{
+		return false;
+	}
+
 	int cpuInfo[4];
 	__cpuid(cpuInfo, 1);
 	if(((cpuInfo[3] & ((int)1 << 25)) != 0) && ((cpuInfo[3] & ((int)1 << 26)) != 0))

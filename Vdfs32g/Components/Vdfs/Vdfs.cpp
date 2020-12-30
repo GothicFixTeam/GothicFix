@@ -218,8 +218,6 @@ bool Vdfs::Init(void)
 {
 	EnterCriticalSection(&CS);
 
-	Filters.Add(new OggFilter);
-
 	if(!Index)
 		InitVirtual();
 	PhysicalFlow->UpdateIndex(Index);
