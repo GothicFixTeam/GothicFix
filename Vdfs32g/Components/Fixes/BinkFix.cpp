@@ -92,7 +92,7 @@ void ValidateAspect(BinkFix& Fix, uInt destx, uInt desty)
 	}
 	if(!Fix.Image)
 	{
-		if (FAILED(hRes = pImgFac->CreateBitmap(ImgWidth, ImgHeight, GUID_WICPixelFormat32bppRGBA, WICBitmapCacheOnDemand, Fix.Image.GetAddressOf())))
+		if (FAILED(hRes = pImgFac->CreateBitmap(ImgWidth, ImgHeight, GUID_WICPixelFormat32bppBGR, WICBitmapCacheOnDemand, Fix.Image.GetAddressOf())))
 		{
 			Fix.Image = nullptr;
 		}
@@ -166,7 +166,9 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 		int res = 0;
 		BinkFix& Fix = Binks[Index - 1];
 		{
-			WICRect rect{0, 0, Fix.SrcWidth, Fix.SrcHeight };
+			UINT width, height;
+			hRes = Fix.Image->GetSize(&width, &height);
+			WICRect rect{0, 0, width, height };
 
 			ComPtr<IWICBitmapLock> srcLock;
 			hRes = Fix.Image->Lock(&rect, WICBitmapLockWrite, srcLock.GetAddressOf());
@@ -177,12 +179,12 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 
 			bnk->Width = Fix.SrcWidth;
 			bnk->Height = Fix.SrcHeight;
-			res = dll->BinkCopyToBuffer(bnk, data, stride, Fix.SrcHeight, Fix.SrcX, Fix.SrcY, flags);
+			res = dll->BinkCopyToBuffer(bnk, data, stride, height, Fix.SrcX, Fix.SrcY, flags);
 			bnk->Width = Fix.DstWidth;
 			bnk->Height = Fix.DstHeight;
 		}
 
-		UINT dstBufferSize = destpitch * destheight * 4;
+		UINT dstBufferSize = destpitch * destheight;
 		hRes = Fix.pIScaler->CopyPixels(nullptr, destpitch, dstBufferSize, (BYTE*)dest);
 
 		return res;
