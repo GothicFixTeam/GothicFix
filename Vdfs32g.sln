@@ -1,15 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vdfs32g", "Vdfs32g\Vdfs32g.vcproj", "{BDDEFB1D-565C-438B-93D3-0815B19A1119}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vdfs32g", "Vdfs32g\Vdfs32g.vcxproj", "{BDDEFB1D-565C-438B-93D3-0815B19A1119}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vdfs32log", "Vdfs32log\Vdfs32log.vcproj", "{4EC5F819-7CF0-46E5-81CB-C25066AEA67B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vdfs32log", "Vdfs32log\Vdfs32log.vcxproj", "{4EC5F819-7CF0-46E5-81CB-C25066AEA67B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mssds3d", "Mssds3d\Mssds3d.vcproj", "{34BF1563-3A96-4135-85C5-9F0F77A6E3FA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mssds3d", "Mssds3d\Mssds3d.vcxproj", "{34BF1563-3A96-4135-85C5-9F0F77A6E3FA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VdfsTool", "VdfsTool\VdfsTool.vcproj", "{14707CF0-973D-4028-80CB-E7AE42E9C10C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VdfsTool", "VdfsTool\VdfsTool.vcxproj", "{14707CF0-973D-4028-80CB-E7AE42E9C10C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GothicStarter", "GothicStarter\GothicStarter.vcproj", "{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GothicStarter", "GothicStarter\GothicStarter.vcxproj", "{8F1AF638-9C89-4E1B-B382-E2AF40E5BC12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,5 +90,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D1533E7-EE1A-4B8F-8B5B-567231C93F46}
 	EndGlobalSection
 EndGlobal
