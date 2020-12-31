@@ -65,7 +65,7 @@ bool InstallMssFix(void)
 	if(!GothicReadIniString("DEBUG", "FixMss", "1", FixMss, 256, "SystemPack.ini"))
 		GothicWriteIniString("DEBUG", "FixMss", "1", "SystemPack.ini");
 
-	if(IsWindowsVistaOrGreater() && (atoi(FixMss) == 1))
+	if(IsWindowsXPOrGreater() && (atoi(FixMss) == 1))
 	{
 		uChar* codeBase = (uChar*)GetModuleHandle(_T("Mss32.dll"));
 		if(codeBase)
