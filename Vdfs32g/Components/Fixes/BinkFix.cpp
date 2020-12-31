@@ -107,18 +107,18 @@ void ValidateAspect(BinkFix& Fix, uInt destx, uInt desty)
 	}
 }
 
-bool CreateBinkFix(BINK* bnk)
+void CreateBinkFix(BINK* bnk)
 {
 	char Buffer[256];
 	GothicReadIniString("GAME", "scaleVideos", "1", Buffer, 256, "Gothic.ini");
 	scaleVideos = atoi(Buffer);
 
 	if(!bnk || !scaleVideos)
-		return false;
+		return;
 
 	POINT GothicWindowSize = { 0, 0 };
 	if(!GetGothicWindowSize(GothicWindowSize))
-		return false;
+		return;
 
 	uInt Index = GetBinkIndex(bnk);
 	if(!Index)
@@ -136,7 +136,7 @@ bool CreateBinkFix(BINK* bnk)
 		bnk->Width = Fix.DstWidth;
 		bnk->Height = Fix.DstHeight;
 	}
-	return true;
+	return;
 }
 
 bool ApplyBinkFix(BINK* bnk)
@@ -165,10 +165,11 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 	{
 		int res = 0;
 		BinkFix& Fix = Binks[Index - 1];
+		if(Fix.Image)
 		{
 			UINT width, height;
 			hRes = Fix.Image->GetSize(&width, &height);
-			WICRect rect{0, 0, width, height };
+			WICRect rect{0, 0, (INT)width, (INT)height };
 
 			ComPtr<IWICBitmapLock> srcLock;
 			hRes = Fix.Image->Lock(&rect, WICBitmapLockWrite, srcLock.GetAddressOf());
@@ -182,12 +183,14 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 			res = dll->BinkCopyToBuffer(bnk, data, stride, height, Fix.SrcX, Fix.SrcY, flags);
 			bnk->Width = Fix.DstWidth;
 			bnk->Height = Fix.DstHeight;
+
+			if (Fix.pIScaler)
+			{
+				UINT dstBufferSize = destpitch * destheight;
+				hRes = Fix.pIScaler->CopyPixels(nullptr, destpitch, dstBufferSize, (BYTE*)dest);
+				return res;
+			}
 		}
-
-		UINT dstBufferSize = destpitch * destheight;
-		hRes = Fix.pIScaler->CopyPixels(nullptr, destpitch, dstBufferSize, (BYTE*)dest);
-
-		return res;
 	}
 
 	return dll->BinkCopyToBuffer(bnk, dest, destpitch, destheight, destx, desty, flags);
@@ -359,52 +362,49 @@ int __stdcall BinkPause(BINK* bnk,int pause)
 
 bool InstallBinkFix(void)
 {
-	if (FAILED(hRes = InitCom()))
+	char FixBink[256];
+	if (!GothicReadIniString("DEBUG", "FixBink", "1", FixBink, 256, "SystemPack.ini"))
 	{
-		return false;
-	}
-	if (FAILED(hRes = CoCreateInstance(CLSID_WICImagingFactory1, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(pImgFac.GetAddressOf()))))
-	{
-		return false;
+		GothicWriteIniString("DEBUG", "FixBink", "1", "SystemPack.ini");
 	}
 
-	int cpuInfo[4];
-	__cpuid(cpuInfo, 1);
-	if(((cpuInfo[3] & ((int)1 << 25)) != 0) && ((cpuInfo[3] & ((int)1 << 26)) != 0))
+	if (atoi(FixBink) == 1)
 	{
-		char FixBink[256];
-		if(!GothicReadIniString("DEBUG", "FixBink", "1", FixBink, 256, "SystemPack.ini"))
-			GothicWriteIniString("DEBUG", "FixBink", "1", "SystemPack.ini");
-
-		if(atoi(FixBink) == 1)
+		if (FAILED(hRes = InitCom()))
 		{
-			uChar* codeBase = (uChar*)GetModuleHandle(NULL);
-			PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "binkw32.dll");
-			if(importDesc)
-			{
-				OrgDll = new cBinkDll(_T("BinkW32.dll"));
-				if(!OrgDll->Load())
-				{
-					MessageBox(NULL, _T("Invalid binkw32.dll"), _T("Error"), MB_ICONERROR);
-					delete OrgDll;
-					OrgDll = NULL;
-					return false;
-				}
+			return false;
+		}
+		if (FAILED(hRes = CoCreateInstance(CLSID_WICImagingFactory1, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(pImgFac.GetAddressOf()))))
+		{
+			return false;
+		}
 
-				bool Ok = true;
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetSoundOnOff@8", (FARPROC)BinkSetSoundOnOff);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkClose@4", (FARPROC)BinkClose);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkNextFrame@4", (FARPROC)BinkNextFrame);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkGoto@12", (FARPROC)BinkGoto);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkWait@4", (FARPROC)BinkWait);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkCopyToBuffer@28", (FARPROC)BinkCopyToBuffer);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkDoFrame@4", (FARPROC)BinkDoFrame);
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkOpen@8", (FARPROC)BinkOpen);
-				Ok = Ok && (PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetVolume@12", (FARPROC)BinkSetVolumeG2) ||
-							PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetVolume@8", (FARPROC)BinkSetVolumeG1));
-				Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkPause@8", (FARPROC)BinkPause);
-				return Ok;
+		uChar* codeBase = (uChar*)GetModuleHandle(NULL);
+		PIMAGE_IMPORT_DESCRIPTOR importDesc = GetImportDescriptor(codeBase, "binkw32.dll");
+		if(importDesc)
+		{
+			OrgDll = new cBinkDll(_T("BinkW32.dll"));
+			if(!OrgDll->Load())
+			{
+				MessageBox(NULL, _T("Invalid binkw32.dll"), _T("Error"), MB_ICONERROR);
+				delete OrgDll;
+				OrgDll = NULL;
+				return false;
 			}
+
+			bool Ok = true;
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetSoundOnOff@8", (FARPROC)BinkSetSoundOnOff);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkClose@4", (FARPROC)BinkClose);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkNextFrame@4", (FARPROC)BinkNextFrame);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkGoto@12", (FARPROC)BinkGoto);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkWait@4", (FARPROC)BinkWait);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkCopyToBuffer@28", (FARPROC)BinkCopyToBuffer);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkDoFrame@4", (FARPROC)BinkDoFrame);
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkOpen@8", (FARPROC)BinkOpen);
+			Ok = Ok && (PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetVolume@12", (FARPROC)BinkSetVolumeG2) ||
+						PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkSetVolume@8", (FARPROC)BinkSetVolumeG1));
+			Ok = Ok && PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "_BinkPause@8", (FARPROC)BinkPause);
+			return Ok;
 		}
 	}
 	return true;
