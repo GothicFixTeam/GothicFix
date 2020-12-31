@@ -167,23 +167,25 @@ int BinkFixBinkCopyToBuffer(cBinkDll* dll, BINK* bnk, void* dest, int destpitch,
 		BinkFix& Fix = Binks[Index - 1];
 		if(Fix.Image)
 		{
-			UINT width, height;
-			hRes = Fix.Image->GetSize(&width, &height);
-			WICRect rect{0, 0, (INT)width, (INT)height };
+			// Should be in {} for destroying all 'srcLock' related objects before using 'Image'
+			{
+				UINT width, height;
+				hRes = Fix.Image->GetSize(&width, &height);
+				WICRect rect{ 0, 0, (INT)width, (INT)height };
 
-			ComPtr<IWICBitmapLock> srcLock;
-			hRes = Fix.Image->Lock(&rect, WICBitmapLockWrite, srcLock.GetAddressOf());
-			UINT size, stride;
-			BYTE* data;
-			srcLock->GetDataPointer(&size, &data);
-			srcLock->GetStride(&stride);
+				ComPtr<IWICBitmapLock> srcLock;
+				hRes = Fix.Image->Lock(&rect, WICBitmapLockWrite, srcLock.GetAddressOf());
+				UINT size, stride;
+				BYTE* data;
+				srcLock->GetDataPointer(&size, &data);
+				srcLock->GetStride(&stride);
 
-			bnk->Width = Fix.SrcWidth;
-			bnk->Height = Fix.SrcHeight;
-			res = dll->BinkCopyToBuffer(bnk, data, stride, height, Fix.SrcX, Fix.SrcY, flags);
-			bnk->Width = Fix.DstWidth;
-			bnk->Height = Fix.DstHeight;
-
+				bnk->Width = Fix.SrcWidth;
+				bnk->Height = Fix.SrcHeight;
+				res = dll->BinkCopyToBuffer(bnk, data, stride, height, Fix.SrcX, Fix.SrcY, flags);
+				bnk->Width = Fix.DstWidth;
+				bnk->Height = Fix.DstHeight;
+			}
 			if (Fix.pIScaler)
 			{
 				UINT dstBufferSize = destpitch * destheight;
