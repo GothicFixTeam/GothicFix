@@ -376,7 +376,7 @@ bool InstallBinkFix(void)
 		{
 			return false;
 		}
-		if (FAILED(hRes = CoCreateInstance(CLSID_WICImagingFactory1, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(pImgFac.GetAddressOf()))))
+		if (FAILED(hRes = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(pImgFac.GetAddressOf()))))
 		{
 			return false;
 		}
