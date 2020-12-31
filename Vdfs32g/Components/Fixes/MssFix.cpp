@@ -12,7 +12,7 @@ bool ExtractLibG2(TString& name)
 		FILE* temp = _tfopen(name, _T("wb"));
 		if(temp)
 		{
-			fwrite(mssds3d_m3d, 1, sizeof(mssds3d_m3d), temp);
+			fwrite(MssDS3D_m3d, 1, sizeof(MssDS3D_m3d), temp);
 			Result = true;
 			fclose(temp);
 		}
@@ -29,7 +29,7 @@ bool ExtractLibG1(TString& name)
 		FILE* temp = _tfopen(name, _T("wb"));
 		if(temp)
 		{
-			fwrite(mssds3dh_m3d, 1, sizeof(mssds3dh_m3d), temp);
+			fwrite(Mssds3dh_m3d, 1, sizeof(Mssds3dh_m3d), temp);
 			Result = true;
 			fclose(temp);
 		}
@@ -65,7 +65,7 @@ bool InstallMssFix(void)
 	if(!GothicReadIniString("DEBUG", "FixMss", "1", FixMss, 256, "SystemPack.ini"))
 		GothicWriteIniString("DEBUG", "FixMss", "1", "SystemPack.ini");
 
-	if(IsWindowsVistaOrGreater() && (atoi(FixMss) == 1))
+	if(IsWindowsXPOrGreater() && (atoi(FixMss) == 1))
 	{
 		uChar* codeBase = (uChar*)GetModuleHandle(_T("Mss32.dll"));
 		if(codeBase)

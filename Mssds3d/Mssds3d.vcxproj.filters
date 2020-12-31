@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{eee10b6b-5864-4b9c-b5fc-232615607276}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Vdfs32g\Components\IniUtils.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Vdfs32g\Components\Common\Utility.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Mss.cpp" />
+    <ClCompile Include="Mssds3d.cpp" />
+    <ClCompile Include="PreCompiled.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Vdfs32g\Components\IniUtils.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vdfs32g\Components\Common\Utility.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vdfs32g\Components\Common\UtilityEx.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Mss.h" />
+    <ClInclude Include="Mssds3d.h" />
+    <ClInclude Include="PreCompiled.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{6085a01d-0668-4ff7-b8fa-cd0bae851bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Common">
+      <UniqueIdentifier>{4adc7080-8a1d-4b95-baa3-f0f502b6a33a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Common\Containers">
+      <UniqueIdentifier>{ef162c75-a077-4c22-8efe-9e9c8da8adbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Vdfs">
+      <UniqueIdentifier>{60da6987-b2b6-45a1-9955-0e9537b05193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Vdfs\Flows">
+      <UniqueIdentifier>{4abb6dd7-baee-4dfa-8478-da851317652d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Bink">
+      <UniqueIdentifier>{4445e180-a5b9-4a85-873d-b76d1871b649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Fixes">
+      <UniqueIdentifier>{e23a246d-1dde-4235-8a4a-7278c0052ce9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Components\Fixes.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\IniUtils.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\IniUtilsEx.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\PatchUtils.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Common\Utility.cpp">
+      <Filter>Components\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Vdfs\Vdfs.cpp">
+      <Filter>Components\Vdfs</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Vdfs\Flows\StdFlow.cpp">
+      <Filter>Components\Vdfs\Flows</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Vdfs\Flows\VdfFlow.cpp">
+      <Filter>Components\Vdfs\Flows</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Bink\DLL.cpp">
+      <Filter>Components\Bink</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\BinkFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\D3DFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\FsHook.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\GUXFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\IniFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\KillerFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\MssFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\SendMsgFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\SplashFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\SteamOverlayFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompiled.cpp" />
+    <ClCompile Include="Vdfs32.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Components\Fixes.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\IniUtils.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\IniUtilsEx.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PatchUtils.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Object.h">
+      <Filter>Components\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\TypeDefs.h">
+      <Filter>Components\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Utility.h">
+      <Filter>Components\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\UtilityEx.h">
+      <Filter>Components\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Containers\Array.h">
+      <Filter>Components\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Containers\HashTable.h">
+      <Filter>Components\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Containers\String.h">
+      <Filter>Components\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\Containers\TaggedArray.h">
+      <Filter>Components\Common\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\Vdfs.h">
+      <Filter>Components\Vdfs</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\VdfsIndex.h">
+      <Filter>Components\Vdfs</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\Flows\IFS.h">
+      <Filter>Components\Vdfs\Flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\Flows\StdFlow.h">
+      <Filter>Components\Vdfs\Flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\Flows\VdfFlow.h">
+      <Filter>Components\Vdfs\Flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bink\BinkExports.h">
+      <Filter>Components\Bink</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bink\DLL.h">
+      <Filter>Components\Bink</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\BinkFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\D3DFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\FsHook.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\GUXFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\IniFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\KillerFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\MssFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\SendMsgFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\SplashFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\SteamOverlayFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="PreCompiled.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Vdfs32.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Exports.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Vdfs32g.rc" />
+  </ItemGroup>
+</Project>
