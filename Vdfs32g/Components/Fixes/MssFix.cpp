@@ -12,7 +12,7 @@ bool ExtractLibG2(TString& name)
 		FILE* temp = _tfopen(name, _T("wb"));
 		if(temp)
 		{
-			fwrite(mssds3d_m3d, 1, sizeof(mssds3d_m3d), temp);
+			fwrite(MssDS3D_m3d, 1, sizeof(MssDS3D_m3d), temp);
 			Result = true;
 			fclose(temp);
 		}
@@ -29,7 +29,7 @@ bool ExtractLibG1(TString& name)
 		FILE* temp = _tfopen(name, _T("wb"));
 		if(temp)
 		{
-			fwrite(mssds3dh_m3d, 1, sizeof(mssds3dh_m3d), temp);
+			fwrite(Mssds3dh_m3d, 1, sizeof(Mssds3dh_m3d), temp);
 			Result = true;
 			fclose(temp);
 		}
