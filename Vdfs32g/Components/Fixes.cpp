@@ -107,18 +107,18 @@ bool AttachFixesInstaller(void)
 	if(importDesc)
 		PatchImportFunctionAddress<FARPROC>(codeBase, importDesc, false, "GetCommandLineA", (FARPROC)MyGetCommandLineA);
 
-	bool Ok = InstallSteamOverlayFix();
-	if(!Ok)
-	{
-		RedirectIOToConsole();
-		printf("InstallSteamOverlayFix failed\n");
-	}
-	Ok = Ok && InstallGUXFix();
+	bool Ok = InstallGUXFix();
 	if(!Ok)
 	{
 		RedirectIOToConsole();
 		printf("InstallGUXFix failed\n");
 	}
+	//Ok = Ok && InstallSteamOverlayFix();
+	//if(!Ok)
+	//{
+	//	RedirectIOToConsole();
+	//	printf("InstallSteamOverlayFix failed\n");
+	//}
 	return Ok;
 }
 
