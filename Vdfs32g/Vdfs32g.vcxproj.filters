@@ -83,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="PreCompiled.cpp" />
     <ClCompile Include="Vdfs32.cpp" />
+    <ClCompile Include="Components\Fixes\SaveBakFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Fixes.h">
@@ -175,6 +178,9 @@
     <ClInclude Include="PreCompiled.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Vdfs32.h" />
+    <ClInclude Include="Components\Fixes\SaveBakFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Exports.def" />

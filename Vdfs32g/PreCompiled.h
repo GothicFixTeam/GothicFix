@@ -47,6 +47,7 @@ using namespace COMMON;
 #include "Fixes/IniFix.h"
 #include "Fixes/BinkFix.h"
 #include "Fixes/SplashFix.h"
+#include "Fixes/SaveBakFix.h"
 #include "Fixes/SendMsgFix.h"
 #include "Fixes/MssFix.h"
 #include "Fixes/SteamOverlayFix.h"

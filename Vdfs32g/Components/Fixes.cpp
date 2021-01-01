@@ -77,6 +77,12 @@ bool AttachSystemPack(void)
 			RedirectIOToConsole();
 			printf("InstallSplashFix failed\n");
 		}
+		Ok = Ok && InstallSaveBakFix();
+		if(!Ok)
+		{
+			RedirectIOToConsole();
+			printf("InstallSaveBakFix failed\n");
+		}
 		Ok = Ok && InstallMssFix();
 		if(!Ok)
 		{

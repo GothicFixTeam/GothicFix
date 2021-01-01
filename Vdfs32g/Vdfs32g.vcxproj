@@ -150,6 +150,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -171,6 +172,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -195,6 +197,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -215,6 +218,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -237,6 +241,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -258,6 +263,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -282,6 +288,7 @@
       <PrecompiledHeaderFile>PreCompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -302,6 +309,7 @@
     <ClCompile Include="Components\Fixes\IniFix.cpp" />
     <ClCompile Include="Components\Fixes\KillerFix.cpp" />
     <ClCompile Include="Components\Fixes\MssFix.cpp" />
+    <ClCompile Include="Components\Fixes\SaveBakFix.cpp" />
     <ClCompile Include="Components\Fixes\SendMsgFix.cpp" />
     <ClCompile Include="Components\Fixes\SplashFix.cpp" />
     <ClCompile Include="Components\Fixes\SteamOverlayFix.cpp" />
@@ -341,6 +349,7 @@
     <ClInclude Include="Components\Fixes\IniFix.h" />
     <ClInclude Include="Components\Fixes\KillerFix.h" />
     <ClInclude Include="Components\Fixes\MssFix.h" />
+    <ClInclude Include="Components\Fixes\SaveBakFix.h" />
     <ClInclude Include="Components\Fixes\SendMsgFix.h" />
     <ClInclude Include="Components\Fixes\SplashFix.h" />
     <ClInclude Include="Components\Fixes\SteamOverlayFix.h" />
