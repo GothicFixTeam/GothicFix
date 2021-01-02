@@ -316,6 +316,7 @@
     <ClCompile Include="Components\IniUtils.cpp" />
     <ClCompile Include="Components\IniUtilsEx.cpp" />
     <ClCompile Include="Components\PatchUtils.cpp" />
+    <ClCompile Include="Components\Vdfs\Filters\OggFilter.cpp" />
     <ClCompile Include="Components\Vdfs\Flows\StdFlow.cpp" />
     <ClCompile Include="Components\Vdfs\Flows\VdfFlow.cpp" />
     <ClCompile Include="Components\Vdfs\Vdfs.cpp" />
@@ -356,6 +357,7 @@
     <ClInclude Include="Components\IniUtils.h" />
     <ClInclude Include="Components\IniUtilsEx.h" />
     <ClInclude Include="Components\PatchUtils.h" />
+    <ClInclude Include="Components\Vdfs\Filters\OggFilter.h" />
     <ClInclude Include="Components\Vdfs\Flows\IFS.h" />
     <ClInclude Include="Components\Vdfs\Flows\StdFlow.h" />
     <ClInclude Include="Components\Vdfs\Flows\VdfFlow.h" />

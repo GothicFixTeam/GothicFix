@@ -22,6 +22,9 @@
     <Filter Include="Components\Fixes">
       <UniqueIdentifier>{e23a246d-1dde-4235-8a4a-7278c0052ce9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Vdfs\Filters">
+      <UniqueIdentifier>{bba70195-412e-4277-845c-adb8092c7ec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\Fixes.cpp">
@@ -85,6 +88,9 @@
     <ClCompile Include="Vdfs32.cpp" />
     <ClCompile Include="Components\Fixes\SaveBakFix.cpp">
       <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Vdfs\Filters\OggFilter.cpp">
+      <Filter>Components\Vdfs\Filters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +186,9 @@
     <ClInclude Include="Vdfs32.h" />
     <ClInclude Include="Components\Fixes\SaveBakFix.h">
       <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Vdfs\Filters\OggFilter.h">
+      <Filter>Components\Vdfs\Filters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
