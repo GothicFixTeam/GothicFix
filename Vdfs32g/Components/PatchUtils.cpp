@@ -8,35 +8,22 @@
 
 void RedirectIOToConsole(void)
 {
-	int hConHandle;
-	long lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
-	FILE *fp;
 
 	// allocate a console for this app
 	AllocConsole();
+
+	FILE* fDummy;
+	freopen_s(&fDummy, "CONIN$", "r", stdin);
+	freopen_s(&fDummy, "CONOUT$", "w", stderr);
+	freopen_s(&fDummy, "CONOUT$", "w", stdout);
 
 	// set the screen buffer to be big enough to let us scroll text
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
 	coninfo.dwSize.Y = 50;
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
 
-	// redirect unbuffered STDOUT to the console
-	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-
-	fp = _fdopen( hConHandle, "w" );
-	//_dup2(_fileno(fp), _fileno(stdout));
-	*stdout = *fp;
 	setvbuf(stdout, NULL, _IONBF, 0);
-
-	// redirect unbuffered STDERR to the console
-	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-
-	fp = _fdopen( hConHandle, "w" );
-	//_dup2(_fileno(fp), _fileno(stderr));
-	*stderr = *fp;
 	setvbuf(stderr, NULL, _IONBF, 0);
 }
 

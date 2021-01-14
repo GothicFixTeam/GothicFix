@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <windows.h>
 
+#include <unordered_map>
+
 class Timer
 {
 private:
@@ -62,6 +64,8 @@ vdf_initall_func vdf_initall_ptr = NULL;
 vdf_exitall_func vdf_exitall_ptr = NULL;
 vdf_ffilesize_func vdf_ffilesize_ptr = NULL;
 
+std::unordered_map<long, bool> debug;
+
 FILE* Log = NULL;
 
 long _cdecl vdf_fopen(const char* filename, long flags) 
@@ -69,9 +73,16 @@ long _cdecl vdf_fopen(const char* filename, long flags)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_fopen_ptr(filename, flags);
-	fprintf(Log, "%d vdf_fopen(%s, %d)\n", res, filename, flags);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+
+	if(strstr(filename, "NEWWORLD.SAV"))
+	{
+		fprintf(Log, "%d vdf_fopen(%s, %d)\n", 0, filename, flags);
+		debug[res] = true;
+	}
+
+	//fprintf(Log, "%d vdf_fopen(%s, %d)\n", res, filename, flags);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 }
 
@@ -80,9 +91,14 @@ long _cdecl vdf_fclose(long fp)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_fclose_ptr(fp);
-	fprintf(Log, "%d vdf_fclose(%d)\n", res, fp);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	if(debug.find(fp) != debug.end())
+	{
+		fprintf(Log, "%d vdf_fclose(%d)\n", res, 0);
+		debug.erase(fp);
+	}
+	//fprintf(Log, "%d vdf_fclose(%d)\n", res, fp);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res; 
 }
 
@@ -91,6 +107,22 @@ long _cdecl vdf_fread(long fp, char* buffer, long size)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_fread_ptr(fp, buffer, size);
+	if(debug.find(fp) != debug.end())
+	{
+		fprintf(Log, "%d vdf_fread(%d)", res, size);
+		if(size < 10)
+		{
+			for(long i = 0; i < size; i++)
+			{
+				fprintf(Log, "%2.X", (unsigned char)buffer[i]);
+			}
+		}
+		fprintf(Log, "\n");
+		if(!res)
+		{
+			fflush(Log);
+		}
+	}
 	//fprintf(Log, "%d vdf_fread(%d, %d, %d)\n", res, fp, buffer, size);
 	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
 	//fflush(Log);
@@ -102,6 +134,10 @@ long _cdecl vdf_fseek(long fp, long offset)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_fseek_ptr(fp, offset);
+	if(debug.find(fp) != debug.end())
+	{
+		fprintf(Log, "%d vdf_fseek(%d, %d)\n", res, 0, offset);
+	}
 	//fprintf(Log, "%d vdf_fseek(%d, %d)\n", res, fp, offset);
 	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
 	//fflush(Log);
@@ -113,6 +149,10 @@ long _cdecl vdf_ftell(long fp)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_ftell_ptr(fp);
+	if(debug.find(fp) != debug.end())
+	{
+		fprintf(Log, "%d vdf_ftell(%d)\n", res, 0);
+	}
 	//fprintf(Log, "%d vdf_ftell(%d)\n", res, fp);
 	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
 	//fflush(Log);
@@ -124,9 +164,9 @@ long _cdecl vdf_fexists(const char* filename, long flags)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_fexists_ptr(filename, flags);
-	fprintf(Log, "%d vdf_fexists(%s, %d)\n", res, filename, flags);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_fexists(%s, %d)\n", res, filename, flags);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res; 
 }
 
@@ -135,9 +175,9 @@ long _cdecl vdf_searchfile(const char* filename, char* fullname)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_searchfile_ptr(filename, fullname);
-	fprintf(Log, "%d vdf_searchfile(%s, %s)\n", res, filename, fullname);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_searchfile(%s, %s)\n", res, filename, fullname);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 };
 
@@ -147,8 +187,9 @@ long _cdecl vdf_getlasterror(char* text)
 	Measure.Start();
 	long res = vdf_getlasterror_ptr(text);
 	fprintf(Log, "%d vdf_getlasterror(%s)\n", res, text);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_getlasterror(%s)\n", res, text);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 }
 
@@ -156,33 +197,11 @@ long _cdecl vdf_initall(int numdisks, const char* cdid, long* cddrives, long* di
 {
 	Timer Measure;
 	Measure.Start();
-	if(hDLL = LoadLibrary(TEXT("Vdfs32org.dll")))
-	{
-		vdf_fopen_ptr = (vdf_fopen_func)GetProcAddress(hDLL, "vdf_fopen");
-		vdf_fclose_ptr = (vdf_fclose_func)GetProcAddress(hDLL, "vdf_fclose");
-		vdf_fread_ptr = (vdf_fread_func)GetProcAddress(hDLL, "vdf_fread");
-		vdf_fseek_ptr = (vdf_fseek_func)GetProcAddress(hDLL, "vdf_fseek");
-		vdf_ftell_ptr = (vdf_ftell_func)GetProcAddress(hDLL, "vdf_ftell");
-		vdf_fexists_ptr = (vdf_fexists_func)GetProcAddress(hDLL, "vdf_fexists");
-		vdf_getdir_ptr = (vdf_getdir_func)GetProcAddress(hDLL, "vdf_getdir");
-		vdf_findopen_ptr = (vdf_findopen_func)GetProcAddress(hDLL, "vdf_findopen");
-		vdf_findnext_ptr = (vdf_findnext_func)GetProcAddress(hDLL, "vdf_findnext");
-		vdf_findclose_ptr = (vdf_findclose_func)GetProcAddress(hDLL, "vdf_findclose");
-		vdf_searchfile_ptr = (vdf_searchfile_func)GetProcAddress(hDLL, "vdf_searchfile");
-		vdf_getlasterror_ptr = (vdf_getlasterror_func)GetProcAddress(hDLL, "vdf_getlasterror");
-		vdf_initall_ptr = (vdf_initall_func)GetProcAddress(hDLL, "vdf_initall");
-		vdf_exitall_ptr = (vdf_exitall_func)GetProcAddress(hDLL, "vdf_exitall");
-		vdf_ffilesize_ptr = (vdf_ffilesize_func)GetProcAddress(hDLL, "vdf_ffilesize");
-
-		fopen_s(&Log, "VDFS.log", "w");
-
-		long res = vdf_initall_ptr(numdisks, cdid, cddrives, disksfound);
-		fprintf(Log, "%d vdf_initall(%d, %s, %d, %d)\n", res, numdisks, cdid, *cddrives, *disksfound);
-		fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-		fflush(Log);
-		return res;
-	}
-	return -1;
+	long res = vdf_initall_ptr(numdisks, cdid, cddrives, disksfound);
+	//fprintf(Log, "%d vdf_initall(%d, %s, %d, %d)\n", res, numdisks, cdid, *cddrives, *disksfound);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
+	return res;
 }
 
 long _cdecl vdf_exitall(void) 
@@ -241,9 +260,9 @@ long _cdecl vdf_getdir(char* dirname)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_getdir_ptr(dirname);
-	fprintf(Log, "%d vdf_getdir_ptr(%s)\n", res, dirname);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_getdir_ptr(%s)\n", res, dirname);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 }
 
@@ -252,9 +271,9 @@ long _cdecl vdf_findopen(const char* path, long flags)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_findopen_ptr(path, flags);
-	fprintf(Log, "%d vdf_findopen(%s, %d)\n", res, path, flags);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_findopen(%s, %d)\n", res, path, flags);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 }
 
@@ -263,9 +282,9 @@ long _cdecl vdf_findnext(long find, TVDFFINDDATA* finddata)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_findnext_ptr(find, finddata);
-	fprintf(Log, "%d vdf_findnext(%d, %s)\n", res, find, finddata->name);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_findnext(%d, %s)\n", res, find, finddata->name);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
 }
 
@@ -274,8 +293,47 @@ long _cdecl vdf_findclose(long find)
 	Timer Measure;
 	Measure.Start();
 	long res = vdf_findclose_ptr(find);
-	fprintf(Log, "%d vdf_findclose(%d)\n", res, find);
-	fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
-	fflush(Log);
+	//fprintf(Log, "%d vdf_findclose(%d)\n", res, find);
+	//fprintf(Log, "\t%f sec\n", Measure.GetElapsedTimeSeconds());
+	//fflush(Log);
 	return res;
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+{
+	switch(ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+		{
+			if(hDLL = LoadLibrary(TEXT("Vdfs32org.dll")))
+			{
+				vdf_fopen_ptr = (vdf_fopen_func)GetProcAddress(hDLL, "vdf_fopen");
+				vdf_fclose_ptr = (vdf_fclose_func)GetProcAddress(hDLL, "vdf_fclose");
+				vdf_fread_ptr = (vdf_fread_func)GetProcAddress(hDLL, "vdf_fread");
+				vdf_fseek_ptr = (vdf_fseek_func)GetProcAddress(hDLL, "vdf_fseek");
+				vdf_ftell_ptr = (vdf_ftell_func)GetProcAddress(hDLL, "vdf_ftell");
+				vdf_fexists_ptr = (vdf_fexists_func)GetProcAddress(hDLL, "vdf_fexists");
+				vdf_getdir_ptr = (vdf_getdir_func)GetProcAddress(hDLL, "vdf_getdir");
+				vdf_findopen_ptr = (vdf_findopen_func)GetProcAddress(hDLL, "vdf_findopen");
+				vdf_findnext_ptr = (vdf_findnext_func)GetProcAddress(hDLL, "vdf_findnext");
+				vdf_findclose_ptr = (vdf_findclose_func)GetProcAddress(hDLL, "vdf_findclose");
+				vdf_searchfile_ptr = (vdf_searchfile_func)GetProcAddress(hDLL, "vdf_searchfile");
+				vdf_getlasterror_ptr = (vdf_getlasterror_func)GetProcAddress(hDLL, "vdf_getlasterror");
+				vdf_initall_ptr = (vdf_initall_func)GetProcAddress(hDLL, "vdf_initall");
+				vdf_exitall_ptr = (vdf_exitall_func)GetProcAddress(hDLL, "vdf_exitall");
+				vdf_ffilesize_ptr = (vdf_ffilesize_func)GetProcAddress(hDLL, "vdf_ffilesize");
+
+				fopen_s(&Log, "VDFS.log", "w");
+			}
+
+			//RedirectIOToConsole();
+		}
+		break;
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+		break;
+	case DLL_PROCESS_DETACH:
+		break;
+	}
+	return TRUE;
 }

@@ -127,7 +127,7 @@ inline uLong IFS::GetData(void* buffer, uLong size)
 		return 0;
 	}
 
-	if((CurrentOffset < Buffer.Begin) || (CurrentOffset + size >= Buffer.Begin + Buffer.Size))
+	if((CurrentOffset < Buffer.Begin) || (CurrentOffset + size > Buffer.Begin + Buffer.Size))
 	{
 		Buffer.Reset();
 		uLong SizeToRead = MIN(VDFS_BUFFER_SIZE, GetFileSize() - CurrentOffset);

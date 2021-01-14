@@ -135,6 +135,7 @@ uLong StdFlow::Read(uLong offset, void* buffer, uLong size)
 {
 	if(FileHandle)
 	{
+		fseek(FileHandle, 0, SEEK_SET); // Fix for strange bug in msvc
 		fseek(FileHandle, offset, SEEK_SET);
 		if(fread(buffer, 1, size, FileHandle) == size)
 			return size;
