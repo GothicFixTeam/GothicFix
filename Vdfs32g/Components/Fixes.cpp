@@ -90,6 +90,21 @@ bool AttachSystemPack(void)
 			printf("InstallMssFix failed\n");
 		}
 	}
+
+	Ok = Ok && InstallNvSettingsFix();
+	if(!Ok)
+	{
+		RedirectIOToConsole();
+		printf("InstallNvSettingsFix failed\n");
+	}
+
+	Ok = Ok && InstallWin10AmdFix();
+	if(!Ok)
+	{
+		RedirectIOToConsole();
+		printf("InstallWin10AmdFix failed\n");
+	}
+
 	SystemPackAttached = true;
 	return Ok;
 }

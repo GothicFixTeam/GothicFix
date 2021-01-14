@@ -92,6 +92,15 @@
     <ClCompile Include="Components\Vdfs\Filters\OggFilter.cpp">
       <Filter>Components\Vdfs\Filters</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Fixes\NvSettingsFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Fixes\Win10AmdFix.cpp">
+      <Filter>Components\Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Common\TextLogger.cpp">
+      <Filter>Components\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Fixes.h">
@@ -189,6 +198,15 @@
     </ClInclude>
     <ClInclude Include="Components\Vdfs\Filters\OggFilter.h">
       <Filter>Components\Vdfs\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\NvSettingsFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Fixes\Win10AmdFix.h">
+      <Filter>Components\Fixes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Common\TextLogger.h">
+      <Filter>Components\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

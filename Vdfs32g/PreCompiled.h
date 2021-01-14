@@ -59,6 +59,9 @@ using namespace COMMON;
 #include "Fixes/MssFix.h"
 #include "Fixes/SteamOverlayFix.h"
 
+#include "Fixes/NvSettingsFix.h"
+#include "Fixes/Win10AmdFix.h"
+
 extern Vdfs VdfsBase;
 
 #include "Fixes.h"
