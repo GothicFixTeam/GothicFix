@@ -4,7 +4,7 @@
 class StdFlow : public IFS
 {
 protected:
-	FILE* FileHandle;
+	HANDLE FileHandle = INVALID_HANDLE_VALUE;
 
 	ObjectArray<AutoPtr<StdFlow>> Streams;
 
@@ -52,7 +52,7 @@ inline uLong StdFlow::GetFileSize(void) const
 inline StdFlow::StdFlow(void) 
 { 
 	Name = "stdio"; 
-	FileHandle = NULL; 
+	FileHandle = INVALID_HANDLE_VALUE;
 	CurrentFileInfo = NULL; 
 }
 

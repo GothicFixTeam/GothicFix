@@ -46,7 +46,7 @@ class VdfFlow : public IFS
 {
 private:
 	// Archive info
-	FILE*		Archive;
+	HANDLE		Archive;
 	VdfHeader	Header;
 	int			Version;
 

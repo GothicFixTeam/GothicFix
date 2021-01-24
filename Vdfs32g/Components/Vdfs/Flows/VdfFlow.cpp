@@ -61,9 +61,10 @@ bool VdfFlow::UpdateIndex(VdfsIndex* index)
 	if(Archive)
 	{
 		// Read root catalog. Possible problem - NumEntries = 1, then add check for this with new without []
+		DWORD readed = 0;
 		VdfEntryInfo* Entries = new VdfEntryInfo[Header.NumEntries];
 		size_t EntriesSize = Header.NumEntries * sizeof(VdfEntryInfo);
-		if(fread(Entries, 1, EntriesSize, Archive) != EntriesSize)
+		if(!ReadFile(Archive, Entries, EntriesSize, &readed, NULL) || (readed != EntriesSize))
 		{
 			delete[] Entries;
 			return false;
@@ -109,10 +110,11 @@ uLong VdfFlow::Read(uLong offset, void* buffer, uLong size)
 {
 	if(CurrentFileInfo)
 	{
-		if(fseek(Archive, CurrentFileInfo->Offset + offset, SEEK_SET) != 0)
+		if(SetFilePointer(Archive, CurrentFileInfo->Offset + offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
 			return 0;
 
-		if(size && (fread(buffer, 1, size, Archive) == size))
+		DWORD readed = 0;
+		if(size && ReadFile(Archive, buffer, size, &readed, NULL) && (readed == size))
 			return size;
 	}
 	return 0;
@@ -120,30 +122,31 @@ uLong VdfFlow::Read(uLong offset, void* buffer, uLong size)
 
 bool VdfFlow::Init(const TCHAR* arcname)
 {
-	if(Archive)
+	if(Archive != INVALID_HANDLE_VALUE)
 		return false;
 
-	FILE* archive = NULL;
-	if(!_tfopen_s(&archive, arcname, _T("rb")))
+	HANDLE hFile = CreateFile(arcname, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if(hFile != INVALID_HANDLE_VALUE)
 	{
 		// Read and verify header, set offset to root catalog
-		if(fread(&Header, 1, sizeof(VdfHeader), archive) == sizeof(VdfHeader))
+		DWORD readed = 0;
+		if(ReadFile(hFile, &Header, sizeof(VdfHeader), &readed, NULL) && (readed == sizeof(VdfHeader)))
 		{
-			if(!memcmp(Header.Signature, VDF_SIGNATURE_G2, sizeof(Header.Signature)) && (Header.Version == 0x50) && (!fseek(archive, Header.RootCatOffset, SEEK_SET)))
+			if(!memcmp(Header.Signature, VDF_SIGNATURE_G2, sizeof(Header.Signature)) && (Header.Version == 0x50) && (SetFilePointer(hFile, Header.RootCatOffset, NULL, FILE_BEGIN) != INVALID_SET_FILE_POINTER))
 				Version = 2;
 			else
-			if(!memcmp(Header.Signature, VDF_SIGNATURE_G1, sizeof(Header.Signature)) && (Header.Version == 0x50) && (!fseek(archive, Header.RootCatOffset, SEEK_SET)))
+			if(!memcmp(Header.Signature, VDF_SIGNATURE_G1, sizeof(Header.Signature)) && (Header.Version == 0x50) && (SetFilePointer(hFile, Header.RootCatOffset, NULL, FILE_BEGIN) != INVALID_SET_FILE_POINTER))
 				Version = 1;
 			else
 			{
 				memset(&Header, 0, sizeof(VdfHeader));
-				fclose(archive);
+				CloseHandle(hFile);
 				return false;
 			}
 		}
 
 		Name = arcname;
-		Archive = archive;
+		Archive = hFile;
 
 		Streams.Add(new VdfFlow());
 		return true;
@@ -156,18 +159,18 @@ bool VdfFlow::Init(const TCHAR* arcname, VdfsIndex::FileInfoPtr& fileinfo)
 	if(CurrentFileInfo)
 		return false;
 
-	if(Archive)
+	if(Archive != INVALID_HANDLE_VALUE)
 	{
 		CurrentFileInfo = fileinfo;
 		Name = fileinfo->Name;
 		return true;
 	}
 
-	FILE* archive = NULL;
-	if(!_tfopen_s(&archive, arcname, _T("rb")))
+	HANDLE hFile = CreateFile(arcname, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if(hFile != INVALID_HANDLE_VALUE)
 	{
 		CurrentFileInfo = fileinfo;
-		Archive = archive;
+		Archive = hFile;
 		Name = fileinfo->Name;
 		return true;
 	}
@@ -176,7 +179,7 @@ bool VdfFlow::Init(const TCHAR* arcname, VdfsIndex::FileInfoPtr& fileinfo)
 
 VdfFlow::VdfFlow(void)
 {
-	Archive = NULL;
+	Archive = INVALID_HANDLE_VALUE;
 	CurrentFileInfo = NULL;
 	CurrentOffset = 0;
 	Version = 0;
@@ -185,11 +188,11 @@ VdfFlow::VdfFlow(void)
 VdfFlow::~VdfFlow(void)
 {
 	Close();
-	if(Archive)
+	if(Archive != INVALID_HANDLE_VALUE)
 	{
 		Name.Clear();
-		fclose(Archive);
-		Archive = NULL;
+		CloseHandle(Archive);
+		Archive = INVALID_HANDLE_VALUE;
 	}
 	memset(&Header, 0, sizeof(VdfHeader));
 }

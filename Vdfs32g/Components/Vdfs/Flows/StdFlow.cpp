@@ -39,7 +39,7 @@ uInt StdFlow::BuildIndex(const TCHAR* dir, VdfsIndex* index)
 
 	WIN32_FIND_DATA findfiledata;
 	findfiledata.cFileName[0] = _T('?');
-	HANDLE hf = FindFirstFile(SearchString, &findfiledata);
+	HANDLE hf = FindFirstFileEx(SearchString, FindExInfoBasic, &findfiledata, FindExSearchNameMatch, 0, FIND_FIRST_EX_LARGE_FETCH);
 	for(BOOL cont = true; (hf != INVALID_HANDLE_VALUE) && (cont != false); cont = FindNextFile(hf, (LPWIN32_FIND_DATA)&findfiledata))
 	{
 		if(findfiledata.cFileName[0] == _T('?')) break;
@@ -71,21 +71,15 @@ uInt StdFlow::BuildIndex(const TCHAR* dir, VdfsIndex* index)
 
 VdfsIndex::FileInfo* StdFlow::GetFileInfo(const AString& filename) 
 {
-	FILE* file = NULL;
-	if(!fopen_s(&file, &filename.GetData()[1], "rb"))
+	HANDLE hFile = CreateFileA(&filename.GetData()[1], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if(hFile != INVALID_HANDLE_VALUE)
 	{
 		VdfsIndex::FileInfo* Result = new VdfsIndex::FileInfo;
 		Result->Flow = this;
 		Result->Name = filename;
-
-		long pos = ftell(file);
-		fseek(file, 0, SEEK_END);
-		Result->Size = ftell(file);
-		fseek(file, 0, SEEK_SET);
-		Result->Size -= ftell(file);
-		fseek(file, pos, SEEK_SET);
-
-		fclose(file);
+		Result->Size = ::GetFileSize(hFile, NULL);
+		
+		CloseHandle(hFile);
 		return Result;
 	}
 	return NULL; 
@@ -93,13 +87,7 @@ VdfsIndex::FileInfo* StdFlow::GetFileInfo(const AString& filename)
 
 bool StdFlow::FileExists(const AString& filename) 
 {
-	FILE* file = NULL;
-	if(!fopen_s(&file, &filename.GetData()[1], "rb"))
-	{
-		fclose(file);
-		return true;
-	}
-	return false; 
+	return (PathFileExistsA(&filename.GetData()[1]) == TRUE);
 }
 
 bool StdFlow::UpdateIndex(VdfsIndex* index)
@@ -133,37 +121,37 @@ IFS* StdFlow::Open(VdfsIndex::FileInfoPtr& fileinfo)
 
 uLong StdFlow::Read(uLong offset, void* buffer, uLong size)
 {
-	if(FileHandle)
+	if(FileHandle != INVALID_HANDLE_VALUE)
 	{
-		fseek(FileHandle, 0, SEEK_SET); // Fix for strange bug in msvc
-		fseek(FileHandle, offset, SEEK_SET);
-		if(fread(buffer, 1, size, FileHandle) == size)
-			return size;
+		DWORD readed = 0;
+		SetFilePointer(FileHandle, offset, NULL, FILE_BEGIN);
+		if(ReadFile(FileHandle, buffer, size, &readed, NULL) && (readed > 0))
+			return readed;
 	}
 	return 0;
 }
 
 void StdFlow::Close(void)
 {
-	if(FileHandle)
+	if(FileHandle != INVALID_HANDLE_VALUE)
 	{
-		fclose(FileHandle);
-		FileHandle = NULL;
+		CloseHandle(FileHandle);
+		FileHandle = INVALID_HANDLE_VALUE;
 	}
 	IFS::Close();
 }
 
 bool StdFlow::Init(VdfsIndex::FileInfoPtr& fileinfo)
 {
-	if(FileHandle || CurrentFileInfo)
+	if((FileHandle != INVALID_HANDLE_VALUE) || CurrentFileInfo)
 		return false;
 
-	FILE* file = NULL;
-	if(!fopen_s(&file, &fileinfo->Name.GetData()[1], "rb"))
+	HANDLE hFile = CreateFileA(&fileinfo->Name.GetData()[1], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if(hFile != INVALID_HANDLE_VALUE)
 	{
 		Name = fileinfo->Name;
 		CurrentFileInfo = fileinfo;
-		FileHandle = file;
+		FileHandle = hFile;
 		return true;
 	}
 
